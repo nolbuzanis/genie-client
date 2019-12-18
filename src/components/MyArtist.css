@@ -1,0 +1,151 @@
+.myartist-container {
+  max-width: 730px;
+  margin: 0 auto;
+  padding-top: 120px;
+  font-family: 'Roboto Open-sans';
+  display: flex;
+}
+.myartist-container p {
+  font-size: 16px;
+  padding-bottom: 16px;
+  margin: 0;
+}
+
+.artist-photo {
+  width: 270px;
+  height: 270px;
+  background: black;
+  margin: 0;
+}
+
+.artist-photo-section button {
+  width: 270px;
+  height: 40px;
+  background: black;
+  color: white;
+  border: none;
+  margin-top: 16px;
+}
+
+.artist-photo-section {
+  margin-right: 60px;
+}
+
+.artist-details-section {
+  padding-top: 70px;
+}
+.artist-details-section label {
+  font-size: 16px;
+  padding-right: 6px;
+}
+.artist-details-section input,
+.artist-details-section textarea {
+  width: 300px;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  margin-bottom: 16px;
+}
+
+input:hover,
+input:focus,
+textarea:hover,
+textarea:focus {
+  outline-width: 0;
+}
+
+.artist-description-input {
+  height: 120px;
+}
+
+.artist-uri-input {
+  margin-left: -3px;
+}
+
+.artist-description-label {
+  float: left;
+}
+
+.myartist-close {
+  width: 20px;
+  height: 20px;
+  margin-top: 40px;
+}
+
+.myartist-popup-content {
+  padding-top: 120px;
+  text-align: center;
+  font-family: 'Roboto, open-sans';
+  width: 100%;
+}
+.myartist-popup-content h2 {
+  font-size: 30px;
+  padding-bottom: 20px;
+  margin: 0;
+}
+.myartist-popup-content p {
+  font-size: 16px;
+  padding-bottom: 20px;
+  font-weight: 300;
+}
+
+.myartist-popup-content input {
+  display: block;
+  width: 200px;
+  height: 30px;
+  margin: auto;
+  margin-bottom: 40px;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.myartist-popup-content button {
+  display: block;
+  border: none;
+  background: black;
+  font-size: 16px;
+  text-align: center;
+  line-height: 40px;
+  margin: 0 auto;
+  color: white;
+  width: 260px;
+  height: 40px;
+  font-weight: 300;
+  cursor: pointer;
+}
+.artist-file-input {
+  opacity: 0;
+}
+
+.artist-file-button {
+  display: block;
+  border: none;
+  background: black;
+  font-size: 16px;
+  text-align: center;
+  line-height: 40px;
+  margin: 0 auto;
+  color: white;
+  width: 260px;
+  height: 40px;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.update-button {
+  display: block;
+  width: 100px;
+  height: 30px;
+  border-radius: 15px;
+  margin: 0 auto;
+  border: none;
+  background: #89a6f0;
+  color: white;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.update-button:focus {
+  outline: none;
+}

@@ -1,0 +1,45 @@
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  color: white;
+}
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+}
+button,
+a {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 400;
+}
+p {
+  margin: 0;
+  padding: 0;
+}

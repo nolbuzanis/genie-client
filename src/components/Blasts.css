@@ -1,0 +1,160 @@
+.blast-container {
+  display: flex;
+  max-width: 630px;
+  margin: 0 auto;
+  justify-content: space-between;
+  font-family: 'Roboto open-sans';
+}
+
+.blasts-column {
+  position: relative;
+  min-width: 300px;
+  max-width: 45%;
+  color: white;
+  letter-spacing: 0.05rem;
+}
+
+.blasts-column.recent {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(#8872ff, #9fc7ff);
+}
+
+.recent-blast-background {
+  margin: 0 auto;
+  margin-top: 18px;
+  height: 195px;
+  width: 195px;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.recent-blast-header {
+  font-size: 16px;
+  padding-left: 18px;
+  padding-top: 15px;
+  font-weight: 300;
+}
+
+.blasts-column a {
+  color: white;
+}
+
+.recent-blast-button {
+  display: block;
+  width: 80px;
+  padding-top: 13px;
+  bottom: 18px;
+  text-align: center;
+  margin: 0 auto;
+
+  border-bottom: 1px solid white;
+}
+.recent-blast-button:hover {
+  color: white;
+}
+
+.blasts-column.selection {
+  padding-top: 100px;
+}
+
+.blasts-column.selection a {
+  display: block;
+  height: 50px;
+  width: 250px;
+  margin: 0 auto;
+  background: black;
+  text-align: center;
+  line-height: 50px;
+  margin-bottom: 20px;
+}
+
+.new-blast-header {
+  font-size: 44px;
+  padding-top: 120px;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 48px;
+}
+
+.newblast-container {
+  text-align: center;
+}
+
+.newblast-container input {
+  position: relative;
+  width: 350px;
+  height: 35px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  top: -10px;
+}
+
+.new-blast-description {
+  display: inline-block;
+  padding-right: 28px;
+}
+.new-blast-description span {
+  display: block;
+  font-size: 19px;
+}
+.new-blast-description a {
+  display: block;
+  font-size: 11px;
+  text-decoration: underline;
+  color: #0069ff;
+}
+.new-blast-description a:hover {
+  cursor: pointer;
+}
+
+.newblast-container .button {
+  margin-top: 40px;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 0;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  width: 240px;
+}
+.newblast-container .button:hover {
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.blast-photo {
+  width: 80px;
+  height: 80px;
+  background: black;
+  float: left;
+}
+
+.song-blast div {
+  display: inline-block;
+}
+
+.song-blast {
+  width: 100%;
+  height: 100px;
+}
+
+.blast-saves {
+  float: right;
+  padding-right: 20px;
+  font-size: 40px;
+  padding-top: 30px;
+}
+
+.blast-content {
+  padding-left: 20px;
+  float: left;
+}
+.blast-content span {
+  font-size: 12px;
+}
+.blast-content h3 {
+  display: inline-block;
+  margin: 0;
+  padding-right: 10px;
+  font-size: 24px;
+  padding-bottom: 15px;
+  padding-top: 5px;
+}

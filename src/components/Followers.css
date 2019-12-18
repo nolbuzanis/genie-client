@@ -1,0 +1,65 @@
+.myfollowers-container {
+  padding: 110px 15px 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  color: white;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.myfollowers-container h1 {
+  font-size: 30px;
+  font-weight: 400;
+  padding-left: 30px;
+  margin: 0;
+}
+.myfollowers-container h2 {
+  font-size: 30px;
+  font-weight: 700;
+  padding-right: 30px;
+  margin: 0;
+}
+
+.myfollowers-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 45px;
+}
+
+.myfollowers-card {
+  width: 320px;
+  height: 90px;
+  background: white;
+  color: black;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.myfollowers-card-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  background: black;
+  display: inline-block;
+}
+
+.myfollowers-card-content {
+  padding-left: 15px;
+  display: inline-block;
+  position: relative;
+  top: -15px;
+}
+.myfollowers-card-content h3 {
+  font-size: 20px;
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
+}
+.myfollowers-card-content p {
+  font-size: 14px;
+  font-weight: 300;
+  color: #9fc7ff;
+  padding: 0;
+  margin: 0;
+}

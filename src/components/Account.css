@@ -1,0 +1,71 @@
+html,
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.account-container {
+  padding: 110px 20px 0;
+  max-width: 450px;
+  margin: 0 auto;
+  font-size: 16px;
+  font-family: 'Nunito Sans', sans-serif;
+}
+.account-container h1 {
+  text-align: center;
+  font-size: 36px;
+  margin: 0;
+  padding-bottom: 30px;
+}
+.account-container h2 {
+  margin: 0;
+  padding: 0 0 20px;
+  font-size: 24px;
+}
+
+.account-container input {
+  display: inline-block;
+  width: 200px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #979797;
+}
+
+.account-container span {
+  color: #a2a2a2;
+  font-size: 16px;
+  padding-right: 24px;
+  line-height: 30px;
+}
+
+.account-content {
+  display: flex;
+  justify-content: space-between;
+  max-width: 400px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+.account-container button {
+  display: block;
+  width: 220px;
+  height: 35px;
+  border-radius: 5px;
+
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 35px;
+  margin: 0 auto;
+  background-color: #8872ff;
+  opacity: 1;
+  cursor: pointer;
+}
+.account-container button:hover {
+  opacity: 0.8;
+}
