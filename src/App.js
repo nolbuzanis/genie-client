@@ -27,7 +27,6 @@ import './App.css';
 
 const App = () => {
   const [auth, setAuth] = React.useState(undefined);
-  console.log(auth);
   if (!auth) {
     getCurrentUser().then(setAuth);
     return 'loading...';

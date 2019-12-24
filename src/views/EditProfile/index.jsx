@@ -173,66 +173,74 @@ const InputSection = props => (
 
 const EditProfile = () => {
   const { auth } = React.useContext(authContext);
-  console.log(auth);
-  if (!auth) {
+
+  if (!auth || !auth.error) {
     return null;
   }
-  return null;
 
-  // return (
-  //   <Container>
-  //     <Header>Edit Profile</Header>
-  //     <UniqueLink>
-  //       Your unique artist url:{' '}
-  //       <Link to={'artists/' + '1'}>{'www.idpt.artists/' + user.userId}</Link>
-  //     </UniqueLink>
-  //     <FlexContainer>
-  //       <ArtistPhoto img={user.img}>
-  //         <PhotoOverlay />
-  //         <FileInput
-  //           onChange={e => {
-  //             this.setState({ uploading: true });
-  //             this.props.editArtistPhoto(e.target.files[0]);
-  //           }}
-  //           className='artist-file-input'
-  //           type='file'
-  //           name='file'
-  //           id='file'
-  //         ></FileInput>
-  //         <ChangePhotoButton htmlFor='file' className='artist-file-button'>
-  //           {this.state.uploading ? 'Uploading...' : 'Change Photo'}
-  //         </ChangePhotoButton>
-  //       </ArtistPhoto>
-  //       <FormContainer
-  //         initialValues={initialValues}
-  //         validationSchema={validationSchema}
-  //         onSubmit={console.log}
-  //       >
-  //         {props => (
-  //           <Form onSubmit={props.handleSubmit}>
-  //             <InputSection {...props} name='name' label='Name'></InputSection>
-  //             <InputSection
-  //               {...props}
-  //               name='bio'
-  //               label='Bio'
-  //               type='textarea'
-  //             ></InputSection>
-  //             <InputSection
-  //               {...props}
-  //               name='uri'
-  //               label='Spotify URI'
-  //             ></InputSection>
-  //             <ChangeUriLink>Need to change your spotify URI?</ChangeUriLink>
+  const initialValues = {
+    name: auth.name,
+    bio: auth.bio,
+    uri: auth.uri,
+    instagram: auth.instagramURL,
+    facebook: auth.facebookURL,
+    twitter: auth.twitterURL,
+    website: auth.websiteURL
+  };
+  return (
+    <Container>
+      <Header>Edit Profile</Header>
+      <UniqueLink>
+        Your unique artist url:{' '}
+        <Link to={'artists/' + auth.uri}>{'www.idpt.artists/' + auth.uri}</Link>
+      </UniqueLink>
+      <FlexContainer>
+        <ArtistPhoto img={auth.img}>
+          <PhotoOverlay />
+          <FileInput
+            onChange={e => {
+              //this.setState({ uploading: true });
+              //this.props.editArtistPhoto(e.target.files[0]);
+            }}
+            className='artist-file-input'
+            type='file'
+            name='file'
+            id='file'
+          ></FileInput>
+          <ChangePhotoButton htmlFor='file' className='artist-file-button'>
+            {this.state.uploading ? 'Uploading...' : 'Change Photo'}
+          </ChangePhotoButton>
+        </ArtistPhoto>
+        <FormContainer
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={console.log}
+        >
+          {props => (
+            <Form onSubmit={props.handleSubmit}>
+              <InputSection {...props} name='name' label='Name'></InputSection>
+              <InputSection
+                {...props}
+                name='bio'
+                label='Bio'
+                type='textarea'
+              ></InputSection>
+              <InputSection
+                {...props}
+                name='uri'
+                label='Spotify URI'
+              ></InputSection>
+              <ChangeUriLink>Need to change your spotify URI?</ChangeUriLink>
 
-  //             <SubmitButton type='submit' disabled={props.isValid}>
-  //               Update
-  //             </SubmitButton>
-  //           </Form>
-  //         )}
-  //       </FormContainer>
-  //     </FlexContainer>
-  //   </Container>
-  // );
+              <SubmitButton type='submit' disabled={props.isValid}>
+                Update
+              </SubmitButton>
+            </Form>
+          )}
+        </FormContainer>
+      </FlexContainer>
+    </Container>
+  );
 };
 
 export default EditProfile;

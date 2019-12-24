@@ -1,13 +1,23 @@
 import axios from 'axios';
 
-const SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
-//const SERVER_URL = 'http://localhost:5000/indepdent-8833f/us-central1/api';
+//const SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
+const SERVER_URL = 'http://localhost:5000/indepdent-8833f/us-central1/api';
 
 const axiosConfig = {
   withCredentials: true,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
+  }
+};
+
+export const logUserOut = async () => {
+  try {
+    const res = await axios.get(`${SERVER_URL}/user/logout`, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
   }
 };
 

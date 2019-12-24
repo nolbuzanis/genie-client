@@ -68,7 +68,6 @@ const Nav = styled.ul`
 `;
 
 const Header = ({ history }) => {
-  console.log(history);
   const { auth } = React.useContext(authContext);
   const [open, setOpen] = React.useState(false);
 

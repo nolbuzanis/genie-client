@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import authContext from '../../Context/authContext';
+import { logUserOut } from '../../api';
+import { withRouter } from 'react-router-dom';
 
 const CloseIcon = props => (
   <CloseIconContianer onClick={() => props.setOpen()}>
@@ -121,8 +123,14 @@ const SideMenu = props => {
     return month + '. ' + year;
   };
 
-  const handleLogout = () => {
-    console.log('Logging user out!');
+  const handleLogout = async () => {
+    const response = await logUserOut();
+    if (response.error) {
+      console.log(response.error);
+      return;
+    }
+    //props.setOpen(false);
+    window.location.replace('/');
   };
 
   return (
@@ -165,4 +173,4 @@ const SideMenu = props => {
   );
 };
 
-export default SideMenu;
+export default withRouter(SideMenu);
