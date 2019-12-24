@@ -1,5 +1,4 @@
 import React from 'react';
-import { userLogin } from '../../actions';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import styled from 'styled-components';
@@ -7,8 +6,7 @@ import Heading from '../../components/Heading';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import * as Yup from 'yup';
-import history from '../../history';
-import { connect } from 'react-redux';
+import { userLogin } from '../../api';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -81,7 +79,7 @@ class Login extends React.Component {
   handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
 
-    const response = await this.props.userLogin(values);
+    const response = await userLogin(values);
     if (response.error) {
       // Wrong password
       console.log(response.error);
@@ -91,8 +89,7 @@ class Login extends React.Component {
       );
       return setSubmitting(false);
     }
-    console.log(response);
-    history.push('/profile');
+    window.location.reload();
   };
 
   render() {
@@ -136,100 +133,4 @@ class Login extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { userLogin }
-)(Login);
-
-// componentDidUpdate = () => {
-//   if (this.props.auth.user) {
-//     // Redirect to dashboard...
-//     this.props.history.push('/dashboard');
-//   }
-// };
-
-// state = {
-//   email: {
-//     value: '',
-//     touched: false
-//   },
-//   password: {
-//     value: '',
-//     touched: false
-//   },
-//   errors: {
-//     email: 'Please enter your email.',
-//     password: 'Please enter a password to continue.'
-//   }
-// };
-
-// generateErrorMsg = (name, value) => {
-//   const errors = this.state.errors;
-//   switch (name) {
-//     case 'email': {
-//       if (value.length === 0 || value === '') {
-//         errors.email = 'Please enter your email.';
-//       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-//         errors.email = 'The email address you supplied is invalid.';
-//       } else {
-//         errors.email = '';
-//       }
-//       break;
-//     }
-//     case 'password': {
-//       if (value.length === 0 || value === '') {
-//         errors.password = 'Please enter a password to continue.';
-//       } else if (value.length < 8) {
-//         errors.password = 'Your password is too short.';
-//       } else {
-//         errors.password = '';
-//       }
-//       break;
-//     }
-//     default: {
-//       break;
-//     }
-//   }
-//   this.setState({ errors: errors });
-// };
-
-// validateForm = errors => {
-//   let valid = true;
-//   // Convert errors object to array which holds the error messages
-//   Object.values(errors).forEach(msg => {
-//     if (msg.length > 0) valid = false;
-//   });
-//   return valid;
-// };
-
-// changeHandler = event => {
-//   const { name, value } = event.target;
-
-//   let currentInput = this.state[name];
-//   this.generateErrorMsg(name, value);
-//   currentInput.value = value;
-
-//   if (!this.state[name].touched) {
-//     currentInput.touched = true;
-//   }
-
-//   // Call set state once at end with changed values since it is an async function
-//   this.setState({ [name]: currentInput });
-// };
-
-// handleSubmit = e => {
-//   e.preventDefault();
-//   // Make axios call to server
-
-//   if (!this.validateForm(this.state.errors)) {
-//     console.error('Invalid form values');
-//     return;
-//   }
-
-//   const formValues = {
-//     email: this.state.email.value,
-//     password: this.state.password.value
-//   };
-
-//   this.props.userLogin(formValues);
-// };
+export default Login;

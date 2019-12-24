@@ -1,15 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logUserOut } from '../actions';
 import styled from 'styled-components';
-import AccountIcon from './AccountIcon';
-import { withRouter } from 'react-router-dom';
-import history from '../history';
 import SideMenu from '../components/SideMenu';
+import authContext from '../Context/authContext';
+import { withRouter } from 'react-router-dom';
 
 const IconContainer = styled.div`
-  display: ${props => (props.show ? 'block' : 'none')}
   cursor: pointer;
   margin-top: 25px;
   margin-right: 10px;
@@ -71,66 +67,46 @@ const Nav = styled.ul`
   padding: 0;
 `;
 
-const DropDown = styled.div`
-  width: 100px;
-  height: 100%;
-  vertical-align: middle;
-  text-align: center;
-`;
+const Header = ({ history }) => {
+  console.log(history);
+  const { auth } = React.useContext(authContext);
+  const [open, setOpen] = React.useState(false);
 
-class Header extends React.Component {
-  state = { transparent: false, open: false };
-
-  SvgIcon = () => (
-    <IconContainer
-      onClick={() => this.setState({ open: true })}
-      show={this.props.auth.user.spotifyURI && this.props.auth.user}
-    >
-      <svg
-        fill='#000000'
-        xmlns='http://www.w3.org/2000/svg'
-        viewBox='0 0 24 24'
-        width='96px'
-        height='96px'
-      >
-        <path d='M 0 2 L 0 4 L 24 4 L 24 2 Z M 0 11 L 0 13 L 24 13 L 24 11 Z M 0 20 L 0 22 L 24 22 L 24 20 Z' />
-      </svg>
-    </IconContainer>
-  );
-
-  render() {
-    if (history.location.pathname === '/' && !this.state.transparent) {
-      this.setState({ transparent: true });
-    }
-    if (this.state.transparent && history.location.pathname !== '/') {
-      this.setState({ transparent: false });
-    }
-    return (
-      <HeaderContainer transparent={this.state.transparent}>
-        <Logo to='/' transparent={this.state.transparent}>
-          idpt.
-        </Logo>
-        {this.props.auth.user ? (
-          <>
-            {this.SvgIcon()}
-            <SideMenu
-              open={this.state.open}
-              setOpen={() => this.setState({ open: false })}
-              onLogout={() => this.props.logUserOut()}
-              user={this.props.auth.user}
-            />
-          </>
-        ) : (
-          <Nav>
-            <StyledLink to='/login' transparent={this.state.transparent}>
-              Log In
-            </StyledLink>
-          </Nav>
-        )}
-      </HeaderContainer>
+  const SvgIcon = () =>
+    history.location.pathname === '/introduction' ? null : (
+      <IconContainer onClick={() => setOpen(!open)}>
+        <svg
+          fill='#000000'
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 24 24'
+          width='96px'
+          height='96px'
+        >
+          <path d='M 0 2 L 0 4 L 24 4 L 24 2 Z M 0 11 L 0 13 L 24 13 L 24 11 Z M 0 20 L 0 22 L 24 22 L 24 20 Z' />
+        </svg>
+      </IconContainer>
     );
-  }
-}
+
+  return (
+    <HeaderContainer>
+      <Logo to='/'>idpt.</Logo>
+      {auth && !auth.error ? (
+        <>
+          <SvgIcon history={history} />
+          <SideMenu
+            open={open}
+            setOpen={setOpen}
+            //onLogout={() => this.props.logUserOut()}
+          />
+        </>
+      ) : (
+        <Nav>
+          <StyledLink to='/login'>Log In</StyledLink>
+        </Nav>
+      )}
+    </HeaderContainer>
+  );
+};
 
 //<StyledLink to='/dashboard' transparent={this.state.transparent}>
 //     Dashboard
@@ -160,11 +136,4 @@ class Header extends React.Component {
 //   </DropDown>
 // </>
 
-const mapStateToProps = state => {
-  return { auth: state.auth };
-};
-
-export default connect(
-  mapStateToProps,
-  { logUserOut }
-)(withRouter(Header));
+export default withRouter(Header);

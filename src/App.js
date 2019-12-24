@@ -1,18 +1,23 @@
 import React from 'react';
-// import { Router, Route, Redirect, Switch } from 'react-router-dom';
-// import Login from './views/LogIn';
+import { Router, Route, Switch } from 'react-router-dom';
+import Login from './views/LogIn';
+import authContext from './Context/authContext';
 // import Dashboard from './components/Dashboard';
-// import SignUp from './views/SignUp';
-// import Header from './components/Header';
+import Signup from './views/SignUp';
+import Header from './components/Header';
 // import { connect } from 'react-redux';
 // import { getCurrentUser } from './actions';
-// import Landing from './views/Landing';
-// import history from './history';
+import Landing from './views/Landing';
+import history from './history';
+import { getCurrentUser } from './api';
+import PrivateRoute from './components/PrivateRoute';
+import AuthRoute from './components/AuthRoute';
 // import Blasts from './components/Blasts';
 // import NewBlast from './components/NewBlast';
 // import PublicProfile from './components/PublicProfile';
 // import AllBlasts from './views/AllBlasts';
-// import EditProfile from './views/EditProfile';
+import EditProfile from './views/EditProfile';
+import Introduction from './views/Introduction';
 // import requireAuth from './components/requireAuth';
 // import ResetPassword from './views/ResetPassword';
 // import NewPassword from './components/NewPassword';
@@ -21,7 +26,27 @@ import React from 'react';
 import './App.css';
 
 const App = () => {
-  return <div>Some App</div>;
+  const [auth, setAuth] = React.useState(undefined);
+  console.log(auth);
+  if (!auth) {
+    getCurrentUser().then(setAuth);
+    return 'loading...';
+  }
+
+  return (
+    <authContext.Provider value={{ auth, setAuth }}>
+      <Router history={history}>
+        <Header user={auth.error ? undefined : auth} />
+        <Switch>
+          <Route path='/' exact render={() => <Landing />} />
+          <AuthRoute path='/login' exact component={Login} />
+          <AuthRoute path='/signup' exact component={Signup} />
+          <PrivateRoute path='/profile' exact component={EditProfile} />
+          <PrivateRoute path='/introduction' exact component={Introduction} />
+        </Switch>
+      </Router>
+    </authContext.Provider>
+  );
 };
 
 // class App extends React.Component {

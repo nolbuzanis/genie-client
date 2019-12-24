@@ -1,18 +1,33 @@
 import axios from 'axios';
 
+const SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
+//const SERVER_URL = 'http://localhost:5000/indepdent-8833f/us-central1/api';
+
+const axiosConfig = {
+  withCredentials: true,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const res = await axios.get(`${SERVER_URL}/user/me`, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
 export const userLogin = async formValues => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
   try {
     const res = await axios.post(
-      '/user/login',
+      `${SERVER_URL}/user/login`,
       JSON.stringify(formValues),
-      config
+      axiosConfig
     );
-    localStorage.setItem('authenticated', true);
 
     return res;
   } catch (error) {
@@ -23,19 +38,12 @@ export const userLogin = async formValues => {
 
 export const userSignup = async formValues => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    };
-
     const res = await axios.post(
-      '/user/signup',
+      `${SERVER_URL}/user/signup`,
       JSON.stringify(formValues),
-      config
+      axiosConfig
     );
     //console.log(res);
-    localStorage.setItem('authenticated', true);
     return res;
   } catch (error) {
     console.log(error);
@@ -45,14 +53,14 @@ export const userSignup = async formValues => {
 
 export const resetPassword = async email => {
   const data = JSON.stringify({ email });
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+
   // Call reset password api route
   try {
-    const response = await axios.post('/user/reset', data, config);
+    const response = await axios.post(
+      `${SERVER_URL}/user/reset`,
+      data,
+      axiosConfig
+    );
     console.log(response);
     return response;
   } catch (error) {

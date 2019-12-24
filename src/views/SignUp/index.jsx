@@ -1,5 +1,4 @@
 import React from 'react';
-import { userSignup } from '../../actions';
 import { Link } from 'react-router-dom';
 import Heading from '../../components/Heading';
 import styled from 'styled-components';
@@ -7,8 +6,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import history from '../../history';
-import { connect } from 'react-redux';
+import { userSignup } from '../../api';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -87,7 +85,7 @@ class Signup extends React.Component {
   handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
 
-    const response = await this.props.userSignup(values);
+    const response = await userSignup(values);
     if (response.error) {
       if (response.error.response.status === 409) {
         setFieldError('email', 'Email is already taken.');
@@ -96,7 +94,7 @@ class Signup extends React.Component {
     }
 
     console.log(response);
-    history.push('/profile');
+    window.location.reload();
   };
 
   render() {
@@ -145,7 +143,4 @@ class Signup extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { userSignup }
-)(Signup);
+export default Signup;

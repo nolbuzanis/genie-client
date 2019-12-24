@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import authContext from '../../Context/authContext';
 
 const CloseIcon = props => (
   <CloseIconContianer onClick={() => props.setOpen()}>
@@ -55,8 +56,7 @@ const MenuContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 `;
 const ProfilePic = styled.div`
-  background: ${props =>
-    props.img ? `url('${props.img}') center center no-repeat` : 'black'}
+  background: url(${props => props.img}) center center no-repeat;
   background-size: cover;
   width: 70px;
   height: 70px;
@@ -110,23 +110,29 @@ const Spacing = styled.div`
 `;
 
 const SideMenu = props => {
-  console.log(props.user);
+  const { auth } = React.useContext(authContext);
+
   const fetchUserDate = () => {
-    const createdAt = new Date(props.user.createdAt);
+    const createdAt = new Date(auth.createdAt);
     const month = createdAt.toLocaleString('default', {
       month: 'short'
     });
     const year = createdAt.toLocaleString('default', { year: 'numeric' });
     return month + '. ' + year;
   };
+
+  const handleLogout = () => {
+    console.log('Logging user out!');
+  };
+
   return (
     <MenuContainer {...props}>
       <MenuHeader>
-        <ProfilePic img={props.user.img} />
-        <ArtistName>
-          {props.user.artistName ? props.user.artistName : ''}
-        </ArtistName>
-        <UserDate>Artist since {fetchUserDate()}</UserDate>
+        <ProfilePic img={auth.img ? auth.img : '/default-user-256.png'} />
+        <ArtistName>{auth.name ? auth.name : ''}</ArtistName>
+        <UserDate>
+          {auth.createdAt ? `Artist since ${fetchUserDate()}` : ''}
+        </UserDate>
       </MenuHeader>
       <CloseIcon {...props} />
       <MenuContent>
@@ -137,19 +143,19 @@ const SideMenu = props => {
           <StyledLink to='/profile' onClick={() => props.setOpen()}>
             Profile
           </StyledLink>
-          <StyledLink to='/blasts' onClick={() => props.setOpen()}>
+          {/* <StyledLink to='/blasts' onClick={() => props.setOpen()}>
             Blasts
           </StyledLink>
           <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
             Followers
-          </StyledLink>
+          </StyledLink> */}
         </div>
         <div>
           <Line />
           <StyledLink to='/account' onClick={() => props.setOpen()}>
             Account Settings
           </StyledLink>
-          <StyledLink to='#' onClick={() => props.onLogout()}>
+          <StyledLink to='#' onClick={handleLogout}>
             Log Out
           </StyledLink>
           <Spacing />

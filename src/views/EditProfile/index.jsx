@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { editArtistPhoto } from '../../actions';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import authContext from '../../Context/authContext';
 
 const Header = styled.h1`
   padding-top: 110px;
@@ -172,93 +171,68 @@ const InputSection = props => (
   </div>
 );
 
-class EditProfile extends React.Component {
-  state = {
-    uploading: false
-  };
-
-  render() {
-    if (!this.props.auth.user) {
-      return null;
-    }
-    const { user } = this.props.auth;
-    const initialValues = {
-      name: user.artistName,
-      bio: user.desc,
-      uri: user.spotifyURI,
-      instagram: user.instagram,
-      facebook: user.facebook,
-      twitter: user.twitter,
-      website: user.website
-    };
-    return (
-      <Container>
-        <Header>Edit Profile</Header>
-        <UniqueLink>
-          Your unique artist url:{' '}
-          <Link to={'artists/' + user.userId}>
-            {'www.idpt.artists/' + user.userId}
-          </Link>
-        </UniqueLink>
-        <FlexContainer>
-          <ArtistPhoto img={user.img}>
-            <PhotoOverlay />
-            <FileInput
-              onChange={e => {
-                this.setState({ uploading: true });
-                this.props.editArtistPhoto(e.target.files[0]);
-              }}
-              className='artist-file-input'
-              type='file'
-              name='file'
-              id='file'
-            ></FileInput>
-            <ChangePhotoButton htmlFor='file' className='artist-file-button'>
-              {this.state.uploading ? 'Uploading...' : 'Change Photo'}
-            </ChangePhotoButton>
-          </ArtistPhoto>
-          <FormContainer
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={console.log}
-          >
-            {props => (
-              <Form onSubmit={props.handleSubmit}>
-                <InputSection
-                  {...props}
-                  name='name'
-                  label='Name'
-                ></InputSection>
-                <InputSection
-                  {...props}
-                  name='bio'
-                  label='Bio'
-                  type='textarea'
-                ></InputSection>
-                <InputSection
-                  {...props}
-                  name='uri'
-                  label='Spotify URI'
-                ></InputSection>
-                <ChangeUriLink>Need to change your spotify URI?</ChangeUriLink>
-
-                <SubmitButton type='submit' disabled={props.isValid}>
-                  Update
-                </SubmitButton>
-              </Form>
-            )}
-          </FormContainer>
-        </FlexContainer>
-      </Container>
-    );
+const EditProfile = () => {
+  const { auth } = React.useContext(authContext);
+  console.log(auth);
+  if (!auth) {
+    return null;
   }
-}
+  return null;
 
-const mapStateToProps = state => {
-  return { auth: state.auth };
+  // return (
+  //   <Container>
+  //     <Header>Edit Profile</Header>
+  //     <UniqueLink>
+  //       Your unique artist url:{' '}
+  //       <Link to={'artists/' + '1'}>{'www.idpt.artists/' + user.userId}</Link>
+  //     </UniqueLink>
+  //     <FlexContainer>
+  //       <ArtistPhoto img={user.img}>
+  //         <PhotoOverlay />
+  //         <FileInput
+  //           onChange={e => {
+  //             this.setState({ uploading: true });
+  //             this.props.editArtistPhoto(e.target.files[0]);
+  //           }}
+  //           className='artist-file-input'
+  //           type='file'
+  //           name='file'
+  //           id='file'
+  //         ></FileInput>
+  //         <ChangePhotoButton htmlFor='file' className='artist-file-button'>
+  //           {this.state.uploading ? 'Uploading...' : 'Change Photo'}
+  //         </ChangePhotoButton>
+  //       </ArtistPhoto>
+  //       <FormContainer
+  //         initialValues={initialValues}
+  //         validationSchema={validationSchema}
+  //         onSubmit={console.log}
+  //       >
+  //         {props => (
+  //           <Form onSubmit={props.handleSubmit}>
+  //             <InputSection {...props} name='name' label='Name'></InputSection>
+  //             <InputSection
+  //               {...props}
+  //               name='bio'
+  //               label='Bio'
+  //               type='textarea'
+  //             ></InputSection>
+  //             <InputSection
+  //               {...props}
+  //               name='uri'
+  //               label='Spotify URI'
+  //             ></InputSection>
+  //             <ChangeUriLink>Need to change your spotify URI?</ChangeUriLink>
+
+  //             <SubmitButton type='submit' disabled={props.isValid}>
+  //               Update
+  //             </SubmitButton>
+  //           </Form>
+  //         )}
+  //       </FormContainer>
+  //     </FlexContainer>
+  //   </Container>
+  // );
 };
 
-export default connect(
-  mapStateToProps,
-  { editArtistPhoto }
-)(EditProfile);
+export default EditProfile;
