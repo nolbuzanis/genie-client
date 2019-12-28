@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import authContext from '../../Context/authContext';
+import { uploadUserPhoto } from '../../api';
 
 const Header = styled.h1`
   padding-top: 110px;
   padding-left: 30px;
 `;
 const UniqueLink = styled.p`
+  font-size: 14px;
   padding-left: 30px;
   font-weight: 300;
   padding-top: 20px;
@@ -87,7 +89,7 @@ const Input = styled.input`
   padding: 10px 15px;
   font-size: 16px;
   margin: 8px 0;
-  line-height: 22px;
+  line-height: 26px;
   height: 40px;
   background-color: ${props => (props.disabled ? '#D8D8D8' : '')};
 `;
@@ -155,8 +157,8 @@ const InputSection = props => (
     <InputLabel>{props.label}</InputLabel>
     <Input
       as={props.type === 'textarea' ? 'textarea' : ''}
-      onClick={props.type === 'textarea' && resizeTextArea}
-      onInput={props.type === 'textarea' && resizeTextArea}
+      onClick={props.type === 'textarea' ? resizeTextArea : () => { }}
+      onInput={props.type === 'textarea' ? resizeTextArea : () => { }}
       value={props.values[props.name]}
       type={props.type || 'text'}
       onChange={props.handleChange}
@@ -172,10 +174,29 @@ const InputSection = props => (
 );
 
 const EditProfile = () => {
-  const { auth } = React.useContext(authContext);
+  const { auth, setAuth } = React.useContext(authContext);
+  const [uploading, setUploading] = React.useState(false);
 
-  if (!auth || !auth.error) {
+  if (!auth || auth.error) {
     return null;
+  }
+
+  const handlePhotoSubmit = async (e) => {
+    const photo = e.target.files[0];
+    setUploading(true);
+    console.log(photo);
+    //Api call
+    const response = await uploadUserPhoto(photo);
+    setUploading(false);
+    if (response.error) {
+      console.log(response.error);
+      return;
+    }
+    setAuth({ ...auth, img: response })
+    return;
+
+    // If success, show success alert
+    // If error, show error alert
   }
 
   const initialValues = {
@@ -191,24 +212,21 @@ const EditProfile = () => {
     <Container>
       <Header>Edit Profile</Header>
       <UniqueLink>
-        Your unique artist url:{' '}
+        {'Your unique artist url: '}
         <Link to={'artists/' + auth.uri}>{'www.idpt.artists/' + auth.uri}</Link>
       </UniqueLink>
       <FlexContainer>
         <ArtistPhoto img={auth.img}>
           <PhotoOverlay />
           <FileInput
-            onChange={e => {
-              //this.setState({ uploading: true });
-              //this.props.editArtistPhoto(e.target.files[0]);
-            }}
+            onChange={e => handlePhotoSubmit(e)}
             className='artist-file-input'
             type='file'
-            name='file'
-            id='file'
+            name='img'
+            id='img'
           ></FileInput>
-          <ChangePhotoButton htmlFor='file' className='artist-file-button'>
-            {this.state.uploading ? 'Uploading...' : 'Change Photo'}
+          <ChangePhotoButton htmlFor='img' className='artist-file-button'>
+            {uploading ? 'Uploading...' : 'Change Photo'}
           </ChangePhotoButton>
         </ArtistPhoto>
         <FormContainer
@@ -230,7 +248,7 @@ const EditProfile = () => {
                 name='uri'
                 label='Spotify URI'
               ></InputSection>
-              <ChangeUriLink>Need to change your spotify URI?</ChangeUriLink>
+              <ChangeUriLink to='#'>Need to change your spotify URI?</ChangeUriLink>
 
               <SubmitButton type='submit' disabled={props.isValid}>
                 Update

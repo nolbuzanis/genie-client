@@ -25,7 +25,7 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   box-shadow: ${props =>
-    !props.transparent && '2px 2px 4px rgba(0, 0, 0, 0.5)'};
+    !props.transparent && '4px 4px 6px rgba(0, 0, 0, 0.16)'};
   position: fixed;
   background: ${props => !props.transparent && 'white'};
   margin: 0;
@@ -66,6 +66,17 @@ const Nav = styled.ul`
   height: 100%;
   padding: 0;
 `;
+const Overlay = styled.div`
+  visibility: ${props => props.open ? 'visible' : 'hidden'};
+  opacity: ${props => props.open ? '1' : '0'};
+  background-color: rgba(255,255,255,0.8);
+  transition: all 0.5s ease;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`
 
 const Header = ({ history }) => {
   const { auth } = React.useContext(authContext);
@@ -92,17 +103,14 @@ const Header = ({ history }) => {
       {auth && !auth.error ? (
         <>
           <SvgIcon history={history} />
-          <SideMenu
-            open={open}
-            setOpen={setOpen}
-            //onLogout={() => this.props.logUserOut()}
-          />
+          <SideMenu open={open} setOpen={setOpen} />
+          <Overlay open={open} onClick={() => setOpen(!open)} />
         </>
       ) : (
-        <Nav>
-          <StyledLink to='/login'>Log In</StyledLink>
-        </Nav>
-      )}
+          <Nav>
+            <StyledLink to='/login'>Log In</StyledLink>
+          </Nav>
+        )}
     </HeaderContainer>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
 // import Dashboard from './components/Dashboard';
@@ -42,6 +42,7 @@ const App = () => {
           <AuthRoute path='/signup' exact component={Signup} />
           <PrivateRoute path='/profile' exact component={EditProfile} />
           <PrivateRoute path='/introduction' exact component={Introduction} />
+          <Route render={() => <Redirect to='/profile' />} />
         </Switch>
       </Router>
     </authContext.Provider>

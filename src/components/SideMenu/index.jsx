@@ -47,6 +47,7 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: fixed;
+  z-index: 10;
   top: 0;
   left: ${props => (props.open ? '0' : '-360px')};
   bottom: 0;

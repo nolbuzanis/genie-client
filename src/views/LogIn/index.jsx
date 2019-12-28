@@ -82,13 +82,14 @@ class Login extends React.Component {
     const response = await userLogin(values);
     if (response.error) {
       // Wrong password
-      console.log(response.error);
+      console.log(JSON.stringify(response.error));
       setFieldError(
         'email',
         'Email or password is incorrect. Please try again.'
       );
       return setSubmitting(false);
     }
+    setSubmitting(false);
     window.location.reload();
   };
 

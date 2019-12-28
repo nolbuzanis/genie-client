@@ -1,4 +1,5 @@
 import axios from 'axios';
+//import FormData from 'form-data';
 
 //const SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
 const SERVER_URL = 'http://localhost:5000/indepdent-8833f/us-central1/api';
@@ -10,6 +11,17 @@ const axiosConfig = {
     'Content-Type': 'application/json'
   }
 };
+
+export const submitSpotifyURI = async (artistId, email) => {
+  const data = JSON.stringify({ artistId, email });
+  try {
+    const res = await axios.post(`${SERVER_URL}/user/spotify-uri`, data, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
 
 export const logUserOut = async () => {
   try {
@@ -41,7 +53,7 @@ export const userLogin = async formValues => {
 
     return res;
   } catch (error) {
-    console.log(error.response.data.message);
+    console.log(error);
     return { error };
   }
 };
@@ -78,3 +90,24 @@ export const resetPassword = async email => {
     return { error };
   }
 };
+
+export const uploadUserPhoto = async (file) => {
+  console.log(file);
+  try {
+    let data = new FormData();
+    data.append('img', file);
+    const config = {
+      withCredentials: true,
+      headers: {
+        'accept': 'application/json',
+        'Content-Type': 'multipart/form-data'
+      }
+    };
+    const response = await axios.post(`${SERVER_URL}/user/photo`, data, config);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}

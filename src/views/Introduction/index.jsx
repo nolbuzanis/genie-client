@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { submitSpotifyURI, getCurrentUser } from '../../api';
+import authContext from '../../Context/authContext';
+import { withRouter } from 'react-router-dom';
 
 const Container = styled.div`
   //margin: 0 auto;
@@ -61,8 +64,24 @@ const validationSchema = Yup.object().shape({
     .required('Please enter a valid URI.')
 });
 
-const Introduction = () => (
-  <Container>
+
+
+const Introduction = ({ history }) => {
+
+  const { auth, setAuth } = React.useContext(authContext);
+  const handleSubmit = async ({ uri }) => {
+    const artistId = uri.includes('spotify') ? uri.trim().split(':')[2] : uri.trim();
+
+    const response = await submitSpotifyURI(artistId, auth.email);
+    if (response.error) {
+      console.log(response.error);
+      return;
+    }
+    getCurrentUser().then(setAuth);
+    history.push('/profile');
+  }
+
+  return <Container>
     <WelcomeHeader>Welcome to Independent</WelcomeHeader>
     <Paragrah>
       Before we get started, please enter your spotify artist URI.
@@ -74,7 +93,7 @@ const Introduction = () => (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={console.log}
+      onSubmit={handleSubmit}
     >
       {props => (
         <form onSubmit={props.handleSubmit}>
@@ -95,6 +114,6 @@ const Introduction = () => (
       )}
     </Formik>
   </Container>
-);
+};
 
-export default Introduction;
+export default withRouter(Introduction);
