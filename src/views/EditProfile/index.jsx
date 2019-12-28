@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import authContext from '../../Context/authContext';
-import { uploadUserPhoto } from '../../api';
+import { uploadUserPhoto, updateUserProfile } from '../../api';
 
 const Header = styled.h1`
   padding-top: 110px;
   padding-left: 30px;
 `;
 const UniqueLink = styled.p`
+  overflow: hidden;
   font-size: 14px;
   padding-left: 30px;
   font-weight: 300;
@@ -66,14 +67,16 @@ const FileInput = styled.input`
   visibility: hidden;
 `;
 const SubmitButton = styled.button`
-  visibility: ${props => (props.disabled ? 'hidden' : 'inherit')};
-  background: #9fc7ff;
-  color: black;
+  display: block;
+  background: ${props => props.disabled ? '#E3E3E3' : '#8872FF'};
+  color: ${props => props.disabled ? '#ACACAC' : 'white'};
   font-size: 20px;
   height: 44px;
   width: 180px;
   border-radius: 10px;
   border: none;
+  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
+  margin: 30px auto;
 `;
 const Input = styled.input`
   box-sizing: border-box;
@@ -94,13 +97,8 @@ const Input = styled.input`
   background-color: ${props => (props.disabled ? '#D8D8D8' : '')};
 `;
 const Form = styled.form`
-  padding: 10px 30px;
   width: 100%;
-  max-width: 420px;
-  flex-basis: 320px;
-  min-width: 320px;
-  box-sizing: border-box;
-  flex-grow: 1;
+  
 `;
 
 const validationSchema = Yup.object().shape({
@@ -140,7 +138,7 @@ const ChangeUriLink = styled(Link)`
   color: #525252;
   text-decoration: underline;
   margin-left: 6px;
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   &:hover,
   &:active {
     color: #525252;
@@ -150,7 +148,14 @@ const Container = styled.div`
   max-width: 880px;
   margin: 0 auto;
 `;
-const FormContainer = styled(Formik)``;
+const FormContainer = styled.div`
+flex-basis: 320px;
+  max-width: 420px;
+  flex-grow: 1;
+  min-width: 320px;
+  padding: 10px 30px;
+  box-sizing: border-box;
+`;
 
 const InputSection = props => (
   <div>
@@ -187,13 +192,13 @@ const EditProfile = () => {
     console.log(photo);
     //Api call
     const response = await uploadUserPhoto(photo);
-    setUploading(false);
+
     if (response.error) {
       console.log(response.error);
       return;
     }
     setAuth({ ...auth, img: response })
-    return;
+    return setUploading(false);;
 
     // If success, show success alert
     // If error, show error alert
@@ -208,6 +213,21 @@ const EditProfile = () => {
     twitter: auth.twitterURL,
     website: auth.websiteURL
   };
+
+  const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
+    console.log(values, setSubmitting);
+    setSubmitting(true);
+    const response = await updateUserProfile(values);
+    resetForm();
+    if (response.error) {
+      return setSubmitting(false);
+    }
+    setSubmitting(false);
+    setAuth({ ...auth, ...values });
+    return;
+
+  };
+
   return (
     <Container>
       <Header>Edit Profile</Header>
@@ -215,48 +235,51 @@ const EditProfile = () => {
         {'Your unique artist url: '}
         <Link to={'artists/' + auth.uri}>{'www.idpt.artists/' + auth.uri}</Link>
       </UniqueLink>
-      <FlexContainer>
-        <ArtistPhoto img={auth.img}>
-          <PhotoOverlay />
-          <FileInput
-            onChange={e => handlePhotoSubmit(e)}
-            className='artist-file-input'
-            type='file'
-            name='img'
-            id='img'
-          ></FileInput>
-          <ChangePhotoButton htmlFor='img' className='artist-file-button'>
-            {uploading ? 'Uploading...' : 'Change Photo'}
-          </ChangePhotoButton>
-        </ArtistPhoto>
-        <FormContainer
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={console.log}
-        >
-          {props => (
-            <Form onSubmit={props.handleSubmit}>
-              <InputSection {...props} name='name' label='Name'></InputSection>
-              <InputSection
-                {...props}
-                name='bio'
-                label='Bio'
-                type='textarea'
-              ></InputSection>
-              <InputSection
-                {...props}
-                name='uri'
-                label='Spotify URI'
-              ></InputSection>
-              <ChangeUriLink to='#'>Need to change your spotify URI?</ChangeUriLink>
 
-              <SubmitButton type='submit' disabled={props.isValid}>
-                Update
-              </SubmitButton>
-            </Form>
-          )}
-        </FormContainer>
-      </FlexContainer>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleFormSubmit}
+      >
+        {props => (
+          <Form onSubmit={props.handleSubmit}>
+            <FlexContainer>
+              <ArtistPhoto img={auth.img}>
+                <PhotoOverlay />
+                <FileInput
+                  onChange={e => handlePhotoSubmit(e)}
+                  className='artist-file-input'
+                  type='file'
+                  name='img'
+                  id='img'
+                ></FileInput>
+                <ChangePhotoButton htmlFor='img' className='artist-file-button' disabled={uploading}>
+                  {uploading ? 'Uploading...' : 'Change Photo'}
+                </ChangePhotoButton>
+              </ArtistPhoto>
+              <FormContainer>{console.log(props.isSubmitting)}
+                <InputSection {...props} name='name' label='Name'></InputSection>
+                <InputSection
+                  {...props}
+                  name='bio'
+                  label='Bio'
+                  type='textarea'
+                ></InputSection>
+                <InputSection
+                  {...props}
+                  name='uri'
+                  label='Spotify URI'
+                ></InputSection>
+                <ChangeUriLink to='#'>Need to change your spotify URI?</ChangeUriLink>
+              </FormContainer>
+            </FlexContainer>
+            <SubmitButton type='submit' disabled={!props.dirty || !props.isValid}>
+              {props.isSubmitting ? 'Submitting...' : 'Submit'}
+            </SubmitButton>
+          </Form>
+        )}
+      </Formik>
+
     </Container>
   );
 };

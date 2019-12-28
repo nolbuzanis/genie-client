@@ -1,8 +1,7 @@
 import axios from 'axios';
-//import FormData from 'form-data';
 
-//const SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
-const SERVER_URL = 'http://localhost:5000/indepdent-8833f/us-central1/api';
+let SERVER_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/indepdent-8833f/us-central1/api' : 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
+//SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
 
 const axiosConfig = {
   withCredentials: true,
@@ -106,6 +105,21 @@ export const uploadUserPhoto = async (file) => {
     const response = await axios.post(`${SERVER_URL}/user/photo`, data, config);
     console.log(response);
     return response.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+export const updateUserProfile = async formValues => {
+  try {
+    const res = await axios.post(
+      `${SERVER_URL}/user/update`,
+      JSON.stringify(formValues),
+      axiosConfig
+    );
+
+    return res;
   } catch (error) {
     console.log(error);
     return { error };
