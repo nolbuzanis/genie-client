@@ -24,12 +24,10 @@ const HeaderContainer = styled.div`
   height: 80px;
   display: flex;
   justify-content: space-between;
-  box-shadow: ${props =>
-    !props.transparent && '4px 4px 6px rgba(0, 0, 0, 0.16)'};
-  position: fixed;
-  background: ${props => !props.transparent && 'white'};
+  position: absolute;
+  background: ${props => props.landing ? 'transparent' : 'white'};
   margin: 0;
-  padding: 0 20px;
+  padding: 0 calc(5px + 5.4vw);
 `;
 
 const Logo = styled(Link)`
@@ -37,27 +35,22 @@ const Logo = styled(Link)`
   height: 100%;
   font-weight: 900;
   font-size: 36px;
-  margin-left: 20px;
   line-height: 80px;
-  color: ${props => (props.transparent ? '#ffffff' : '#000000')};
+  color: ${props => (props.landing ? '#ffffff' : '#8872FF')};
   &:hover {
-    color: ${props => (props.transparent ? '#ffffff' : '#000000')};
+    color: ${props => (props.landing ? '#ffffff' : '#8872FF')};
   }
 `;
 
 const StyledLink = styled(Link)`
   display: inline-block;
-  padding: 0 25px;
-  margin: 0;
-  line-height: 80px;
-  height: 80px;
+  margin: 25px 0 0 0;
+  line-height: 20px;
   font-size: 20px;
-  color: ${props => (props.transparent ? '#ffffff' : '#000000')};
+  padding: 5px;
+  color: ${props => (props.landing ? '#ffffff' : '#000000')};
   &:hover {
-    color: ${props => (props.transparent ? '#ffffff' : '#000000')};
-  }
-  &:active {
-    background-color: ${props => !props.transparent && '#eeeeee'};
+    color: ${props => (props.landing ? '#ffffff' : '#000000')};
   }
 `;
 
@@ -70,7 +63,7 @@ const Overlay = styled.div`
   visibility: ${props => props.open ? 'visible' : 'hidden'};
   opacity: ${props => props.open ? '1' : '0'};
   background-color: rgba(255,255,255,0.8);
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -81,6 +74,8 @@ const Overlay = styled.div`
 const Header = ({ history }) => {
   const { auth } = React.useContext(authContext);
   const [open, setOpen] = React.useState(false);
+
+  const landing = history.location.pathname === '/' ? true : false;
 
   const SvgIcon = () =>
     history.location.pathname === '/introduction' ? null : (
@@ -98,8 +93,8 @@ const Header = ({ history }) => {
     );
 
   return (
-    <HeaderContainer>
-      <Logo to='/'>idpt.</Logo>
+    <HeaderContainer landing={landing}>
+      <Logo to='/' landing={landing}>idpt</Logo>
       {auth && !auth.error ? (
         <>
           <SvgIcon history={history} />
@@ -108,7 +103,7 @@ const Header = ({ history }) => {
         </>
       ) : (
           <Nav>
-            <StyledLink to='/login'>Log In</StyledLink>
+            <StyledLink to='/login' landing={landing}>Log In</StyledLink>
           </Nav>
         )}
     </HeaderContainer>

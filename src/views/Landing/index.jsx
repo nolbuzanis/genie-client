@@ -3,38 +3,24 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Landing = () => {
-  const Mask = styled.div`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.3);
-  `;
 
   const HeroImage = styled.div`
     position: relative;
-    height: 100vh;
+    height: 680px;
     width: 100%;
-    background: url('./purple-fireworks.jpg') center center no-repeat;
+    background: url('/landing-image.webp') center center no-repeat;
     background-size: cover;
   `;
 
   const Attention = styled.h1`
     color: white;
-    font-size: 30;
+    font-size: calc(15px + 1.4vw);
     font-style: 700;
-    padding-bottom: 25px;
-    @media only screen and (max-width: 767px) {
-      font-size: 24px;
-    }
+    padding-bottom: 20px;
+    max-width: 650px;
   `;
   const AttentionWrapper = styled.div`
-    position: absolute;
-    left: 10vw;
-    bottom: 100px;
-    z-index: 1;
-    padding-right: 10vw;
+    padding: 280px calc(5px + 5.4vw) 0;
   `;
 
   const Button = styled(Link)`
@@ -42,24 +28,38 @@ const Landing = () => {
     text-align: center;
     height: 50px;
     width: 230px;
-    color: white;
-    background: #8872ff;
+    background: #F9C349;
+    color: black;
     border-radius: 33px;
     line-height: 50px;
     border: none;
-    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.3);
     font-size: 24px;
+    transition: all ease 0.3s;
+    &:hover {
+      color: black;
+      background: #FFD473;
+    }
   `;
+  const HeadphonesImg = styled.img`
+  display: none;
+    float: right;
+    display: block;
+    width: 300px;
+    position: absolute;
+    left: 800px;
+    top: 145px;
+  `
 
   return (
     <HeroImage>
       <AttentionWrapper>
         <Attention>
-          Increase engagement on Spotify. Jumpstart your career.
+          Revolutionize the way you engage your followers with Spotify Presaves.
         </Attention>
         <Button to='/signup'>Get Started</Button>
       </AttentionWrapper>
-      <Mask />
+      {/* <HeadphonesImg src='/headphones-white.webp' /> */}
     </HeroImage>
   );
 };

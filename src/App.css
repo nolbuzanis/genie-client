@@ -1,7 +1,10 @@
-body {
+body, html, #root {
   font-family: 'Nunito Sans', sans-serif;
-  margin: 0;
   box-sizing: border-box;
+  height: 100%;
+  margin:0;
+    padding:0;
+    height:100%;
 }
 
 div {

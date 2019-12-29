@@ -53,9 +53,9 @@ const MenuContainer = styled.div`
   bottom: 0;
   height: 100%;
   width: 100%;
-  max-width: 360px;
+  max-width: 320px;
   background: white;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 `;
 const ProfilePic = styled.div`

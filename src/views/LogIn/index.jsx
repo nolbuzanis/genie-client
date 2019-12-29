@@ -51,6 +51,9 @@ const ButtonWraper = styled.div`
 
 const BodyContainer = styled.div`
   padding-top: 140px;
+  background: -webkit-linear-gradient(#FFFFFF 7%, #DFEBFC 60%, #9E8CFF);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(#FFFFFF 10%, #DFEBFC 60%, #9E8CFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 100%;
 `;
 
 const InputSection = props => {
