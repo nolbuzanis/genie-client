@@ -5,6 +5,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import authContext from '../../Context/authContext';
 import { uploadUserPhoto, updateUserProfile } from '../../api';
+import { useAlert } from 'react-alert';
 
 const Header = styled.h1`
   padding-top: 110px;
@@ -181,6 +182,7 @@ const InputSection = props => (
 const EditProfile = () => {
   const { auth, setAuth } = React.useContext(authContext);
   const [uploading, setUploading] = React.useState(false);
+  const alert = useAlert();
 
   if (!auth || auth.error) {
     return null;
@@ -195,10 +197,12 @@ const EditProfile = () => {
 
     if (response.error) {
       console.log(response.error);
-      return;
+      alert.show('Error!');
+      return setUploading(false);
     }
     setAuth({ ...auth, img: response })
-    return setUploading(false);;
+    alert.show('Updated Picture!', { type: 'success' });
+    return setUploading(false);
 
     // If success, show success alert
     // If error, show error alert
@@ -215,16 +219,17 @@ const EditProfile = () => {
   };
 
   const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
-    console.log(values, setSubmitting);
+
     setSubmitting(true);
     const response = await updateUserProfile(values);
     resetForm();
     if (response.error) {
+      alert.show('Error!');
       return setSubmitting(false);
     }
-    setSubmitting(false);
     setAuth({ ...auth, ...values });
-    return;
+    alert.show('Updated Profile!', { type: 'success' });
+    return setSubmitting(false);;
 
   };
 

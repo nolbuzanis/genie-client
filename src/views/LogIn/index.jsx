@@ -75,8 +75,8 @@ const InputSection = props => {
   );
 };
 
-class Login extends React.Component {
-  handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+const Login = () => {
+  const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
 
     const response = await userLogin(values);
@@ -93,45 +93,44 @@ class Login extends React.Component {
     window.location.reload();
   };
 
-  render() {
-    return (
-      <BodyContainer>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={this.handleSubmit}
-          validationSchema={validationSchema}
-        >
-          {props => (
-            <Form onSubmit={props.handleSubmit}>
-              <Heading title='Log in' subtitle='Welcome back!' />
-              <Spacing />
-              <InputSection
-                {...props}
-                name='email'
-                type='email'
-                placeholder='Email'
+  return (
+    <BodyContainer>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        {props => (
+          <Form onSubmit={props.handleSubmit}>
+            <Heading title='Log in' subtitle='Welcome back!' />
+            <Spacing />
+            <InputSection
+              {...props}
+              name='email'
+              type='email'
+              placeholder='Email'
+            />
+            <InputSection
+              {...props}
+              name='password'
+              type='password'
+              placeholder='Password'
+            />
+            <StyledLink to='/reset'>Forgot password?</StyledLink>
+            <ButtonWraper>
+              <Button
+                text={props.isSubmitting ? 'Submitting...' : 'Log In'}
+                disabled={props.isSubmitting}
+                type='submit'
               />
-              <InputSection
-                {...props}
-                name='password'
-                type='password'
-                placeholder='Password'
-              />
-              <StyledLink to='/reset'>Forgot password?</StyledLink>
-              <ButtonWraper>
-                <Button
-                  text={props.isSubmitting ? 'Submitting...' : 'Log In'}
-                  disabled={props.isSubmitting}
-                  type='submit'
-                />
-              </ButtonWraper>
-              <StyledLink to='/signup'>Don't have an account?</StyledLink>
-            </Form>
-          )}
-        </Formik>
-      </BodyContainer>
-    );
-  }
+            </ButtonWraper>
+            <StyledLink to='/signup'>Don't have an account?</StyledLink>
+          </Form>
+        )}
+      </Formik>
+    </BodyContainer>
+  );
 }
+
 
 export default Login;

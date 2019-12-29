@@ -24,6 +24,8 @@ import Introduction from './views/Introduction';
 // import Account from './components/Account';
 // import MyFollowers from './components/MyFollowers';
 import './App.css';
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from './components/Alert';
 
 const App = () => {
   const [auth, setAuth] = React.useState(undefined);
@@ -32,19 +34,33 @@ const App = () => {
     return 'loading...';
   }
 
+  const alertOptions = {
+    // you can also just use 'bottom center'
+    position: positions.BOTTOM_CENTER,
+    timeout: 4000,
+    offset: "30px",
+    // you can also just use 'scale'
+    transition: transitions.SCALE,
+    containerStyle: {
+      width: "100%"
+    }
+  };
+
   return (
     <authContext.Provider value={{ auth, setAuth }}>
-      <Router history={history}>
-        <Header user={auth.error ? undefined : auth} />
-        <Switch>
-          <Route path='/' exact render={() => <Landing />} />
-          <AuthRoute path='/login' exact component={Login} />
-          <AuthRoute path='/signup' exact component={Signup} />
-          <PrivateRoute path='/profile' exact component={EditProfile} />
-          <PrivateRoute path='/introduction' exact component={Introduction} />
-          <Route render={() => <Redirect to='/profile' />} />
-        </Switch>
-      </Router>
+      <AlertProvider template={AlertTemplate} {...alertOptions}>
+        <Router history={history}>
+          <Header user={auth.error ? undefined : auth} />
+          <Switch>
+            <Route path='/' exact render={() => <Landing />} />
+            <AuthRoute path='/login' exact component={Login} />
+            <AuthRoute path='/signup' exact component={Signup} />
+            <PrivateRoute path='/profile' exact component={EditProfile} />
+            <PrivateRoute path='/introduction' exact component={Introduction} />
+            <Route render={() => <Redirect to='/profile' />} />
+          </Switch>
+        </Router>
+      </AlertProvider>
     </authContext.Provider>
   );
 };
