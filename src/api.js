@@ -78,7 +78,7 @@ export const resetPassword = async email => {
   // Call reset password api route
   try {
     const response = await axios.post(
-      `${SERVER_URL}/user/reset`,
+      `${SERVER_URL}/user/reset-password`,
       data,
       axiosConfig
     );

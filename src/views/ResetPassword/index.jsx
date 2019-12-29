@@ -29,14 +29,10 @@ const ResetPassword = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string()
+    email: Yup.string().trim()
       .email('Please enter a valid email.')
       .required('Please enter a valid email.')
   });
-
-  const ButtonWraper = styled.div`
-    padding: 20px 0;
-  `;
 
   const BodyContainer = styled.div`
     padding-top: 140px;
@@ -69,18 +65,14 @@ const ResetPassword = () => {
     );
   };
 
-  const [message, setMessage] = React.useState(
-    'Please enter the email address associated with your IDPT account.'
-  );
   const [success, setSuccess] = React.useState(false);
   const handleSubmit = async ({ email }, { setSubmitting }) => {
     setSubmitting(true);
-    const response = await resetPassword(email);
+    const response = await resetPassword(email.trim());
 
     if (response.error) {
       return setSubmitting(false);
     }
-    setMessage('Check your email for a link to reset your password.');
     console.log(response);
     setSubmitting(false);
     return setSuccess(true);
@@ -91,34 +83,34 @@ const ResetPassword = () => {
       {success ? (
         <Form>
           <Heading title='Check your email' />
-          <Note>{message}</Note>
+          <Note>Check your email for a link to reset your password.</Note>
           <Button as={Link} to='/login' text='Back to login' />
         </Form>
       ) : (
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          {props => (
-            <Form onSubmit={props.handleSubmit}>
-              <Heading title='Reset password' />
-              <Note>{message}</Note>
-              <InputSection
-                {...props}
-                name='email'
-                type='email'
-                placeholder='Email'
-              />
-              <Button
-                text={props.isSubmitting ? 'Submitting...' : 'Continue'}
-                disabled={props.isSubmitting}
-                type='submit'
-              />
-            </Form>
-          )}
-        </Formik>
-      )}
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            {props => (
+              <Form onSubmit={props.handleSubmit}>
+                <Heading title='Reset password' />
+                <Note>Please enter the email address associated with your IDPT account.</Note>
+                <InputSection
+                  {...props}
+                  name='email'
+                  type='email'
+                  placeholder='Email'
+                />
+                <Button
+                  text={props.isSubmitting ? 'Submitting...' : 'Continue'}
+                  disabled={props.isSubmitting}
+                  type='submit'
+                />
+              </Form>
+            )}
+          </Formik>
+        )}
     </BodyContainer>
   );
 };

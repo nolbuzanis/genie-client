@@ -48,10 +48,10 @@ const Spacing = styled.div`
 `;
 
 const validationSchema = Yup.object({
-  email: Yup.string()
+  email: Yup.string().trim()
     .email('Please enter a valid email.')
     .required('Please enter a valid email.'),
-  email2: Yup.string()
+  email2: Yup.string().trim()
     .oneOf([Yup.ref('email')], 'Emails do not match.')
     .required('Please enter a valid email.'),
   password: Yup.string()
@@ -84,6 +84,7 @@ const InputSection = props => {
 class Signup extends React.Component {
   handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
+    values.email = values.email.trim();
 
     const response = await userSignup(values);
     if (response.error) {

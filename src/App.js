@@ -19,7 +19,7 @@ import AuthRoute from './components/AuthRoute';
 import EditProfile from './views/EditProfile';
 import Introduction from './views/Introduction';
 // import requireAuth from './components/requireAuth';
-// import ResetPassword from './views/ResetPassword';
+import ResetPassword from './views/ResetPassword';
 // import NewPassword from './components/NewPassword';
 // import Account from './components/Account';
 // import MyFollowers from './components/MyFollowers';
@@ -55,6 +55,7 @@ const App = () => {
             <Route path='/' exact render={() => <Landing />} />
             <AuthRoute path='/login' exact component={Login} />
             <AuthRoute path='/signup' exact component={Signup} />
+            <Route path='/forgot-password' exact render={() => <ResetPassword />} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
             <PrivateRoute path='/introduction' exact component={Introduction} />
             <Route render={() => <Redirect to='/profile' />} />

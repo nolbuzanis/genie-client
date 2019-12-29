@@ -36,9 +36,9 @@ const StyledLink = styled(Link)`
 `;
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Please enter a valid email.')
-    .required('Please enter a valid email.'),
+  email: Yup.string().trim()
+    .required('Please enter a valid email.')
+    .email('Please enter a valid email.'),
   password: Yup.string().required('Please enter a password.')
 });
 
@@ -78,6 +78,7 @@ const InputSection = props => {
 const Login = () => {
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
+    values.email = values.email.trim();
 
     const response = await userLogin(values);
     if (response.error) {
@@ -116,7 +117,7 @@ const Login = () => {
               type='password'
               placeholder='Password'
             />
-            <StyledLink to='/reset'>Forgot password?</StyledLink>
+            <StyledLink to='/forgot-password'>Forgot password?</StyledLink>
             <ButtonWraper>
               <Button
                 text={props.isSubmitting ? 'Submitting...' : 'Log In'}
