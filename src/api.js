@@ -140,7 +140,6 @@ export const getArtistByURI = async (uri) => {
 };
 
 export const followerLogin = async () => {
-
   try {
     const res = await axios.get(`${SERVER_URL}/follower/login`);
     console.log(res);
@@ -148,5 +147,17 @@ export const followerLogin = async () => {
   } catch (error) {
     console.log(error);
   }
+}
 
+export const followArtist = async (artistId) => {
+
+  const data = JSON.stringify({ artistId });
+  try {
+    const response = await axios.post(`${SERVER_URL}/follower/follow`, data, axiosConfig);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams, Redirect } from 'react-router-dom';
-import { getArtistByURI } from '../../api';
+import { getArtistByURI, followArtist } from '../../api';
+import { useAlert } from 'react-alert';
 
 const ArtistPic = styled.div`
   width: 100%;
@@ -98,6 +99,7 @@ const Artist = () => {
 
   const { id } = useParams();
   const [artist, setArtist] = React.useState(undefined);
+  const alert = useAlert();
 
   if (!artist) {
     getArtistByURI(id).then(setArtist);
@@ -108,11 +110,20 @@ const Artist = () => {
   }
   console.log(artist);
 
+  const handleFollow = async () => {
+
+    const response = await followArtist(artist.uri);
+    if (response.error) {
+      return alert.show('Error following artist!');
+    }
+    return alert.show('Successfully followed!', { type: 'success' });
+  };
+
   return <FlexContainer><ArtistPic img={artist.img}>
     <Mask />
     <PhotoContent>
       <ArtistName>{artist.name}</ArtistName>
-      <FollowButton>Follow</FollowButton>
+      <FollowButton onClick={handleFollow}>Follow</FollowButton>
       <FollowerCount>{artist.followers + '  followers'}</FollowerCount>
     </PhotoContent>
   </ArtistPic>

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import SideMenu from '../SideMenu';
 import authContext from '../../Context/authContext';
 import { SERVER_URL } from '../../api';
-import qs from 'querystring';
 
 const IconContainer = styled.div`
   cursor: pointer;
