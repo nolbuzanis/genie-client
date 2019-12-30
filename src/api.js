@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-let SERVER_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/indepdent-8833f/us-central1/api' : 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
-SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
+export let SERVER_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/indepdent-8833f/us-central1/api' : 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
+//SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
 
 const axiosConfig = {
   withCredentials: true,
@@ -124,4 +124,29 @@ export const updateUserProfile = async formValues => {
     console.log(error);
     return { error };
   }
+}
+
+export const getArtistByURI = async (uri) => {
+  try {
+    const res = await axios.get(
+      `${SERVER_URL}/user/${uri}`);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+
+};
+
+export const followerLogin = async () => {
+
+  try {
+    const res = await axios.get(`${SERVER_URL}/follower/login`);
+    console.log(res);
+
+  } catch (error) {
+    console.log(error);
+  }
+
 }

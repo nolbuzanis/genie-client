@@ -5,13 +5,12 @@ import authContext from './Context/authContext';
 // import Dashboard from './components/Dashboard';
 import Signup from './views/SignUp';
 import Header from './components/Header';
-// import { connect } from 'react-redux';
-// import { getCurrentUser } from './actions';
 import Landing from './views/Landing';
 import history from './history';
 import { getCurrentUser } from './api';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
+import Artist from './views/Artist';
 // import Blasts from './components/Blasts';
 // import NewBlast from './components/NewBlast';
 // import PublicProfile from './components/PublicProfile';
@@ -53,6 +52,7 @@ const App = () => {
           <Header user={auth.error ? undefined : auth} />
           <Switch>
             <Route path='/' exact render={() => <Landing />} />
+            <Route path='/artist/:id' exact render={() => <Artist />} />
             <AuthRoute path='/login' exact component={Login} />
             <AuthRoute path='/signup' exact component={Signup} />
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
