@@ -7,7 +7,6 @@ import Signup from './views/SignUp';
 import Header from './components/Header';
 import Landing from './views/Landing';
 import history from './history';
-import { getCurrentUser } from './api';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
@@ -25,13 +24,10 @@ import ResetPassword from './views/ResetPassword';
 import './App.css';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from './components/Alert';
+//import PublicRoute from './components/PublicRoute';
 
 const App = () => {
-  const [auth, setAuth] = React.useState(undefined);
-  if (!auth) {
-    getCurrentUser().then(setAuth);
-    return 'loading...';
-  }
+  const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
 
   const alertOptions = {
     // you can also just use 'bottom center'
@@ -45,11 +41,12 @@ const App = () => {
     }
   };
 
+  console.log(auth);
   return (
-    <authContext.Provider value={{ auth, setAuth }}>
+    <authContext.Provider value={{ ...auth, setAuth }}>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
         <Router history={history}>
-          <Header user={auth.error ? undefined : auth} />
+          <Header />
           <Switch>
             <Route path='/' exact render={() => <Landing />} />
             <Route path='/artist/:id' exact render={() => <Artist />} />
@@ -65,52 +62,5 @@ const App = () => {
     </authContext.Provider>
   );
 };
-
-// class App extends React.Component {
-//   componentDidMount() {
-//     if (!this.props.auth.user) {
-//       console.log('Fetching current user');
-//       this.props.getCurrentUser();
-//     }
-//   }
-
-//   render() {
-//     // if (!this.props.auth.user) {
-//     //   return 'loading...';
-//     // }
-//     return (
-//       <div className='App'>
-//         <Router history={history}>
-//           <Switch>
-//             <Route path='/artists/:artistId' exact component={PublicProfile} />
-//             <Header />
-//           </Switch>
-//           <Switch>
-//             <Route path='/' exact component={Landing} />
-//             <Route path='/login' exact component={Login} />
-//             <Route path='/reset' exact component={ResetPassword} />
-//             <Route path='/reset/:token' exact component={NewPassword} />
-//             <Route path='/signup' exact component={SignUp} />
-//             <Route path='/account' exact component={requireAuth(Account)} />
-//             {/* <Route path='/dashboard' exact component={requireAuth(Dashboard)} /> */}
-//             <Route path='/blasts' exact component={requireAuth(Blasts)} />
-//             <Route path='/profile' exact component={requireAuth(EditProfile)} />
-//             <Route
-//               path='/myfollowers'
-//               exact
-//               component={requireAuth(MyFollowers)}
-//             />
-//             <Route path='/blasts/new' exact component={requireAuth(NewBlast)} />
-//             <Route
-//               path='/blasts/all'
-//               exact
-//               component={requireAuth(AllBlasts)}
-//             />
-//           </Switch>
-//         </Router>
-//       </div>
-//     );
-//   }
-// }
 
 export default App;

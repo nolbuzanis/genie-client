@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams, Redirect } from 'react-router-dom';
-import { getArtistByURI, followArtist } from '../../api';
+import { getArtistByURI, followArtist, SERVER_URL } from '../../api';
 import { useAlert } from 'react-alert';
+import authContext from '../../Context/authContext';
 
 const ArtistPic = styled.div`
   width: 100%;
@@ -41,7 +42,7 @@ const Mask = styled.div`
 `
 const FollowButton = styled.button`
   display: block;
-  background-color: #8872FF;
+  background-color: ${props => props.disabled ? '#333333' : '#8872FF'};
   width: 220px;
   height: 50px;
   border-radius: 25px;
@@ -54,8 +55,9 @@ const FollowButton = styled.button`
   font-weight: 700;
   box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
   transition: all ease 0.3s;
+  cursor: ${props => props.disabled ? 'auto' : 'pointer'};
   &:hover {
-    background-color: #9986FF;
+    background-color: ${props => props.disabled ? '#333333' : '#9986FF'};
   }
 `
 const FollowerCount = styled.p`
@@ -100,6 +102,7 @@ const Artist = () => {
   const { id } = useParams();
   const [artist, setArtist] = React.useState(undefined);
   const alert = useAlert();
+  const { follower, setAuth, user } = React.useContext(authContext);
 
   if (!artist) {
     getArtistByURI(id).then(setArtist);
@@ -112,18 +115,32 @@ const Artist = () => {
 
   const handleFollow = async () => {
 
+    if (!follower || follower.error) {
+      // No one logged in.. redirect to spotify oauth and will also handle following in this case
+      window.location.href = `${SERVER_URL}/follower/login/${artist.uri}/follow`;
+      follower.following ? follower.following.push(artist.uri) : follower.follower = [artist.uri];
+      setAuth({ user, follower })
+      return;
+    }
+    // If already following then unfollow (in future), for now return
+
     const response = await followArtist(artist.uri);
     if (response.error) {
       return alert.show('Error following artist!');
     }
+
+    follower.following ? follower.following.push(artist.uri) : follower.follower = [artist.uri];
+    setAuth({ user, follower });
     return alert.show('Successfully followed!', { type: 'success' });
   };
+
+  const isFollowing = follower.following && follower.following.includes(id);
 
   return <FlexContainer><ArtistPic img={artist.img}>
     <Mask />
     <PhotoContent>
       <ArtistName>{artist.name}</ArtistName>
-      <FollowButton onClick={handleFollow}>Follow</FollowButton>
+      <FollowButton onClick={handleFollow} disabled={isFollowing}>{isFollowing ? 'Following' : 'Follow'}</FollowButton>
       <FollowerCount>{artist.followers + '  followers'}</FollowerCount>
     </PhotoContent>
   </ArtistPic>

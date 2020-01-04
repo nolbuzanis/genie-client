@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import SideMenu from '../SideMenu';
 import authContext from '../../Context/authContext';
 import { SERVER_URL } from '../../api';
+import { getCurrentFollower, logoutFollower } from '../../api';
+import { useAlert } from 'react-alert';
 
 const IconContainer = styled.div`
   cursor: pointer;
@@ -91,16 +93,36 @@ const SpotifyIcon = () => (
 );
 
 const Header = ({ history }) => {
-  const { auth } = React.useContext(authContext);
+  const { user, follower, setAuth } = React.useContext(authContext);
   const [open, setOpen] = React.useState(false);
-
+  const alert = useAlert();
 
   const landing = history.location.pathname === '/' ? true : false;
 
   if (history.location.pathname.includes('artist')) {
+
+    if (!follower) {
+      getCurrentFollower().then((response) => setAuth({ user, follower: response }));
+    }
+
+    const handleLogout = async () => {
+      const res = await logoutFollower();
+
+      if (res.error) {
+        return alert.show('Error logging out!');
+      }
+      setAuth({ user, follower: undefined });
+      return alert.show('Successfully Logged out!', { type: 'success' });
+    }
+
     return <HeaderContainer landing={true}>
       <Logo to='/' landing={true}>Genie</Logo>
-      <SpotifyLogin href={`${SERVER_URL}/follower/login/${window.location.pathname.split('/')[2] ? window.location.pathname.split('/')[2] : '0'}`}>Log In <SpotifyIcon /></SpotifyLogin>
+      {follower && !follower.error ? <SpotifyLogin as='button' onClick={handleLogout}>Log Out <SpotifyIcon /></SpotifyLogin>
+        : <SpotifyLogin
+          href={`${SERVER_URL}/follower/login/${window.location.pathname.split('/')[2] ? window.location.pathname.split('/')[2] : '0'}`}>
+          Log In
+        <SpotifyIcon />
+        </SpotifyLogin>}
     </HeaderContainer>
   };
 
@@ -122,7 +144,7 @@ const Header = ({ history }) => {
   return (
     <HeaderContainer landing={landing}>
       <Logo to='/' landing={landing}>Genie</Logo>
-      {auth && !auth.error ? (
+      {user && !user.error && history.location.pathname !== '/' ? (
         <>
           <SvgIcon history={history} />
           <SideMenu open={open} setOpen={setOpen} />

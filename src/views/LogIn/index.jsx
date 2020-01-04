@@ -7,6 +7,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import * as Yup from 'yup';
 import { userLogin } from '../../api';
+import authContext from '../../Context/authContext';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -79,6 +80,7 @@ const InputSection = props => {
 };
 
 const Login = () => {
+  const { follower, setAuth } = React.useContext(authContext);
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
     values.email = values.email.trim();
@@ -94,7 +96,7 @@ const Login = () => {
       return setSubmitting(false);
     }
     setSubmitting(false);
-    window.location.reload();
+    return setAuth({ follower, user: undefined });
   };
 
   return (

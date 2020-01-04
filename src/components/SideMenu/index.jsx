@@ -113,10 +113,10 @@ const Spacing = styled.div`
 `;
 
 const SideMenu = props => {
-  const { auth } = React.useContext(authContext);
+  const { user } = React.useContext(authContext);
 
   const fetchUserDate = () => {
-    const createdAt = new Date(auth.createdAt);
+    const createdAt = new Date(user.createdAt);
     const month = createdAt.toLocaleString('default', {
       month: 'short'
     });
@@ -137,10 +137,10 @@ const SideMenu = props => {
   return (
     <MenuContainer {...props}>
       <MenuHeader>
-        <ProfilePic img={auth.img ? auth.img : '/default-user-256.png'} />
-        <ArtistName>{auth.name ? auth.name : ''}</ArtistName>
+        <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
+        <ArtistName>{user.name ? user.name : ''}</ArtistName>
         <UserDate>
-          {auth.createdAt ? `Artist since ${fetchUserDate()}` : ''}
+          {user.createdAt ? `Artist since ${fetchUserDate()}` : ''}
         </UserDate>
       </MenuHeader>
       <CloseIcon {...props} />

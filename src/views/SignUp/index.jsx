@@ -7,6 +7,7 @@ import Button from '../../components/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { userSignup } from '../../api';
+import authContext from '../../Context/authContext';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -62,30 +63,29 @@ const validationSchema = Yup.object({
     .required('Password is required.')
 });
 
-const InputSection = props => {
-  return (
-    <>
-      <Input
-        id={props.name}
-        name={props.name}
-        type={props.type}
-        onChange={props.handleChange}
-        onBlur={props.handleBlur}
-        value={props.values[props.name]}
-        error={props.errors[props.name] && props.touched[props.name]}
-        placeholder={props.placeholder}
-      />
-      <Label>
-        {props.errors[props.name] &&
-          props.touched[props.name] &&
-          props.errors[props.name]}
-      </Label>
-    </>
-  );
-};
+const InputSection = props => (
+  <>
+    <Input
+      id={props.name}
+      name={props.name}
+      type={props.type}
+      onChange={props.handleChange}
+      onBlur={props.handleBlur}
+      value={props.values[props.name]}
+      error={props.errors[props.name] && props.touched[props.name]}
+      placeholder={props.placeholder}
+    />
+    <Label>
+      {props.errors[props.name] &&
+        props.touched[props.name] &&
+        props.errors[props.name]}
+    </Label>
+  </>
+);
 
-class Signup extends React.Component {
-  handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+const Signup = () => {
+  const { follower, setAuth } = React.useContext(authContext);
+  const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
     values.email = values.email.trim();
 
@@ -98,53 +98,51 @@ class Signup extends React.Component {
     }
 
     console.log(response);
-    window.location.reload();
+    return setAuth({ follower, user: undefined });
   };
 
-  render() {
-    return (
-      <BodyContainer>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={this.handleSubmit}
-          validationSchema={validationSchema}
-        >
-          {props => (
-            <Form onSubmit={props.handleSubmit}>
-              <Heading title='Sign up' subtitle='Promote your music!' />
-              <Spacing />
-              <InputSection
-                {...props}
-                name='email'
-                type='email'
-                placeholder='Email'
+  return (
+    <BodyContainer>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        {props => (
+          <Form onSubmit={props.handleSubmit}>
+            <Heading title='Sign up' subtitle='Promote your music!' />
+            <Spacing />
+            <InputSection
+              {...props}
+              name='email'
+              type='email'
+              placeholder='Email'
+            />
+            <InputSection
+              {...props}
+              name='email2'
+              type='email'
+              placeholder='Verify Email'
+            />
+            <InputSection
+              {...props}
+              name='password'
+              type='password'
+              placeholder='Password'
+            />
+            <ButtonWraper>
+              <Button
+                text={props.isSubmitting ? 'Submitting...' : 'Sign Up'}
+                disabled={props.isSubmitting}
+                type='submit'
               />
-              <InputSection
-                {...props}
-                name='email2'
-                type='email'
-                placeholder='Verify Email'
-              />
-              <InputSection
-                {...props}
-                name='password'
-                type='password'
-                placeholder='Password'
-              />
-              <ButtonWraper>
-                <Button
-                  text={props.isSubmitting ? 'Submitting...' : 'Sign Up'}
-                  disabled={props.isSubmitting}
-                  type='submit'
-                />
-              </ButtonWraper>
-              <StyledLink to='/login'>Already have an account?</StyledLink>
-            </Form>
-          )}
-        </Formik>
-      </BodyContainer>
-    );
-  }
+            </ButtonWraper>
+            <StyledLink to='/login'>Already have an account?</StyledLink>
+          </Form>
+        )}
+      </Formik>
+    </BodyContainer>
+  );
 }
 
 export default Signup;

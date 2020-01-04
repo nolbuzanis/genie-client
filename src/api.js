@@ -161,3 +161,23 @@ export const followArtist = async (artistId) => {
     return { error };
   }
 }
+
+export const getCurrentFollower = async () => {
+  try {
+    const res = await axios.get(`${SERVER_URL}/follower/me`, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+export const logoutFollower = async () => {
+  try {
+    const res = await axios.get(`${SERVER_URL}/follower/logout`, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}

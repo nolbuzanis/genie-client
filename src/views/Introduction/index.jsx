@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { submitSpotifyURI, getCurrentUser } from '../../api';
+import { submitSpotifyURI } from '../../api';
 import authContext from '../../Context/authContext';
 import { withRouter } from 'react-router-dom';
+import { useAlert } from 'react-alert';
 
 const Container = styled.div`
   //margin: 0 auto;
@@ -67,18 +68,24 @@ const validationSchema = Yup.object().shape({
 
 
 const Introduction = ({ history }) => {
-
-  const { auth, setAuth } = React.useContext(authContext);
-  const handleSubmit = async ({ uri }) => {
+  const alert = useAlert();
+  const { user, follower, setAuth } = React.useContext(authContext);
+  const handleSubmit = async ({ uri }, { setFieldError, setSubmitting }) => {
+    setSubmitting(true);
     const artistId = uri.includes('spotify') ? uri.trim().split(':')[2] : uri.trim();
 
-    const response = await submitSpotifyURI(artistId, auth.email);
-    if (response.error) {
-      console.log(response.error);
-      return;
+    const response = await submitSpotifyURI(artistId, user.email);
+    if (response.error && response.error.response.status === 409) {
+      setFieldError('uri', 'That URI is already taken.')
+      return setSubmitting(false);
     }
-    getCurrentUser().then(setAuth);
-    history.push('/profile');
+    if (response.error) {
+      alert.show('Error submitting URI!');
+      return setSubmitting(false);
+    }
+    setAuth({ follower, user: { ...user, uri } });
+    return setSubmitting(false);
+    //history.push('/profile');
   }
 
   return <Container>
@@ -109,7 +116,7 @@ const Introduction = ({ history }) => {
           {props.errors['uri'] && props.touched['uri'] && (
             <ErrorMsg>{props.errors['uri']}</ErrorMsg>
           )}
-          <Button>Get Started</Button>
+          <Button type='submit' disabled={props.isSubmitting}>{props.isSubmitting ? 'Importing...' : 'Import Profile'}</Button>
         </form>
       )}
     </Formik>

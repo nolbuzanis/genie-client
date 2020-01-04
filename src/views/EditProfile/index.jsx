@@ -180,13 +180,9 @@ const InputSection = props => (
 );
 
 const EditProfile = () => {
-  const { auth, setAuth } = React.useContext(authContext);
+  const { user, follower, setAuth } = React.useContext(authContext);
   const [uploading, setUploading] = React.useState(false);
   const alert = useAlert();
-
-  if (!auth || auth.error) {
-    return null;
-  }
 
   const handlePhotoSubmit = async (e) => {
     const photo = e.target.files[0];
@@ -200,7 +196,8 @@ const EditProfile = () => {
       alert.show('Error!');
       return setUploading(false);
     }
-    setAuth({ ...auth, img: response })
+    user.img = response;
+    setAuth({ user, follower });
     alert.show('Updated Picture!', { type: 'success' });
     return setUploading(false);
 
@@ -209,13 +206,13 @@ const EditProfile = () => {
   }
 
   const initialValues = {
-    name: auth.name,
-    bio: auth.bio,
-    uri: auth.uri,
-    instagram: auth.instagramURL,
-    facebook: auth.facebookURL,
-    twitter: auth.twitterURL,
-    website: auth.websiteURL
+    name: user.name,
+    bio: user.bio,
+    uri: user.uri,
+    instagram: user.instagramURL,
+    facebook: user.facebookURL,
+    twitter: user.twitterURL,
+    website: user.websiteURL
   };
 
   const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -227,7 +224,7 @@ const EditProfile = () => {
       alert.show('Error!');
       return setSubmitting(false);
     }
-    setAuth({ ...auth, ...values });
+    setAuth({ user: { ...user, ...values }, follower });
     alert.show('Updated Profile!', { type: 'success' });
     return setSubmitting(false);;
 
@@ -238,7 +235,7 @@ const EditProfile = () => {
       <Header>Edit Profile</Header>
       <UniqueLink>
         {'Your unique artist url: '}
-        <Link to={'artists/' + auth.uri}>{'www.idpt.artists/' + auth.uri}</Link>
+        <Link to={'artist/' + user.uri}>{'www.idpt.artists/' + user.uri}</Link>
       </UniqueLink>
 
       <Formik
@@ -249,7 +246,7 @@ const EditProfile = () => {
         {props => (
           <Form onSubmit={props.handleSubmit}>
             <FlexContainer>
-              <ArtistPhoto img={auth.img}>
+              <ArtistPhoto img={user.img}>
                 <PhotoOverlay />
                 <FileInput
                   onChange={e => handlePhotoSubmit(e)}
