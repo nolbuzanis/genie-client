@@ -41,15 +41,15 @@ const Landing = () => {
       background: #FFD473;
     }
   `;
-  const HeadphonesImg = styled.img`
-  display: none;
-    float: right;
-    display: block;
-    width: 300px;
-    position: absolute;
-    left: 800px;
-    top: 145px;
-  `
+  // const HeadphonesImg = styled.img`
+  // display: none;
+  //   float: right;
+  //   display: block;
+  //   width: 300px;
+  //   position: absolute;
+  //   left: 800px;
+  //   top: 145px;
+  // `
 
   return (
     <HeroImage>

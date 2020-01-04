@@ -41,7 +41,7 @@ const App = () => {
     }
   };
 
-  console.log(auth);
+  //console.log(auth);
   return (
     <authContext.Provider value={{ ...auth, setAuth }}>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
