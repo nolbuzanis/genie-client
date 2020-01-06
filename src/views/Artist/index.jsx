@@ -103,7 +103,7 @@ const Artist = () => {
   const [artist, setArtist] = React.useState(undefined);
   const alert = useAlert();
   const { follower, setAuth, user } = React.useContext(authContext);
-
+  console.log(follower);
   if (!artist) {
     getArtistByURI(id).then(setArtist);
     return 'loading...';
@@ -111,7 +111,6 @@ const Artist = () => {
   if (artist.error) {
     return <Redirect to='/' />
   }
-  console.log(artist);
 
   const handleFollow = async () => {
 
@@ -134,7 +133,7 @@ const Artist = () => {
     return alert.show('Successfully followed!', { type: 'success' });
   };
 
-  const isFollowing = follower.following && follower.following.includes(id);
+  const isFollowing = follower && follower.following && follower.following.includes(id);
 
   return <FlexContainer><ArtistPic img={artist.img}>
     <Mask />

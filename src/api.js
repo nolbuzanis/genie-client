@@ -181,3 +181,23 @@ export const logoutFollower = async () => {
     return { error };
   }
 }
+
+export const getMySongs = async () => {
+  try {
+    const res = await axios.get(`${SERVER_URL}/songs/me`, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+export const createNewSong = async (uri) => {
+  try {
+    const res = await axios.post(`${SERVER_URL}/songs/create`, JSON.stringify({ uri }), axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}

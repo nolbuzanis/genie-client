@@ -23,7 +23,7 @@ const Saves = styled.p`
   margin: 0;
   padding-top: 15px;
 `;
-const Date = styled.p`
+const DateString = styled.p`
   margin: 0;
   font-style: italic;
 `;
@@ -36,7 +36,7 @@ const Button = styled.button`
   width: 200px;
   height: 44px;
   color: white;
-  background: #080808;
+  background: ${props => props.disabled ? '#C7C7C7' : '#080808'};
   border: none;
   box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
   font-size: 16px;
@@ -51,19 +51,22 @@ const Background = styled.div`
   height: 120px;
 `;
 
-const BlastCard = props => (
-  <div style={{ position: 'relative' }}>
+const BlastCard = props => {
+  const created = new Date(props.createdAt);
+  const parsed = created.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' }).split(' ');
+
+  return (<div style={{ position: 'relative' }}>
     <Background img={props.img}>
       <Title>{props.title}</Title>
     </Background>
     <Content>
       <Saves>
-        <strong>2</strong> saves
+        <strong>{props.saves}</strong> saves
       </Saves>
-      <Date>Created on Nov. 2, 2019</Date>
+      <DateString>Created on {parsed[0] + '. ' + parsed[1] + ' ' + parsed[2]}</DateString>
     </Content>
-    <Button>Save to 2 followers</Button>
-  </div>
-);
+    <Button disabled>Saved to all followers</Button>
+  </div>);
+};
 
 export default BlastCard;

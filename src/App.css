@@ -49,3 +49,6 @@ p {
 input, textarea {
   font-family: 'Nunito Sans', sans-serif;
 }
+.ReactModal__Body--open {
+  overflow-y: hidden;
+}

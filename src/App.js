@@ -13,7 +13,7 @@ import Artist from './views/Artist';
 // import Blasts from './components/Blasts';
 // import NewBlast from './components/NewBlast';
 // import PublicProfile from './components/PublicProfile';
-// import AllBlasts from './views/AllBlasts';
+import AllBlasts from './views/AllBlasts';
 import EditProfile from './views/EditProfile';
 import Introduction from './views/Introduction';
 // import requireAuth from './components/requireAuth';
@@ -40,8 +40,6 @@ const App = () => {
       width: "100%"
     }
   };
-
-  //console.log(auth);
   return (
     <authContext.Provider value={{ ...auth, setAuth }}>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
@@ -53,6 +51,7 @@ const App = () => {
             <AuthRoute path='/login' exact component={Login} />
             <AuthRoute path='/signup' exact component={Signup} />
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
+            <PrivateRoute path='/allsongs' exact component={AllBlasts} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
             <PrivateRoute path='/introduction' exact component={Introduction} />
             <Route render={() => <Redirect to='/profile' />} />

@@ -152,18 +152,18 @@ const SideMenu = props => {
           <StyledLink to='/profile' onClick={() => props.setOpen()}>
             Profile
           </StyledLink>
-          {/* <StyledLink to='/blasts' onClick={() => props.setOpen()}>
-            Blasts
+          <StyledLink to='/allsongs' onClick={() => props.setOpen()}>
+            Songs
           </StyledLink>
-          <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
+          {/* <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
             Followers
           </StyledLink> */}
         </div>
         <div>
           <Line />
-          <StyledLink to='/account' onClick={() => props.setOpen()}>
+          {/* <StyledLink to='/account' onClick={() => props.setOpen()}>
             Account Settings
-          </StyledLink>
+          </StyledLink> */}
           <StyledLink to='#' onClick={handleLogout}>
             Log Out
           </StyledLink>
