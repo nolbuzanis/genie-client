@@ -5,115 +5,124 @@ import authContext from '../../Context/authContext';
 import { logUserOut } from '../../api';
 import { withRouter } from 'react-router-dom';
 
-const CloseIcon = props => (
-  <CloseIconContianer onClick={() => props.setOpen()}>
-    <svg
-      version='1.1'
-      id='Capa_1'
-      xmlns='http://www.w3.org/2000/svg'
-      xmlnsXlink='http://www.w3.org/1999/xlink'
-      x='0px'
-      y='0px'
-      width='32px'
-      height='32px'
-      viewBox='0 0 612 612'
-      style={{ enableBackground: 'new 0 0 612 612' }}
-      xmlSpace='preserve'
-    >
-      <g>
-        <g id='cross'>
-          <g>
-            <polygon
-              points='612,36.004 576.521,0.603 306,270.608 35.478,0.603 0,36.004 270.522,306.011 0,575.997 35.478,611.397 
-				306,341.411 576.521,611.397 612,575.997 341.459,306.011 			'
-            />
-          </g>
-        </g>
-      </g>
-    </svg>
-  </CloseIconContianer>
-);
-
-const CloseIconContianer = styled.div`
-  position: absolute;
-  right: 30px;
-  top: 25px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-`;
-
 const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
-  position: fixed;
+  justify-content: space-between;
   z-index: 10;
+  position: fixed;
   top: 0;
-  left: ${props => (props.open ? '0' : '-360px')};
+  left: ${props => (props.open ? '0' : '-270px')};
   bottom: 0;
   height: 100%;
-  width: 100%;
-  max-width: 320px;
-  background: white;
+  width: 270px;
+  min-width: 270px;
+  background: linear-gradient(#8872FF, #4568DC);
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  @media (min-width: 920px) {
+    left: 0;
+    position: relative;
+    bottom: 0;
+  }
 `;
+const ProfileSection = styled.div`
+  border-bottom: 1px solid #404854;
+  display: flex;
+  padding: 20px;
+  
+`
 const ProfilePic = styled.div`
   background: url(${props => props.img}) center center no-repeat;
   background-size: cover;
-  width: 70px;
-  height: 70px;
-  border-radius: 35px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-right: 10px;
 `;
 const MenuHeader = styled.div`
-  margin: 0 30px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #666666;
+  border-bottom: 1px solid #404854;
+  background-color: rgba(0,0,0,0.2);
 `;
 const ArtistName = styled.p`
-  padding-top: 12px;
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
+  color: white;
+  width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const UserDate = styled.p`
   margin: 0;
   padding: 0;
   font-weight: 300;
   padding-top: 2px;
+  font-size: 14px;
+  color: #E1E1E1;
 `;
 const MenuContent = styled.div`
   display: flex;
   flex-grow: 1;
   justify-content: space-between;
   flex-direction: column;
-  padding-top: 12px;
 `;
 const StyledLink = styled(Link)`
-  color: black;
   display: block;
-  font-weight: 300;
-  font-size: 24px;
-  padding: 10px 0;
-  padding-left: 50px;
+  font-size: 20px;
+  height: 45px;
+  line-height: 45px;
+  color: #E1E1E1;
+  padding-left: 30px;
   &:hover,
   &:active {
-    background: #f0f0f0;
-    color: black;
+    background: rgba(255,255,255,0.2);
+    color: #E1E1E1;
+  }
+  >img {
+    height: 20px;
+    margin-right: 20px;
+    margin-top: 13px;
+    margin-bottom: -3px;
   }
 `;
+const Logo = styled(Link)`
+  display: block;
+  font-weight: 700;
+  color: #9FC7FF;
+  font-size: 24px;
+  padding-left: 25px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #404854;
+  &:hover{
+    color: #9FC7FF;
+  }
+`
+const HomeLink = styled(Link)`
+  display: block;
+  padding: 20px 25px;
+  font-size: 24px; 
+  > img {
+    height: 24px;
+    margin-right: 9px;
+  }
+  &:hover {
+    background-color: rgba(255,255,255,0.2);
+  }
+`
+const LogoSpan = styled.span`
+  color: white;
+  font-weight: 400;
+  padding-left: 10px;
+`
 
-const Line = styled.div`
-  border-top: 1px solid #666666;
-  margin: 0 30px;
-  height: 10px;
-`;
-const Spacing = styled.div`
-  height: 10px;
-`;
-
-const SideMenu = props => {
+const SideMenu = ({ open, setOpen }) => {
   const { user } = React.useContext(authContext);
+
+  if (!user || user.error) {
+    return null;
+  }
 
   const fetchUserDate = () => {
     const createdAt = new Date(user.createdAt);
@@ -135,39 +144,47 @@ const SideMenu = props => {
   };
 
   return (
-    <MenuContainer {...props}>
+    <MenuContainer open={open}>
       <MenuHeader>
-        <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
-        <ArtistName>{user.name ? user.name : ''}</ArtistName>
-        <UserDate>
-          {user.createdAt ? `Artist since ${fetchUserDate()}` : ''}
-        </UserDate>
+        <Logo to='/'>g<LogoSpan>Genie</LogoSpan></Logo>
+        <ProfileSection>
+          <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
+          <div>
+            <ArtistName>{user.name ? user.name : ''}</ArtistName>
+            <UserDate>
+              {user.createdAt ? `Artist since ${fetchUserDate()}` : ''}
+            </UserDate>
+          </div>
+        </ProfileSection>
+        <HomeLink to='/profile' onClick={() => setOpen(false)}>
+          <img src='/dashboard-icon.png' alt='' />
+          Dashboard
+          </HomeLink>
       </MenuHeader>
-      <CloseIcon {...props} />
       <MenuContent>
         <div>
           {/* <StyledLink to='/dashboard' onClick={() => props.setOpen()}>
             Dashboard
           </StyledLink> */}
-          <StyledLink to='/profile' onClick={() => props.setOpen()}>
+          <StyledLink to='/profile' onClick={() => setOpen(false)}>
+            <img src='/profile-icon.png' alt='' />
             Profile
           </StyledLink>
-          <StyledLink to='/allsongs' onClick={() => props.setOpen()}>
-            Songs
+          <StyledLink to='/allsongs' onClick={() => setOpen(false)}>
+            <img src='/song-icon.png' alt='' />
+            Releases
           </StyledLink>
           {/* <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
             Followers
           </StyledLink> */}
         </div>
-        <div>
-          <Line />
+        <div style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderTop: '1px solid #404854' }}>
           {/* <StyledLink to='/account' onClick={() => props.setOpen()}>
             Account Settings
           </StyledLink> */}
-          <StyledLink to='#' onClick={handleLogout}>
+          <HomeLink to='#' onClick={handleLogout}>
             Log Out
-          </StyledLink>
-          <Spacing />
+          </HomeLink>
         </div>
       </MenuContent>
     </MenuContainer>

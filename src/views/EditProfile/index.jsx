@@ -8,7 +8,7 @@ import { uploadUserPhoto, updateUserProfile } from '../../api';
 import { useAlert } from 'react-alert';
 
 const Header = styled.h1`
-  padding-top: 110px;
+  padding-top: 50px;
   padding-left: 30px;
 `;
 const UniqueLink = styled.p`
@@ -219,14 +219,16 @@ const EditProfile = () => {
 
     setSubmitting(true);
     const response = await updateUserProfile(values);
-    resetForm();
+
     if (response.error) {
       alert.show('Error!');
       return setSubmitting(false);
     }
-    setAuth({ user: { ...user, ...values }, follower });
+
+
     alert.show('Updated Profile!', { type: 'success' });
-    return setSubmitting(false);;
+    setSubmitting(false);
+    return setAuth({ user: { ...user, ...values }, follower });
 
   };
 
@@ -244,7 +246,8 @@ const EditProfile = () => {
         onSubmit={handleFormSubmit}
       >
         {props => (
-          <Form onSubmit={props.handleSubmit}>
+          < Form onSubmit={props.handleSubmit}>
+            {console.log(props)}
             <FlexContainer>
               <ArtistPhoto img={user.img}>
                 <PhotoOverlay />
@@ -259,7 +262,7 @@ const EditProfile = () => {
                   {uploading ? 'Uploading...' : 'Change Photo'}
                 </ChangePhotoButton>
               </ArtistPhoto>
-              <FormContainer>{console.log(props.isSubmitting)}
+              <FormContainer>
                 <InputSection {...props} name='name' label='Name'></InputSection>
                 <InputSection
                   {...props}
@@ -275,14 +278,14 @@ const EditProfile = () => {
                 <ChangeUriLink to='#'>Need to change your spotify URI?</ChangeUriLink>
               </FormContainer>
             </FlexContainer>
-            <SubmitButton type='submit' disabled={!props.dirty || !props.isValid}>
+            <SubmitButton type='submit' disabled={!props.isValid || !props.dirty}>
               {props.isSubmitting ? 'Submitting...' : 'Submit'}
             </SubmitButton>
           </Form>
         )}
       </Formik>
 
-    </Container>
+    </Container >
   );
 };
 

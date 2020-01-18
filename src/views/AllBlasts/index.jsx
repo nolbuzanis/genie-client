@@ -8,47 +8,51 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 
-const Container = styled.div`
-  padding: 110px 25px 60px;
-`;
-
 const BlastList = styled.div`
   margin: 0 auto;
-  max-width: 1100px;
+  padding: 0 25px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-column-gap: 40px;
-  grid-row-gap: 60px;
+  grid-row-gap: 30px;
+  width: 100%;
 `;
 
 const Header = styled.h1`
   font-weight: 400;
   margin: 0;
-  padding-left: 14vw;
-  padding-bottom: 40px;
+  font-size: 30px;
+  padding: 40px;
+  display: flex;
+  justify-content: space-between;
 `;
-const CreateSongButton = styled.div`
-  height: 200px;
-  width: 100%;
-  background: #F7F7F7;
-  text-align: center;
-  color: black;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: 2px solid #F7F7F7;
-  &:hover {
-    border: 2px solid #8872FF;
-    color: #8872FF;
-    #Path {
-      fill: #8872FF;
-      transition: all 0.2s ease;
-    }
+const CreateSongButton = styled.button`
+  background: #8872ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  border: none;
+  box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.16);
+  margin-bottom: 2.5px;
+  margin-left: 2.5px;
+  > img {
+    width: 20px;
+    height: 20px;
   }
-`
-const CreateButtonText = styled.p`
-  font-size: 24px;
-  padding-top: 50px;
-  padding-bottom: 10px;
+  &:hover {
+    width: 55px;
+    height: 55px;
+    border-radius: 27.5px;
+    margin-right: -2.5px;
+    margin-top: -2.5px;
+    margin-bottom: 0;
+    margin-left: 0;
+    box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.36);
+    > img {
+    width: 22.5px;
+    height: 22.5px;
+  }
+  }
 `
 const ModalHeader = styled.h2`
   font-size: calc(24px + 2vw);
@@ -101,18 +105,6 @@ const CloseSvg = () => (
   </svg >
 );
 
-const AddSvg = () => (
-  <svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" >
-    <g id="All-Blasts" stroke="none" strokeWidth={1} fillRule="evenodd">
-      <g id="Desktop,-Chrome" transform="translate(-615.000000, -515.000000)" fillRule="nonzero">
-        <g id="add" transform="translate(615.000000, 515.000000)">
-          <polygon id="Path" fill="#000000" points="50 23.8095238 26.1904762 23.8095238 26.1904762 0 23.8095238 0 23.8095238 23.8095238 0 23.8095238 0 26.1904762 23.8095238 26.1904762 23.8095238 50 26.1904762 50 26.1904762 26.1904762 50 26.1904762" />
-        </g>
-      </g>
-    </g>
-  </svg>
-);
-
 const modalStyles = {
   overlay: {
     backgroundColor: 'rgba(51,51,51,0.7)',
@@ -160,6 +152,91 @@ const HelpLink = styled(Link)`
 const validationSchema = Yup.object().shape({
   uri: Yup.string().trim().required('Please enter a valid URI')
 });
+const Pic = styled.div`
+  width: 70px;
+  height 70px;
+  display: inline-block;
+  border-radius: 8px;
+  background: url('${props => props.src}') center center no-repeat;
+  background-size: cover;
+`
+const SongName = styled.p`
+  font-size: 20px;
+  padding-left: 10px;
+  font-weight: 500;
+`
+const CreatedOn = styled.p`
+  padding-left: 10px;
+  font-weight: 300;
+  padding-right: 20px;
+`
+const ReleaseDateContainer = styled.div`
+  text-align: center;
+  margin: 0 auto;
+  font-style: ${props => props.released && 'oblique'};
+  height: 60px;
+  min-width: 130px;
+  width: 100%;
+  background: ${props => props.released ? '#818181' : '#4568DC'};
+  padding-top: 20px;
+  color: white;
+  font-weight: ${props => !props.released && '500'};
+`
+const Saves = styled.p`
+  font-style: normal;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: -13px;
+`
+const ReleaseCard = styled.div`
+  padding-bottom: 30px;
+  border-bottom: 1px solid #979797;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  > div {
+    display: inline-block;
+  }
+`
+const SaveIcon = styled.img`
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+`
+const Content = styled.div`
+  display: inline-block;
+  margin-bottom: 20px;
+`
+
+const parseDate = (timestamp) => {
+  if (!timestamp) return '';
+  const date = new Date(timestamp);
+  const parsed = date.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' }).split(' ');
+  return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
+}
+
+const Release = ({ song }) => {
+  const now = new Date();
+  const releaseDate = new Date(song.releaseDate);
+  console.log(song);
+  const released = now > releaseDate;
+  return (
+    <ReleaseCard>
+      <div>
+        <Pic src={song.img} />
+        <Content>
+          <SongName>{song.name}</SongName>
+          <CreatedOn>{'Created on ' + parseDate(song.createdAt)}</CreatedOn>
+        </Content>
+      </div>
+      <ReleaseDateContainer released={released}>
+        {released && <Saves>{song.saves}<SaveIcon src='/save-icon.png' alt='' /></Saves>}
+        {parseDate(releaseDate)}
+      </ReleaseDateContainer>
+    </ReleaseCard>)
+};
 
 const AllBlasts = () => {
 
@@ -169,7 +246,7 @@ const AllBlasts = () => {
   const fetchSongs = async () => {
     const songs = await getMySongs();
     if (songs.error) {
-      alert.show('Error fetching songs!');
+      return alert.show('Error fetching songs!');
     }
     setSongs(songs);
   }
@@ -180,13 +257,7 @@ const AllBlasts = () => {
 
   const renderSongs = () => {
     return songs.map((song) => {
-      return <BlastCard
-        key={song.spotifyUri}
-        title={song.name}
-        img={song.img}
-        saves={song.saves}
-        createdAt={song.createdAt}
-      />
+      return <Release key={song.spotifyUri} song={song} />
     });
   };
   Modal.setAppElement('#modal')
@@ -212,7 +283,7 @@ const AllBlasts = () => {
       setSubmitting(false);
       return setModalOpen(false);
     }
-    songs.push(response);
+    songs.unshift(response);
     setSongs(songs);
     setSubmitting(false);
     setModalOpen(false);
@@ -221,18 +292,16 @@ const AllBlasts = () => {
 
   return (
     <>
-      <Container>
-        <Header>All Songs</Header>
-        <BlastList>
-          {renderSongs()}
-          <CreateSongButton onClick={() => setModalOpen(true)}>
-            <CreateButtonText>
-              Create New Song
-          </CreateButtonText>
-            <AddSvg />
-          </CreateSongButton>
-        </BlastList>
-      </Container>
+      <Header>
+        Releases
+        <CreateSongButton onClick={() => setModalOpen(true)}>
+          <img src='/add-icon.png' alt='Add' />
+        </CreateSongButton>
+      </Header>
+
+      <BlastList>
+        {renderSongs()}
+      </BlastList>
       <Modal style={modalStyles} isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} shouldCloseOnOverlayClick shouldCloseOnEsc>
         <ModalHeader>Create a new song</ModalHeader>
         <ModalText>Please enter the spotify URI of the song you want to import.</ModalText>
