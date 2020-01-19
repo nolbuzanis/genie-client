@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
-// import Dashboard from './components/Dashboard';
+import Dashboard from './views/Dashboard';
 import Signup from './views/SignUp';
 import Header from './components/Header';
 import Landing from './views/Landing';
@@ -51,7 +51,8 @@ const App = () => {
             <AuthRoute path='/login' exact component={Login} />
             <AuthRoute path='/signup' exact component={Signup} />
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
-            <PrivateRoute path='/allsongs' exact component={AllBlasts} />
+            <PrivateRoute path='/dashboard' exact component={Dashboard} />
+            <PrivateRoute path='/releases' exact component={AllBlasts} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
             <PrivateRoute path='/introduction' exact component={Introduction} />
             <Route render={() => <Redirect to='/profile' />} />

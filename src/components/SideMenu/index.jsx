@@ -156,7 +156,7 @@ const SideMenu = ({ open, setOpen }) => {
             </UserDate>
           </div>
         </ProfileSection>
-        <HomeLink to='/profile' onClick={() => setOpen(false)}>
+        <HomeLink to='/dashboard' onClick={() => setOpen(false)}>
           <img src='/dashboard-icon.png' alt='' />
           Dashboard
           </HomeLink>
@@ -170,7 +170,7 @@ const SideMenu = ({ open, setOpen }) => {
             <img src='/profile-icon.png' alt='' />
             Profile
           </StyledLink>
-          <StyledLink to='/allsongs' onClick={() => setOpen(false)}>
+          <StyledLink to='/releases' onClick={() => setOpen(false)}>
             <img src='/song-icon.png' alt='' />
             Releases
           </StyledLink>
