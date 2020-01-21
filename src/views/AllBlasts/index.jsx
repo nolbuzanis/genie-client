@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import BlastCard from '../../components/BlastCard';
 import { getMySongs, createNewSong } from '../../api';
 import { useAlert } from 'react-alert';
 import Modal from 'react-modal';
@@ -10,11 +9,12 @@ import { Link } from 'react-router-dom';
 
 const BlastList = styled.div`
   margin: 0 auto;
-  padding: 0 25px;
+  padding: 0 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   grid-column-gap: 40px;
-  grid-row-gap: 30px;
+  //grid-row-gap: 30px;
+  max-width: 1000px;
   width: 100%;
 `;
 
@@ -25,6 +25,9 @@ const Header = styled.h1`
   padding: 40px;
   display: flex;
   justify-content: space-between;
+  @media (max-width: 920px) {
+    padding-top: 0px;
+  }
 `;
 const CreateSongButton = styled.button`
   background: #8872ff;
@@ -153,61 +156,54 @@ const validationSchema = Yup.object().shape({
   uri: Yup.string().trim().required('Please enter a valid URI')
 });
 const Pic = styled.div`
-  width: 70px;
-  height 70px;
+  width: 60px;
+  height 60px;
   display: inline-block;
   border-radius: 8px;
   background: url('${props => props.src}') center center no-repeat;
   background-size: cover;
 `
 const SongName = styled.p`
-  font-size: 20px;
-  padding-left: 10px;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 10px;
   font-weight: 500;
+  border-bottom: solid 3px ${props => props.released ? '#b4b4b4' : '#4568dc'};
 `
-const CreatedOn = styled.p`
+const ReleasedOn = styled.p`
   padding-left: 10px;
-  font-weight: 300;
+  font-size: 13px;
+  font-weight: 500;
   padding-right: 20px;
-`
-const ReleaseDateContainer = styled.div`
-  text-align: center;
-  margin: 0 auto;
-  font-style: ${props => props.released && 'oblique'};
-  height: 60px;
-  min-width: 130px;
-  width: 100%;
-  background: ${props => props.released ? '#818181' : '#4568DC'};
-  padding-top: 20px;
-  color: white;
-  font-weight: ${props => !props.released && '500'};
-`
-const Saves = styled.p`
-  font-style: normal;
-  color: white;
-  font-weight: 700;
-  font-size: 20px;
-  margin-top: -13px;
+  padding-top: 3px;
 `
 const ReleaseCard = styled.div`
-  padding-bottom: 30px;
+  position: relative;
+  padding: 15px 0;
   border-bottom: 1px solid #979797;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   margin: 0 auto;
-  > div {
-    display: inline-block;
-  }
-`
-const SaveIcon = styled.img`
-  margin-left: 5px;
-  width: 20px;
-  height: 20px;
+  width: 100%;
 `
 const Content = styled.div`
   display: inline-block;
-  margin-bottom: 20px;
+`
+const ReleaseIconContainer = styled.div`
+  position: absolute;
+  right: 10px;
+  
+`;
+const ReleaseIcon = styled.img`
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+`;
+const Span = styled.span`
+  font-weight: ${props => props.released ? '500' : '900'};
+  font-size: ${props => props.released ? '12px' : '11px'};
 `
 
 const parseDate = (timestamp) => {
@@ -216,25 +212,45 @@ const parseDate = (timestamp) => {
   const parsed = date.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' }).split(' ');
   return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
 }
+const timeUntilRelease = (releaseDate) => {
+  const now = new Date();
+  releaseDate.setHours(24, 0, 0, 0); // Set to next midnight
+  const timeRemaining = Math.round((releaseDate.getTime() - now.getTime()) / 1000);
+
+  const hours = Math.floor(timeRemaining / 3600);
+  const minutes = Math.floor(timeRemaining / 60) - hours * 60;
+  const seconds = timeRemaining - (hours * 60 + minutes) * 60;
+
+  const parsedHours = hours < 10 ? '0' + hours.toString() : hours.toString()
+  const parsedMinutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+  const parsedSeconds = seconds < 10 ? '0' + seconds.toString() : seconds.toString();
+
+  return parsedHours + ':' + parsedMinutes + ':' + parsedSeconds;
+};
 
 const Release = ({ song }) => {
   const now = new Date();
   const releaseDate = new Date(song.releaseDate);
-  console.log(song);
+  const [time, setTime] = React.useState('--:--:--');
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setTime(timeUntilRelease(releaseDate));
+    }, 1000);
+  });
+
   const released = now > releaseDate;
   return (
     <ReleaseCard>
-      <div>
-        <Pic src={song.img} />
-        <Content>
-          <SongName>{song.name}</SongName>
-          <CreatedOn>{'Created on ' + parseDate(song.createdAt)}</CreatedOn>
-        </Content>
-      </div>
-      <ReleaseDateContainer released={released}>
-        {released && <Saves>{song.saves}<SaveIcon src='/save-icon.png' alt='' /></Saves>}
-        {parseDate(releaseDate)}
-      </ReleaseDateContainer>
+      <Pic src={song.img} />
+      <Content>
+        <SongName released={released}>{song.name}</SongName>
+        <ReleasedOn>{(released ? 'Released ' : 'Releasing ') + parseDate(song.releaseDate)}</ReleasedOn>
+      </Content>
+      <ReleaseIconContainer>
+        <ReleaseIcon released={released} src={released ? '/saves-green-icon.png' : '/clock-icon.png'} />
+        <Span released={released}>{released ? song.saves + ' saves' : time}</Span>
+      </ReleaseIconContainer>
     </ReleaseCard>)
 };
 
@@ -298,7 +314,6 @@ const AllBlasts = () => {
           <img src='/add-icon.png' alt='Add' />
         </CreateSongButton>
       </Header>
-
       <BlastList>
         {renderSongs()}
       </BlastList>
