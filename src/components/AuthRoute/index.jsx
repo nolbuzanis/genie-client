@@ -7,7 +7,6 @@ const AuthRoute = ({ component: Component, ...props }) => {
   const { user, follower, setAuth } = React.useContext(authContext);
   if (!user) {
     getCurrentUser().then((response) => setAuth({ follower, user: { ...user, ...response } }));
-    return 'loading...';
   }
   return (
     <Route
@@ -16,7 +15,7 @@ const AuthRoute = ({ component: Component, ...props }) => {
         user && !user.error ? (
           <Redirect
             to={{
-              pathname: '/profile',
+              pathname: '/dashboard',
               state: {
                 from: componentProps.location
               }

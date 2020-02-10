@@ -51,6 +51,13 @@ const FeatureCard = styled(Link)`
   height: 260px;
   padding-top: 40px;
   padding-left: 28px;
+  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
+  transition: all 0.3s ease;
+    bottom: 0;
+  &:hover {
+    bottom: 5px;
+    box-shadow: 4px 4px 6px rgba(0,0,0,0.4);
+  }
 `;
 const CardTitle = styled.h3`
 position: relative;

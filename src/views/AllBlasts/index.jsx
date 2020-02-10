@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getMySongs, createNewSong } from '../../api';
+import { getMySongs } from '../../api';
 import { useAlert } from 'react-alert';
 import Modal from 'react-modal';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
 
 const BlastList = styled.div`
@@ -22,14 +20,16 @@ const Header = styled.h1`
   font-weight: 400;
   margin: 0;
   font-size: 30px;
-  padding: 40px;
+  padding: 40px 40px 25px;
+  align-items: center;
   display: flex;
   justify-content: space-between;
   @media (max-width: 920px) {
     padding-top: 0px;
   }
 `;
-const CreateSongButton = styled.button`
+const CreateSongButton = styled(Link)`
+  position: relative;
   background: #8872ff;
   width: 50px;
   height: 50px;
@@ -39,8 +39,11 @@ const CreateSongButton = styled.button`
   margin-bottom: 2.5px;
   margin-left: 2.5px;
   > img {
+    position: absolute;
     width: 20px;
     height: 20px;
+    top: 15px;
+    left: 15px;
   }
   &:hover {
     width: 55px;
@@ -54,107 +57,11 @@ const CreateSongButton = styled.button`
     > img {
     width: 22.5px;
     height: 22.5px;
+    top: 16px;
+    left: 16px;
   }
   }
 `
-const ModalHeader = styled.h2`
-  font-size: calc(24px + 2vw);
-`
-const ModalText = styled.p`
-padding-top: 35px;
-font-size: 20px;
-`
-const Input = styled.input`
-  display: block;
-  width: 100%;
-  border: 1px solid ${props => (props.error ? '#bd3200' : '#979797')};
-  max-width: 420px;
-  height: 36px;
-  padding: 5px 10px;
-  font-size: 16px;
-  margin: 20px auto 0;
-  box-sizing: border-box;
-`
-const Button = styled.button`
-  margin-top: 25px;
-  width: 200px;
-  height: 44px;
-  color: white;
-  font-weight: 300;
-  font-size: 20px;
-  background: ${props => props.disabled ? '#C7C7C7' : 'linear-gradient(90deg, #8872ff, #4568DC)'};
-  border: none;
-  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
-`;
-const ErrorMsg = styled.label`
-  display: block;
-  font-size: 12px;
-  color: #bd3200;
-  text-align: left;
-  padding-top: 5px;
-  max-width: 420px;
-  margin: 0 auto;
-`;
-const CloseSvg = () => (
-  <svg width="31px" height="30px" viewBox="0 0 31 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" >
-    <g id="All-Blasts" stroke="none" strokeWidth={1} fill="none" fillRule="evenodd" strokeLinecap="square">
-      <g id="Desktop,-Chrome-Copy" transform="translate(-934.000000, -177.000000)" stroke="#060606">
-        <g id="Group" transform="translate(935.000000, 178.000000)">
-          <path d="M0.227822093,1.5197107e-13 L29.1549177,26.7857143" id="Line" />
-          <path d="M28.125,0 L0,28.125" id="Line" />
-        </g>
-      </g>
-    </g>
-  </svg >
-);
-
-const modalStyles = {
-  overlay: {
-    backgroundColor: 'rgba(51,51,51,0.7)',
-    position: 'fixed',
-    zIndex: '100',
-    display: 'flex',
-    top: '0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '15px'
-  },
-  content: {
-    display: 'block',
-    position: 'relative',
-    border: 'none',
-    boxShadow: '0 3px 6px rgba(0,0,0,0.16)',
-    textAlign: 'center',
-    padding: '80px 15px 50px',
-    borderRadius: '0px',
-    maxWidth: '700px',
-    top: '0',
-    bottom: '0',
-    left: '0',
-    right: '0',
-    width: '100%'
-  }
-}
-const CloseDiv = styled.div`
-  position: absolute;
-  right: 30px;
-  top: 30px;
-  cursor: pointer;
-`
-const HelpLink = styled(Link)`
-  font-size: 12px;
-  color: #8872FF;
-  text-decoration: underline;
-  display: block;
-  margin-top: 5px;
-  &:hover {
-    color: #8872FF;
-  }
-`
-
-const validationSchema = Yup.object().shape({
-  uri: Yup.string().trim().required('Please enter a valid URI')
-});
 const Pic = styled.div`
   width: 60px;
   height 60px;
@@ -232,17 +139,22 @@ const Release = ({ song }) => {
   const now = new Date();
   const releaseDate = new Date(song.releaseDate);
   const [time, setTime] = React.useState('--:--:--');
-
+  const timer = React.useRef(false)
+  // React.useEffect(() => {
+  //   return clearTimeout(timer.current)
+  // }, [])
   React.useEffect(() => {
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setTime(timeUntilRelease(releaseDate));
     }, 1000);
+
   });
+
 
   const released = now > releaseDate;
   return (
     <ReleaseCard>
-      <Pic src={song.img} />
+      <Pic src={song.img || '/rec.png'} />
       <Content>
         <SongName released={released}>{song.name}</SongName>
         <ReleasedOn>{(released ? 'Released ' : 'Releasing ') + parseDate(song.releaseDate)}</ReleasedOn>
@@ -257,7 +169,6 @@ const Release = ({ song }) => {
 const AllBlasts = () => {
 
   const [songs, setSongs] = React.useState([]);
-  const [modalOpen, setModalOpen] = React.useState(false);
   const alert = useAlert();
   const fetchSongs = async () => {
     const songs = await getMySongs();
@@ -272,78 +183,23 @@ const AllBlasts = () => {
   }, []);
 
   const renderSongs = () => {
-    return songs.map((song) => {
-      return <Release key={song.spotifyUri} song={song} />
+    return songs.map((song, i) => {
+      return <Release key={i} song={song} />
     });
   };
   Modal.setAppElement('#modal')
-
-  const handleSubmit = async ({ uri }, { setSubmitting, setFieldError }) => {
-    setSubmitting(true);
-    const parsedUri = uri.includes('spotify:track') ? uri.trim().split(':')[2] : uri.trim();
-
-    const response = await createNewSong(parsedUri);
-    if (response.error && response.error.response.status === 401) {
-      console.log(response.error.response);
-      setFieldError('uri', 'This song does not belong to your Spotify artist account.')
-      return setSubmitting(false);
-    }
-    if (response.error && response.error.response.status === 409) {
-      console.log(response.error.response);
-      setFieldError('uri', 'This song has already been created.')
-      return setSubmitting(false);
-    }
-    if (response.error) {
-      console.log(response.error.response);
-      alert.show('Error creating song!');
-      setSubmitting(false);
-      return setModalOpen(false);
-    }
-    songs.unshift(response);
-    setSongs(songs);
-    setSubmitting(false);
-    setModalOpen(false);
-    return alert.show('Successfully created song!', { type: 'success' });
-  };
 
   return (
     <>
       <Header>
         Releases
-        <CreateSongButton onClick={() => setModalOpen(true)}>
+        <CreateSongButton to='/releases/new'>
           <img src='/add-icon.png' alt='Add' />
         </CreateSongButton>
       </Header>
       <BlastList>
         {renderSongs()}
       </BlastList>
-      <Modal style={modalStyles} isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} shouldCloseOnOverlayClick shouldCloseOnEsc>
-        <ModalHeader>Create a new song</ModalHeader>
-        <ModalText>Please enter the spotify URI of the song you want to import.</ModalText>
-        <CloseDiv onClick={() => setModalOpen(false)}>
-          <CloseSvg />
-        </CloseDiv>
-        <Formik onSubmit={handleSubmit} validationSchema={validationSchema} initialValues={{ uri: '' }}>
-          {(props) => (
-            <form onSubmit={props.handleSubmit}>
-              <Input
-                name='uri'
-                value={props.values['uri']}
-                type='text'
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-                error={props.errors['uri'] && props.touched['uri']}
-                placeholder='spotify:track:6QtGlUje…'
-              />
-              {props.errors['uri'] && props.touched['uri'] && (
-                <ErrorMsg>{props.errors['uri']}</ErrorMsg>
-              )}
-              <HelpLink to='#'>Where do I find this?</HelpLink>
-              <Button type='submit' disabled={props.isSubmitting}>{props.isSubmitting ? 'Creating...' : 'Create'}</Button>
-            </form>
-          )}
-        </Formik>
-      </Modal>
     </>
   );
 }

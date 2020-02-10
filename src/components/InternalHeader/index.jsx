@@ -7,12 +7,7 @@ const IconContainer = styled.div`
   margin-top: 25px;
   margin-right: 10px;
   display: inline-block;
-  height: 30px;
-  width: 30px;
-  > svg {
-    height: 30px;
-    width: 30px;
-  }
+  height: 25px;
 `;
 const Logo = styled(Link)`
   display: inline-block;
@@ -57,25 +52,27 @@ const Overlay = styled.div`
   opacity: ${props => props.open ? '1' : '0'};
   transition: all ease 0.3s;
 `
+const Line = styled.div`
+  display: block;
+  background: black;
+  height: 3px;
+  border-radius: 1.5px;
+  width: 30px;
+  margin-bottom: 8px;
+`
 
-const SvgIcon = ({ setOpen }) => (
+const HamburgerIcon = ({ setOpen }) => (
   <IconContainer onClick={() => setOpen(true)}>
-    <svg
-      fill='#000000'
-      xmlns='http://www.w3.org/2000/svg'
-      viewBox='0 0 24 24'
-      width='96px'
-      height='96px'
-    >
-      <path d='M 0 2 L 0 4 L 24 4 L 24 2 Z M 0 11 L 0 13 L 24 13 L 24 11 Z M 0 20 L 0 22 L 24 22 L 24 20 Z' />
-    </svg>
+    <Line />
+    <Line />
+    <Line />
   </IconContainer>
 );
 
 const InternalHeader = ({ open, setOpen }) => (
   <>
     <Container>
-      <SvgIcon setOpen={setOpen} />
+      <HamburgerIcon setOpen={setOpen} />
       <Logo to='/'>Genie</Logo>
     </Container>
     <Overlay open={open} onClick={() => setOpen(false)} />

@@ -10,14 +10,11 @@ import history from './history';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
-// import Blasts from './components/Blasts';
-// import NewBlast from './components/NewBlast';
-// import PublicProfile from './components/PublicProfile';
 import AllBlasts from './views/AllBlasts';
 import EditProfile from './views/EditProfile';
 import Introduction from './views/Introduction';
-// import requireAuth from './components/requireAuth';
 import ResetPassword from './views/ResetPassword';
+import NewRelease from './views/NewRelease';
 // import NewPassword from './components/NewPassword';
 // import Account from './components/Account';
 // import MyFollowers from './components/MyFollowers';
@@ -53,6 +50,7 @@ const App = () => {
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
             <PrivateRoute path='/dashboard' exact component={Dashboard} />
             <PrivateRoute path='/releases' exact component={AllBlasts} />
+            <PrivateRoute path='/releases/new' exact component={NewRelease} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
             <PrivateRoute path='/introduction' exact component={Introduction} />
             <Route render={() => <Redirect to='/profile' />} />

@@ -113,7 +113,7 @@ const Header = ({ history }) => {
     </HeaderContainer>
   };
 
-  const exclusionArray = ['/profile', '/releases', '/dashboard'];
+  const exclusionArray = ['/profile', '/releases', '/dashboard', '/releases/new'];
 
   if (exclusionArray.indexOf(window.location.pathname) >= 0) {
     return null;

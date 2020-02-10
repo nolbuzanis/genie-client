@@ -192,9 +192,9 @@ export const getMySongs = async () => {
   }
 }
 
-export const createNewSong = async (uri) => {
+export const createNewSong = async (uri, songName, releaseDate) => {
   try {
-    const res = await axios.post(`${SERVER_URL}/songs/create`, JSON.stringify({ uri }), axiosConfig);
+    const res = await axios.post(`${SERVER_URL}/songs/create`, JSON.stringify({ uri, songName, releaseDate: new Date(releaseDate).getTime() }), axiosConfig);
     return res.data;
   } catch (error) {
     console.log(error);
