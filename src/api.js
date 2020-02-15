@@ -193,8 +193,9 @@ export const getMySongs = async () => {
 }
 
 export const createNewSong = async (uri, songName, releaseDate) => {
+  const nextDay = new Date(releaseDate).getTime() + 1000 * 60 * 60 * 24;
   try {
-    const res = await axios.post(`${SERVER_URL}/songs/create`, JSON.stringify({ uri, songName, releaseDate: new Date(releaseDate).getTime() }), axiosConfig);
+    const res = await axios.post(`${SERVER_URL}/songs/create`, JSON.stringify({ uri, songName, releaseDate: nextDay }), axiosConfig);
     return res.data;
   } catch (error) {
     console.log(error);

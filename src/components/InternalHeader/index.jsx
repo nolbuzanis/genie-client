@@ -73,7 +73,7 @@ const InternalHeader = ({ open, setOpen }) => (
   <>
     <Container>
       <HamburgerIcon setOpen={setOpen} />
-      <Logo to='/'>Genie</Logo>
+      {/* <Logo to='/'>Genie</Logo> */}
     </Container>
     <Overlay open={open} onClick={() => setOpen(false)} />
   </>

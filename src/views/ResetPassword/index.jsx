@@ -35,10 +35,11 @@ const ResetPassword = () => {
   });
 
   const BodyContainer = styled.div`
-    padding-top: 140px;
+    padding-top: 100px;
     background: -webkit-linear-gradient(#FFFFFF 7%, #DFEBFC 60%, #9E8CFF);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(180deg, #FFFFFF 10%, #DFEBFC 60%, #9E8CFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    height: 100%;
+    min-height: 100%;
+    padding-bottom: 40px;
   `;
   const Note = styled.p`
     color: #666666;
@@ -87,7 +88,7 @@ const ResetPassword = () => {
         <Form>
           <Heading title='Check your email' />
           <Note>Check your email for a link to reset your password.</Note>
-          <Button as={Link} to='/login' text='Back to login' />
+          <Button as={Link} to='/login'>Back to login</Button>
         </Form>
       ) : (
           <Formik
@@ -106,10 +107,11 @@ const ResetPassword = () => {
                   placeholder='Email'
                 />
                 <Button
-                  text={props.isSubmitting ? 'Submitting...' : 'Continue'}
                   disabled={props.isSubmitting}
                   type='submit'
-                />
+                >
+                  {props.isSubmitting ? 'Submitting...' : 'Continue'}
+                </Button>
               </Form>
             )}
           </Formik>

@@ -4,6 +4,9 @@ import { getMySongs } from '../../api';
 import { useAlert } from 'react-alert';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
+import { Formik } from 'formik';
+import Button from '../../components/Button';
+import * as Yup from 'yup';
 
 const BlastList = styled.div`
   margin: 0 auto;
@@ -98,9 +101,11 @@ const Content = styled.div`
   display: inline-block;
 `
 const ReleaseIconContainer = styled.div`
+  cursor: ${props => props.edit && 'pointer'};
   position: absolute;
   right: 10px;
-  
+  width: 60px;
+  text-align: center;
 `;
 const ReleaseIcon = styled.img`
   display: block;
@@ -112,6 +117,111 @@ const Span = styled.span`
   font-weight: ${props => props.released ? '500' : '900'};
   font-size: ${props => props.released ? '12px' : '11px'};
 `
+const AddURI = styled.button`
+  background: linear-gradient(90deg, #8872ff, #4568DC);
+  width: 60px;
+  height: 44px;
+  border-radius: 22px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
+  margin: 0 auto;
+`
+const modalStyles = {
+  overlay: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: '100',
+    background: 'rgba(0, 0, 0, 0.5)'
+  },
+  content: {
+    position: 'static',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 'none',
+    border: 'none',
+    background: 'none',
+  }
+};
+const ModalContainer = styled.div`
+  background: white;
+  border-radius: 20px;
+  max-width: 300px;
+  padding: 20px;
+  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
+`
+const ModalHeader = styled.h3`
+  font-size: 20px;
+  padding-top: 10px;
+  font-weight: 500;
+  text-align: center;
+`
+const ModalText = styled.p`
+  padding-top: 20px;
+  font-size: 14px;
+  font-weight: 300;
+`
+const Input = styled.input`
+  display: block;
+  width: 100%;
+  border: 1px solid ${props => (props.error ? '#bd3200' : '#979797')};
+  background: ${props => props.error && 'rgb(250, 229, 236)'};
+  max-width: 420px;
+  height: 36px;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 16px;
+  margin: 20px auto 0;
+  box-sizing: border-box;
+`
+const ErrorMsg = styled.label`
+  display: block;
+  font-size: 12px;
+  color: #bd3200;
+  text-align: left;
+  padding-top: 5px;
+  padding-left: 10px;
+  max-width: 420px;
+  margin: 0 auto;
+`;
+const ButtonContainer = styled.div`
+  width: 140px;
+  padding: 20px 0;
+  margin: 0 auto;
+`
+const Spacing = styled.div`
+  height: 15px;
+`
+const HelpLink = styled.a`
+  font-size: 12px;
+  color: #8872FF;
+  text-decoration: underline;
+  display: block;
+  margin-top: 5px;
+  margin-left: 5px;
+  &:hover {
+    color: #8872FF;
+  }
+`
+const EditIcon = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+  cursor: pointer;
+`
+const Delete = styled.p`
+  color: #910505;
+  font-size: 12px;
+  font-weight: 500;
+
+`
+
+const validationSchema = Yup.object().shape({
+  uri: Yup.string().trim().required('Invalid URI.')
+});
 
 const parseDate = (timestamp) => {
   if (!timestamp) return '';
@@ -135,23 +245,35 @@ const timeUntilRelease = (releaseDate) => {
   return parsedHours + ':' + parsedMinutes + ':' + parsedSeconds;
 };
 
-const Release = ({ song }) => {
+const Release = ({ song, setURIModal, edit }) => {
   const now = new Date();
   const releaseDate = new Date(song.releaseDate);
   const [time, setTime] = React.useState('--:--:--');
+  const [confirm, setConfirm] = React.useState(false);
   const timer = React.useRef(false)
   // React.useEffect(() => {
   //   return clearTimeout(timer.current)
   // }, [])
   React.useEffect(() => {
-    timer.current = setTimeout(() => {
-      setTime(timeUntilRelease(releaseDate));
-    }, 1000);
-
+    if (song.status === 'scheduled' && song.spotifyURI) {
+      timer.current = setTimeout(() => {
+        setTime(timeUntilRelease(releaseDate));
+      }, 1000);
+    }
   });
+  const released = now > releaseDate && song.status === 'released';
 
+  if (!edit && confirm) {
+    setConfirm(false);
+  }
 
-  const released = now > releaseDate;
+  const handleDeleteClick = () => {
+    if (confirm) {
+      // Delete song
+    }
+    return setConfirm(true);
+  }
+
   return (
     <ReleaseCard>
       <Pic src={song.img || '/rec.png'} />
@@ -159,16 +281,30 @@ const Release = ({ song }) => {
         <SongName released={released}>{song.name}</SongName>
         <ReleasedOn>{(released ? 'Released ' : 'Releasing ') + parseDate(song.releaseDate)}</ReleasedOn>
       </Content>
-      <ReleaseIconContainer>
-        <ReleaseIcon released={released} src={released ? '/saves-green-icon.png' : '/clock-icon.png'} />
-        <Span released={released}>{released ? song.saves + ' saves' : time}</Span>
+      <ReleaseIconContainer edit={edit} onClick={handleDeleteClick}>
+        {edit ?
+          <>
+            <ReleaseIcon src={confirm ? '/assets/confirm_delete_icon.png' : '/assets/delete_icon.png'} />
+            <Delete >{confirm ? 'are you sure?' : 'delete'}</Delete>
+          </>
+          :
+          song.spotifyUri ?
+            <>
+              <ReleaseIcon released={released} src={released ? '/saves-green-icon.png' : '/clock-icon.png'} />
+              <Span released={released}>{released ? song.saves + ' saves' : time}</Span>
+            </>
+            :
+            <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>
+
+        }
       </ReleaseIconContainer>
     </ReleaseCard>)
 };
 
 const AllBlasts = () => {
-
+  const [URIModal, setURIModal] = React.useState(false);
   const [songs, setSongs] = React.useState([]);
+  const [edit, setEdit] = React.useState(true);
   const alert = useAlert();
   const fetchSongs = async () => {
     const songs = await getMySongs();
@@ -180,19 +316,59 @@ const AllBlasts = () => {
   React.useEffect(() => {
     fetchSongs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    return setEdit(false);
   }, []);
 
   const renderSongs = () => {
     return songs.map((song, i) => {
-      return <Release key={i} song={song} />
+      return <Release key={i} song={song} setURIModal={setURIModal} edit={edit} />
     });
   };
-  Modal.setAppElement('#modal')
+  const handleAddUri = (values, { setSubmitting }) => {
+    setSubmitting(true);
+    console.log(values);
+  }
+  Modal.setAppElement('#modal');
 
   return (
     <>
+      <Modal style={modalStyles} isOpen={URIModal} onRequestClose={() => setURIModal(false)}>
+        <ModalContainer>
+          <ModalHeader>Add Spotify URI</ModalHeader>
+          <ModalText>Please enter the spotify URI of the song before it can be released.</ModalText>
+          <Formik
+            initialValues={{ uri: '' }}
+            onSubmit={handleAddUri}
+            validationSchema={validationSchema}
+          >
+            {(props) => (
+              <form onSubmit={props.handleSubmit}>
+                <Input
+                  name='uri'
+                  value={props.values['uri']}
+                  type='text'
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  error={props.errors['uri'] && props.touched['uri']}
+                  placeholder='Spotify Song URI'
+                />
+                {props.errors['uri'] && props.touched['uri'] && <ErrorMsg>{props.errors['uri']}</ErrorMsg>}
+                <HelpLink href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201' target='_blank'>Where do I find this?</HelpLink>
+                <ButtonContainer>
+                  <Button type='submit' disabled={props.isSubmitting}>{props.isSubmitting ? 'Adding' : 'Add'}</Button>
+                  <Spacing />
+                  <Button type='button' alt onClick={() => setURIModal(false)}>Cancel</Button>
+                </ButtonContainer>
+              </form>
+            )}
+          </Formik>
+        </ModalContainer>
+      </Modal>
       <Header>
-        Releases
+        <div>
+          Releases
+        <EditIcon src='/assets/edit-icon.png' onClick={() => setEdit(!edit)} />
+        </div>
         <CreateSongButton to='/releases/new'>
           <img src='/add-icon.png' alt='Add' />
         </CreateSongButton>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Formik } from 'formik';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { createNewSong } from '../../api';
 import Calendar from 'react-calendar';
 import { useAlert } from 'react-alert';
@@ -64,7 +64,7 @@ const ErrorMsg = styled.label`
   max-width: 420px;
   margin: 0 auto;
 `;
-const HelpLink = styled(Link)`
+const HelpLink = styled.a`
   font-size: 12px;
   color: #8872FF;
   text-decoration: underline;
@@ -245,9 +245,9 @@ const NewRelease = ({ history }) => {
                   {props.errors['uri'] && props.touched['uri'] && (
                     <ErrorMsg>{props.errors['uri']}</ErrorMsg>
                   )}
-                  <HelpLink to='#'>Where do I find this?</HelpLink>
+                  <HelpLink href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201' target='_blank'>Where do I find this?</HelpLink>
                   <Spacing />
-                  <Toggle type='button' onClick={() => setState(STATES.songName)}>Don’t have your URI yet?</Toggle>
+                  {/* <Toggle type='button' onClick={() => setState(STATES.songName)}>Don’t have your URI yet?</Toggle> */}
                   <Button type='button' onClick={() => setState(STATES.calendar)}>Next</Button>
                 </>
             }

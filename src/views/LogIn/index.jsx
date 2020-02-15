@@ -51,10 +51,11 @@ const ButtonWraper = styled.div`
 `;
 
 const BodyContainer = styled.div`
-  padding-top: 140px;
+  padding-top: 100px;
   background: -webkit-linear-gradient(#FFFFFF 7%, #DFEBFC 60%, #9E8CFF);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(#FFFFFF 10%, #DFEBFC 60%, #9E8CFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  height: 100%;
+  min-height: 100%;
+  padding-bottom: 40px;
 `;
 
 const InputSection = props => {
@@ -124,11 +125,9 @@ const Login = () => {
             />
             <StyledLink to='/forgot-password'>Forgot password?</StyledLink>
             <ButtonWraper>
-              <Button
-                text={props.isSubmitting ? 'Submitting...' : 'Log In'}
-                disabled={props.isSubmitting}
-                type='submit'
-              />
+              <Button disabled={props.isSubmitting} type='submit'>
+                {props.isSubmitting ? 'Submitting...' : 'Log In'}
+              </Button>
             </ButtonWraper>
             <StyledLink to='/signup'>Don't have an account?</StyledLink>
           </Form>

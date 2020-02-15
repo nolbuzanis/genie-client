@@ -41,10 +41,11 @@ const StyledLink = styled(Link)`
 `;
 
 const BodyContainer = styled.div`
-  padding-top: 140px;
+  padding-top: 100px;
   background: -webkit-linear-gradient(#FFFFFF 7%, #DFEBFC 60%, #9E8CFF);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(#FFFFFF 10%, #DFEBFC 60%, #9E8CFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  height: 100%;
+  min-height: 100%;
+  padding-bottom: 40px;
 `;
 
 const Spacing = styled.div`
@@ -131,11 +132,9 @@ const Signup = () => {
               placeholder='Password'
             />
             <ButtonWraper>
-              <Button
-                text={props.isSubmitting ? 'Submitting...' : 'Sign Up'}
-                disabled={props.isSubmitting}
-                type='submit'
-              />
+              <Button disabled={props.isSubmitting} type='submit'>
+                {props.isSubmitting ? 'Submitting...' : 'Sign Up'}
+              </Button>
             </ButtonWraper>
             <StyledLink to='/login'>Already have an account?</StyledLink>
           </Form>
