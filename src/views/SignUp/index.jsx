@@ -59,6 +59,7 @@ const validationSchema = Yup.object({
   email2: Yup.string().trim()
     .oneOf([Yup.ref('email')], 'Emails do not match.')
     .required('Please enter a valid email.'),
+  phone: Yup.string().trim().matches(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/, 'Please enter a valid phone number.').required('Please enter a valid phone number.'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters long.')
     .required('Password is required.')
@@ -124,6 +125,12 @@ const Signup = () => {
               name='email2'
               type='email'
               placeholder='Verify Email'
+            />
+            <InputSection
+              {...props}
+              name='phone'
+              type='phone'
+              placeholder='Phone'
             />
             <InputSection
               {...props}

@@ -8,12 +8,13 @@ import { useAlert } from 'react-alert';
 
 const HeaderContainer = styled.div`
   position: ${props => props.landing ? 'absolute' : 'static'};;
-  z-index: 1;
+  z-index: 100;
   width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  top: 0;
   background: ${props => props.landing ? 'transparent' : 'white'};
   margin: 0;
   padding: 0 calc(5px + 5.4vw);
@@ -33,33 +34,58 @@ const Logo = styled(Link)`
 
 const StyledLink = styled(Link)`
   display: inline-block;
-  margin: 25px 0 0 0;
   line-height: 20px;
   font-size: 20px;
   padding: 5px;
-  color: ${props => (props.landing ? '#ffffff' : '#000000')};
+  color: ${props => (props.landing ? '#ffffff' : '#8872ff')};
   &:hover {
-    color: ${props => (props.landing ? '#ffffff' : '#000000')};
+    color: ${props => (props.landing ? '#ffffff' : '#8872ff')};
+  }
+`;
+const SignupLink = styled(Link)`
+  display: inline-block;
+  line-height: 44px;
+  font-size: 20px;
+  width: 100px;
+  height: 44px;
+  border-radius: 22px;
+  margin-left: 20px;
+  text-align: center;
+  color: ${props => (props.landing ? '#8872ff' : '#ffffff')};
+  background-color: ${props => props.landing ? '#ffffff' : '#8872ff'}
+  &:hover {
+    color: ${props => (props.landing ? '#8872ff' : '#ffffff')};
   }
 `;
 
-const Nav = styled.ul`
+const Nav = styled.nav`
   margin: 0;
   height: 100%;
   padding: 0;
+  margin-top: 15px;
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 40px;
+  flex-direction: row-reverse;
+  @media screen and (max-width: 480px) {
+    flex-wrap: wrap;
+    
+  }
 `;
 const SpotifyLogin = styled.a`
   display: flex;
   justify-content: center;
   font-size: 20px;
   border: none;
-  padding: 0;
+  padding: 0 5px 0 10px;
   background: white;
   border-radius: 22px;
   height: 44px;
+  align-items: center;
   line-height: 44px;
   font-size: 20px;
-  width: 110px;
+  //width: 110px;
   color: black;
   &:hover {
     color: black;
@@ -124,7 +150,8 @@ const Header = ({ history }) => {
     <HeaderContainer landing={landing}>
       <Logo to='/' landing={landing}>Genie</Logo>
       <Nav>
-        <StyledLink to='/login' landing={landing}>Log In</StyledLink>
+        <SignupLink to='/signup' landing={landing}>Sign Up</SignupLink>
+        <StyledLink to='/login' landing={landing}>Artist Log In</StyledLink>
       </Nav>
     </HeaderContainer>
   );

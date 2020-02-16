@@ -96,8 +96,8 @@ const Login = () => {
       );
       return setSubmitting(false);
     }
-    setSubmitting(false);
-    return setAuth({ follower, user: undefined });
+    setAuth({ follower, user: undefined });
+    return setSubmitting(false);
   };
 
   return (

@@ -315,8 +315,8 @@ const AllBlasts = () => {
   }
   React.useEffect(() => {
     fetchSongs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     return setEdit(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderSongs = () => {
