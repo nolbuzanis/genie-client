@@ -22,9 +22,15 @@ import './App.css';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from './components/Alert';
 //import PublicRoute from './components/PublicRoute';
+import ReactGA from 'react-ga';
 
 const App = () => {
   const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
+
+  history.listen(location => {
+    ReactGA.set({ page: location.pathname }); // Update the user's current page
+    ReactGA.pageview(location.pathname); // Record a pageview for the given page
+  });
 
   const alertOptions = {
     // you can also just use 'bottom center'

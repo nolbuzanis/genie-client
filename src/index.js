@@ -2,6 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import ReactGA from 'react-ga';
+if (process.env.REACT_APP_ENV === 'production') {
+  ReactGA.initialize('218385872');
+} else {
+  ReactGA.initialize('223056304');
+}
+
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
