@@ -139,7 +139,7 @@ const Header = ({ history }) => {
     </HeaderContainer>
   };
 
-  const exclusionArray = ['/profile', '/releases', '/dashboard', '/releases/new'];
+  const exclusionArray = ['/profile', '/releases', '/dashboard', '/releases/new', '/introduction'];
 
   if (exclusionArray.indexOf(window.location.pathname) >= 0) {
     return null;
@@ -151,7 +151,7 @@ const Header = ({ history }) => {
       <Logo to='/' landing={landing}>Genie</Logo>
       <Nav>
         <SignupLink to='/signup' landing={landing}>Sign Up</SignupLink>
-        <StyledLink to='/login' landing={landing}>Artist Log In</StyledLink>
+        <StyledLink to='/login' landing={landing}>Log In</StyledLink>
       </Nav>
     </HeaderContainer>
   );

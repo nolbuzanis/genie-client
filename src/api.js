@@ -11,10 +11,21 @@ const axiosConfig = {
   }
 };
 
-export const submitSpotifyURI = async (artistId, email) => {
-  const data = JSON.stringify({ artistId, email });
+export const submitSpotifyURI = async (artist) => {
+  const data = JSON.stringify({ artist });
   try {
     const res = await axios.post(`${SERVER_URL}/user/spotify-uri`, data, axiosConfig);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+}
+
+export const getSpotifyArtistDetails = async (id) => {
+  //const data = JSON.stringify({ artistId });
+  try {
+    const res = await axios.get(`${SERVER_URL}/user/spotify-uri/${id}`, axiosConfig);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -149,9 +160,9 @@ export const followerLogin = async () => {
   }
 }
 
-export const followArtist = async (artistId) => {
+export const followArtist = async (artist) => {
 
-  const data = JSON.stringify({ artistId });
+  const data = JSON.stringify({ artist });
   try {
     const response = await axios.post(`${SERVER_URL}/follower/follow`, data, axiosConfig);
     console.log(response);

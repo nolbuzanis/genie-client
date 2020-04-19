@@ -89,7 +89,7 @@ const Signup = () => {
   const { follower, setAuth } = React.useContext(authContext);
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
-    values.email = values.email.trim();
+    values.email = values.email.trim().toLowerCase();
 
     const response = await userSignup(values);
     if (response.error) {
@@ -99,7 +99,7 @@ const Signup = () => {
       return setSubmitting(false);
     }
 
-    console.log(response);
+    //console.log(response);
     return setAuth({ follower, user: undefined });
   };
 

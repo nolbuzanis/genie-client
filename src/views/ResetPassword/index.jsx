@@ -72,7 +72,7 @@ const ResetPassword = () => {
   const [success, setSuccess] = React.useState(false);
   const handleSubmit = async ({ email }, { setSubmitting }) => {
     setSubmitting(true);
-    const response = await resetPassword(email.trim());
+    const response = await resetPassword(email.trim().toLowerCase());
 
     if (response.error) {
       return setSubmitting(false);
@@ -99,7 +99,7 @@ const ResetPassword = () => {
             {props => (
               <Form onSubmit={props.handleSubmit}>
                 <Heading title='Reset password' />
-                <Note>Please enter the email address associated with your IDPT account.</Note>
+                <Note>Please enter the email address associated with your Genie account.</Note>
                 <InputSection
                   {...props}
                   name='email'

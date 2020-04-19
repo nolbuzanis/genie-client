@@ -34,6 +34,8 @@ const MaxContent = styled.div`
         position: relative;
       `
 
+const lockedRoutes = ['/introduction'];
+
 const PrivateRoute = ({ component: Component, ...props }) => {
   const { user, follower, setAuth } = React.useContext(authContext);
   const [open, setOpen] = React.useState(false);
@@ -62,17 +64,22 @@ const PrivateRoute = ({ component: Component, ...props }) => {
           />
         );
       }
-      if (user.uri && window.location.pathname === '/introduction') {
-        return (
-          <Redirect
-            to={{
-              pathname: '/dashboard',
-              state: {
-                from: componentProps.location
-              }
-            }}
-          />
-        );
+      // if (user.uri && window.location.pathname === '/introduction') {
+      //   return (
+      //     <Redirect
+      //       to={{
+      //         pathname: '/dashboard',
+      //         state: {
+      //           from: componentProps.location
+      //         }
+      //       }}
+      //     />
+      //   );
+      // }
+      if (lockedRoutes.includes(window.location.pathname)) {
+        return <MaxContent>
+          <Component {...componentProps} />
+        </MaxContent>;
       }
 
       return (

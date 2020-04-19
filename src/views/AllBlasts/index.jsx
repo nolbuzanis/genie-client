@@ -231,9 +231,8 @@ const parseDate = (timestamp) => {
 }
 const timeUntilRelease = (releaseDate) => {
   const now = new Date();
-  releaseDate.setHours(24, 0, 0, 0); // Set to next midnight
-  const timeRemaining = Math.round((releaseDate.getTime() - now.getTime()) / 1000);
 
+  const timeRemaining = Math.round((releaseDate.getTime() - now.getTime()) / 1000);
   const hours = Math.floor(timeRemaining / 3600);
   const minutes = Math.floor(timeRemaining / 60) - hours * 60;
   const seconds = timeRemaining - (hours * 60 + minutes) * 60;
@@ -247,20 +246,20 @@ const timeUntilRelease = (releaseDate) => {
 
 const Release = ({ song, setURIModal, edit }) => {
   const now = new Date();
+
   const releaseDate = new Date(song.releaseDate);
   const [time, setTime] = React.useState('--:--:--');
   const [confirm, setConfirm] = React.useState(false);
-  const timer = React.useRef(false)
-  // React.useEffect(() => {
-  //   return clearTimeout(timer.current)
-  // }, [])
+
   React.useEffect(() => {
-    if (song.status === 'scheduled' && song.spotifyURI) {
-      timer.current = setTimeout(() => {
-        setTime(timeUntilRelease(releaseDate));
+    if (song.status === 'scheduled' && song.spotifyUri) {
+      const interval = setInterval(() => {
+        return setTime(timeUntilRelease(releaseDate));
       }, 1000);
+
+      return () => clearInterval(interval);
     }
-  });
+  }, []);
   const released = now > releaseDate && song.status === 'released';
 
   if (!edit && confirm) {

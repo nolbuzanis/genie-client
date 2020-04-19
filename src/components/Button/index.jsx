@@ -13,7 +13,9 @@ const Button = styled.button`
   text-align: center;
   font-size: 18px;
   border-radius: 22px;
-  box-shadow: ${props => !props.alt && '4px 4px 6px rgba(0, 0, 0, 0.16)'};
+  height: 44px;
+  font-weight: 700;
+  box-shadow: ${props => !props.alt && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
 `;
 
 export default props => <Button {...props}>{props.children}</Button>;

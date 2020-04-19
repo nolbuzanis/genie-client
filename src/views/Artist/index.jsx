@@ -189,7 +189,7 @@ const Artist = () => {
     }
     // If already following then unfollow (in future), for now return
 
-    const response = await followArtist(artist.uri);
+    const response = await followArtist(artist);
     if (response.error) {
       return alert.show('Error following artist!');
     }
