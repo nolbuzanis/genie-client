@@ -34,7 +34,7 @@ const MaxContent = styled.div`
         position: relative;
       `
 
-const lockedRoutes = ['/introduction'];
+const lockedRoutes = ['/introduction', '/find-artist-uri'];
 
 const PrivateRoute = ({ component: Component, ...props }) => {
   const { user, follower, setAuth } = React.useContext(authContext);

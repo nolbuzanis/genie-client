@@ -15,6 +15,8 @@ import EditProfile from './views/EditProfile';
 import Introduction from './views/Introduction';
 import ResetPassword from './views/ResetPassword';
 import NewRelease from './views/NewRelease';
+import GetStarted from './views/GetStarted';
+import ArtistURIExplained from './views/ArtistURIExplained';
 // import NewPassword from './components/NewPassword';
 // import Account from './components/Account';
 // import MyFollowers from './components/MyFollowers';
@@ -53,12 +55,14 @@ const App = () => {
             <Route path='/artist/:id' exact render={() => <Artist />} />
             <AuthRoute path='/login' exact component={Login} />
             <AuthRoute path='/signup' exact component={Signup} />
+            <AuthRoute path='/get-started' exact component={GetStarted} />
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
             <PrivateRoute path='/dashboard' exact component={Dashboard} />
             <PrivateRoute path='/releases' exact component={AllBlasts} />
             <PrivateRoute path='/releases/new' exact component={NewRelease} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
             <PrivateRoute path='/introduction' exact component={Introduction} />
+            <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
             <Route render={() => <Redirect to='/profile' />} />
           </Switch>
         </Router>

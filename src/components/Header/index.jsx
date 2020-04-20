@@ -112,7 +112,7 @@ const Header = ({ history }) => {
 
   const landing = history.location.pathname === '/' ? true : false;
 
-  if (history.location.pathname.includes('artist')) {
+  if (history.location.pathname.includes('/artist')) {
 
     if (!follower) {
       getCurrentFollower().then((response) => setAuth({ user, follower: response }));
@@ -139,7 +139,7 @@ const Header = ({ history }) => {
     </HeaderContainer>
   };
 
-  const exclusionArray = ['/profile', '/releases', '/dashboard', '/releases/new', '/introduction'];
+  const exclusionArray = ['/profile', '/releases', '/dashboard', '/releases/new', '/introduction', '/get-started', '/find-artist-uri'];
 
   if (exclusionArray.indexOf(window.location.pathname) >= 0) {
     return null;

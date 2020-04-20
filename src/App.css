@@ -17,9 +17,6 @@ a {
   color: white;
   text-decoration: none;
 }
-a:hover {
-  color: white;
-}
 a:focus,
 button:focus,
 input:focus,

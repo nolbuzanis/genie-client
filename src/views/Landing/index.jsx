@@ -230,7 +230,7 @@ const Landing = () => {
       <HeroImage>
         <AttentionWrapper>
           <Attention>
-            Revolutionizing the way music artists engage their followers.
+            Revolutionizing the way music artists engage with their followers.
         </Attention>
           <Button to='/signup'>Get Started</Button>
         </AttentionWrapper>

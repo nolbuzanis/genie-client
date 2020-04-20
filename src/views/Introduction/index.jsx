@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { submitSpotifyURI, getSpotifyArtistDetails } from '../../api';
 import authContext from '../../Context/authContext';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import Button from '../../components/Button';
 
@@ -61,7 +61,7 @@ const HelpIcon = styled.img`
   height: 20px;
   margin-right: 5px;
 `;
-const HelpContainer = styled.div`
+const HelpContainer = styled(Link)`
   margin: 25px auto 0;
   cursor: pointer;
   display: flex;
@@ -178,7 +178,7 @@ const Introduction = ({ history }) => {
           {props.errors['uri'] && props.touched['uri'] && (
             <ErrorMsg>{props.errors['uri']}</ErrorMsg>
           )}
-          <HelpContainer>
+          <HelpContainer to='/find-artist-uri'>
             <HelpIcon src='/assets/help-icon-blue.png' />
             <HelpText>how do I find this?</HelpText>
           </HelpContainer>
