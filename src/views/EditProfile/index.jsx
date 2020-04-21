@@ -10,9 +10,6 @@ import { useAlert } from 'react-alert';
 const Header = styled.h1`
   padding-top: 50px;
   padding-left: 30px;
-  @media (max-width: 920px) {
-    padding-top: 0px;
-  }
 `;
 const UniqueLink = styled.p`
   overflow: hidden;

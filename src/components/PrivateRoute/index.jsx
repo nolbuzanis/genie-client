@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import SideMenu from '../SideMenu';
 import InternalHeader from '../InternalHeader';
 import { css } from "@emotion/core";
-import ScaleLoader from 'react-spinners/ScaleLoader'
+import ScaleLoader from 'react-spinners/ScaleLoader';
+import MobileNavigation from '../../components/MobileNavigation';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -89,6 +90,7 @@ const PrivateRoute = ({ component: Component, ...props }) => {
             <InternalHeader open={open} setOpen={setOpen} />
             <MaxContent>
               <Component {...componentProps} />
+              <MobileNavigation />
             </MaxContent>
           </ContentContainer>
         </FlexContainer>

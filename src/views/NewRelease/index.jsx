@@ -15,7 +15,7 @@ const SubHeading = styled.p`
 const BodyContainer = styled.div`
   margin: 0 auto;
   max-width: 400px;
-  padding: 0 20px 40px;
+  padding: 40px 20px;
   @media (min-width: 920px) {
     padding-top: 40px;
   }

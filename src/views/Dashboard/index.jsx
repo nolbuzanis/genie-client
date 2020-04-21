@@ -10,9 +10,6 @@ const Header = styled.h1`
   padding: 40px;
   display: flex;
   justify-content: space-between;
-  @media (max-width: 920px) {
-    padding-top: 0px;
-  }
 `;
 const StatContainer = styled.div`
   display: grid;

@@ -139,12 +139,9 @@ const Header = ({ history }) => {
     </HeaderContainer>
   };
 
-  const exclusionArray = ['/profile', '/releases', '/dashboard', '/releases/new', '/introduction', '/get-started', '/find-artist-uri'];
+  const exclusionArray = ['/profile', '/releases', '/home', '/releases/new', '/introduction', '/get-started', '/find-artist-uri', '/menu'];
 
-  if (exclusionArray.indexOf(window.location.pathname) >= 0) {
-    return null;
-  }
-
+  if (exclusionArray.indexOf(window.location.pathname) >= 0) return null;
 
   return (
     <HeaderContainer landing={landing}>

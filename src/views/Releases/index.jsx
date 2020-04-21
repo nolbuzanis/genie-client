@@ -32,9 +32,6 @@ const Header = styled.h1`
   //align-items: center;
   //display: flex;
   //justify-content: space-between;
-  @media (max-width: 920px) {
-    padding-top: 0px;
-  }
 `;
 // const CreateSongButton = styled(Link)`
 //   position: relative;

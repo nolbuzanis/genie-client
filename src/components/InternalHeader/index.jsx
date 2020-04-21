@@ -28,16 +28,16 @@ const Container = styled.div`
   justify-content: space-between;
   margin: 0;
   padding: 0 calc(5px + 5.4vw);
-  @media (min-width: 920px) {
-    height: 0;
-    ${Logo} {
-      display: none;
-    }
-    ${IconContainer} {
-      display: none;
-    }
-  }
-  }
+  // @media (min-width: 920px) {
+  //   height: 0;
+  //   ${Logo} {
+  //     display: none;
+  //   }
+  //   ${IconContainer} {
+  //     display: none;
+  //   }
+  // }
+  // }
 `
 const Overlay = styled.div`
   z-index: 1;
@@ -69,14 +69,17 @@ const HamburgerIcon = ({ setOpen }) => (
   </IconContainer>
 );
 
-const InternalHeader = ({ open, setOpen }) => (
-  <>
+const InternalHeader = ({ open, setOpen }) => {
+
+  if (window.innerWidth < 1024) return null;
+
+  return <>
     <Container>
       <HamburgerIcon setOpen={setOpen} />
       {/* <Logo to='/'>Genie</Logo> */}
     </Container>
     <Overlay open={open} onClick={() => setOpen(false)} />
   </>
-);
+};
 
 export default InternalHeader;
