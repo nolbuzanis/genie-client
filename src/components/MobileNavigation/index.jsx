@@ -93,20 +93,19 @@ const ReleasesIcon = ({ active }) => (
     <path style={{ fill: active ? '#4568dc' : '#757575' }} id="prefix__Path_217" d="M21.751 2H8.584a2.2 2.2 0 0 0-2.195 2.195v13.167a2.2 2.2 0 0 0 2.195 2.195h13.167a2.2 2.2 0 0 0 2.195-2.195V4.195A2.2 2.2 0 0 0 21.751 2zm.557 16.067H7.894V3.631h14.414zm-8.787-1.8a2.744 2.744 0 0 0 2.743-2.743V7.486h3.292V5.292h-4.388v6.046a2.685 2.685 0 0 0-1.646-.56 2.743 2.743 0 1 0 0 5.486zM3.293 6.389H2v15.362a2.2 2.2 0 0 0 2.195 2.195h15.362V22.76H3.293z" data-name="Path 217" transform="translate(-.312 -.312)" />
   </ReleaseSvg>
 );
-const MenuIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={30} height={26} viewBox="0 0 30 26">
-    <defs>
-      <style dangerouslySetInnerHTML={{ __html: "\n            .prefix__cls-2{fill:none;stroke:#818181;stroke-linecap:round;stroke-width:2px}\n        " }} />
-    </defs>
-    <g id="prefix__Group_61" data-name="Group 61" transform="translate(-205.703 -465)">
-      <rect id="prefix__Rectangle_2088" width={30} height={26} data-name="Rectangle 2088" rx={1} transform="translate(205.703 465)" style={{ fill: 'none' }} />
-      <path id="prefix__Line_5" d="M0 0L20.703 0" className="prefix__cls-2" data-name="Line 5" transform="translate(210.5 473.5)" />
-      <path id="prefix__Line_6" d="M0 0L20.703 0" className="prefix__cls-2" data-name="Line 6" transform="translate(210.5 479.5)" />
-      <path id="prefix__Line_7" d="M0 0L15 0" className="prefix__cls-2" data-name="Line 7" transform="translate(216.203 485.5)" />
-    </g>
-  </svg>
-
-);
+// const MenuIcon = () => (
+//   <svg xmlns="http://www.w3.org/2000/svg" width={30} height={26} viewBox="0 0 30 26">
+//     <defs>
+//       <style dangerouslySetInnerHTML={{ __html: "\n            .prefix__cls-2{fill:none;stroke:#818181;stroke-linecap:round;stroke-width:2px}\n        " }} />
+//     </defs>
+//     <g id="prefix__Group_61" data-name="Group 61" transform="translate(-205.703 -465)">
+//       <rect id="prefix__Rectangle_2088" width={30} height={26} data-name="Rectangle 2088" rx={1} transform="translate(205.703 465)" style={{ fill: 'none' }} />
+//       <path id="prefix__Line_5" d="M0 0L20.703 0" className="prefix__cls-2" data-name="Line 5" transform="translate(210.5 473.5)" />
+//       <path id="prefix__Line_6" d="M0 0L20.703 0" className="prefix__cls-2" data-name="Line 6" transform="translate(210.5 479.5)" />
+//       <path id="prefix__Line_7" d="M0 0L15 0" className="prefix__cls-2" data-name="Line 7" transform="translate(216.203 485.5)" />
+//     </g>
+//   </svg>
+// );
 
 const menuItems = [
   {
