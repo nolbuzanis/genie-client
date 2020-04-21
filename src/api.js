@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export let SERVER_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/indepdent-8833f/us-central1/api' : 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
-//SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
+SERVER_URL = 'https://us-central1-indepdent-8833f.cloudfunctions.net/api';
 
 const axiosConfig = {
   withCredentials: true,

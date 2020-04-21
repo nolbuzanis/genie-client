@@ -10,87 +10,99 @@ import * as Yup from 'yup';
 
 const BlastList = styled.div`
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-column-gap: 40px;
   //grid-row-gap: 30px;
-  max-width: 1000px;
+  max-width: 500px;
   width: 100%;
+  @media (max-width: 360px) {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
 `;
 
 const Header = styled.h1`
-  font-weight: 400;
   margin: 0;
-  font-size: 30px;
+  text-align: center;
+  font-size: 24px;
   padding: 40px 40px 25px;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
+  font-weight: 600;
+  color: #4568dc;
+  //align-items: center;
+  //display: flex;
+  //justify-content: space-between;
   @media (max-width: 920px) {
     padding-top: 0px;
   }
 `;
-const CreateSongButton = styled(Link)`
-  position: relative;
-  background: #8872ff;
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  border: none;
-  box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.16);
-  margin-bottom: 2.5px;
-  margin-left: 2.5px;
-  > img {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 15px;
-    left: 15px;
-  }
-  &:hover {
-    width: 55px;
-    height: 55px;
-    border-radius: 27.5px;
-    margin-right: -2.5px;
-    margin-top: -2.5px;
-    margin-bottom: 0;
-    margin-left: 0;
-    box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.36);
-    > img {
-    width: 22.5px;
-    height: 22.5px;
-    top: 16px;
-    left: 16px;
-  }
-  }
-`
+// const CreateSongButton = styled(Link)`
+//   position: relative;
+//   background: #8872ff;
+//   width: 50px;
+//   height: 50px;
+//   border-radius: 25px;
+//   border: none;
+//   box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.16);
+//   margin-bottom: 2.5px;
+//   margin-left: 2.5px;
+//   > img {
+//     position: absolute;
+//     width: 20px;
+//     height: 20px;
+//     top: 15px;
+//     left: 15px;
+//   }
+//   &:hover {
+//     width: 55px;
+//     height: 55px;
+//     border-radius: 27.5px;
+//     margin-right: -2.5px;
+//     margin-top: -2.5px;
+//     margin-bottom: 0;
+//     margin-left: 0;
+//     box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.36);
+//     > img {
+//     width: 22.5px;
+//     height: 22.5px;
+//     top: 16px;
+//     left: 16px;
+//   }
+//   }
+// `
 const Pic = styled.div`
   width: 60px;
   height 60px;
   display: inline-block;
-  border-radius: 8px;
+  border-radius: 50%;
   background: url('${props => props.src}') center center no-repeat;
   background-size: cover;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.16);
+  @media (max-width: 360px) {
+    width: 45px;
+    height 45px;
+  }
+  
 `
 const SongName = styled.p`
-  display: inline-block;
-  font-size: 16px;
-  margin-left: 10px;
-  font-weight: 500;
-  border-bottom: solid 3px ${props => props.released ? '#b4b4b4' : '#4568dc'};
+  //font-weight: 500;
+  font-size: calc(14px + 0.4vw);
+  color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  //border-bottom: solid 3px ${props => props.released ? '#b4b4b4' : '#4568dc'};
 `
 const ReleasedOn = styled.p`
-  padding-left: 10px;
   font-size: 13px;
-  font-weight: 500;
-  padding-right: 20px;
-  padding-top: 3px;
+  font-weight: 300;
+  //padding-top: 3px;
 `
 const ReleaseCard = styled.div`
   position: relative;
-  padding: 15px 0;
-  border-bottom: 1px solid #979797;
+  padding: 10px 0;
+  //border-bottom: 1px solid #979797;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -99,6 +111,10 @@ const ReleaseCard = styled.div`
 `
 const Content = styled.div`
   display: inline-block;
+  padding-left: 10px;
+  width: 60%;
+  overflow-x: hidden;
+
 `
 const ReleaseIconContainer = styled.div`
   cursor: ${props => props.edit && 'pointer'};
@@ -114,8 +130,9 @@ const ReleaseIcon = styled.img`
   margin: 0 auto;
 `;
 const Span = styled.span`
-  font-weight: ${props => props.released ? '500' : '900'};
-  font-size: ${props => props.released ? '12px' : '11px'};
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: -0.31px;
 `
 const AddURI = styled.button`
   background: linear-gradient(90deg, #8872ff, #4568DC);
@@ -206,18 +223,44 @@ const HelpLink = styled.a`
     color: #8872FF;
   }
 `
-const EditIcon = styled.img`
-  width: 25px;
-  height: 25px;
-  margin-left: 10px;
-  cursor: pointer;
-`
+// const EditIcon = styled.img`
+//   width: 25px;
+//   height: 25px;
+//   margin-left: 10px;
+//   cursor: pointer;
+// `
 const Delete = styled.p`
   color: #910505;
   font-size: 12px;
   font-weight: 500;
-
 `
+const AddImg = styled.img`
+  width: 22px;
+  height: 22px;
+  @media (max-width: 360px) {
+    width: 15px;
+    height 15px;
+  }
+`;
+const AddContainer = styled.div`
+  background: #4b4b4b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  @media (max-width: 360px) {
+    width: 45px;
+    height 45px;
+  }
+`;
+const AddText = styled.p`
+font-weight: 500;
+color: black;
+font-size: calc(15px + 0.5vw);
+padding-left: 20px;
+`;
 
 const validationSchema = Yup.object().shape({
   uri: Yup.string().trim().required('Invalid URI.')
@@ -241,14 +284,14 @@ const timeUntilRelease = (releaseDate) => {
   const parsedMinutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
   const parsedSeconds = seconds < 10 ? '0' + seconds.toString() : seconds.toString();
 
-  return parsedHours + ':' + parsedMinutes + ':' + parsedSeconds;
+  return parsedHours + ' : ' + parsedMinutes + ' : ' + parsedSeconds;
 };
 
 const Release = ({ song, setURIModal, edit }) => {
   const now = new Date();
 
   const releaseDate = new Date(song.releaseDate);
-  const [time, setTime] = React.useState('--:--:--');
+  const [time, setTime] = React.useState('-- : -- : --');
   const [confirm, setConfirm] = React.useState(false);
 
   React.useEffect(() => {
@@ -259,7 +302,7 @@ const Release = ({ song, setURIModal, edit }) => {
 
       return () => clearInterval(interval);
     }
-  }, []);
+  }, [releaseDate, song.spotifyUri, song.status]);
   const released = now > releaseDate && song.status === 'released';
 
   if (!edit && confirm) {
@@ -289,7 +332,7 @@ const Release = ({ song, setURIModal, edit }) => {
           :
           song.spotifyUri ?
             <>
-              <ReleaseIcon released={released} src={released ? '/saves-green-icon.png' : '/clock-icon.png'} />
+              <ReleaseIcon released={released} src={released ? '/assets/save-icon-blue.png' : '/clock-icon.png'} />
               <Span released={released}>{released ? song.saves + ' saves' : time}</Span>
             </>
             :
@@ -300,7 +343,7 @@ const Release = ({ song, setURIModal, edit }) => {
     </ReleaseCard>)
 };
 
-const AllBlasts = () => {
+const Releases = () => {
   const [URIModal, setURIModal] = React.useState(false);
   const [songs, setSongs] = React.useState([]);
   const [edit, setEdit] = React.useState(true);
@@ -364,15 +407,20 @@ const AllBlasts = () => {
         </ModalContainer>
       </Modal>
       <Header>
-        <div>
-          Releases
-        <EditIcon src='/assets/edit-icon.png' onClick={() => setEdit(!edit)} />
-        </div>
-        <CreateSongButton to='/releases/new'>
+        Releases
+        {/* <CreateSongButton to='/releases/new'>
           <img src='/add-icon.png' alt='Add' />
-        </CreateSongButton>
+        </CreateSongButton> */}
       </Header>
       <BlastList>
+        <ReleaseCard as={Link} to='/releases/new'>
+          <AddContainer>
+            <AddImg src='/add-icon.png' />
+          </AddContainer>
+          <AddText>
+            Create Release
+          </AddText>
+        </ReleaseCard>
         {renderSongs()}
       </BlastList>
     </>
@@ -380,4 +428,4 @@ const AllBlasts = () => {
 }
 
 
-export default AllBlasts;
+export default Releases;

@@ -10,7 +10,7 @@ import history from './history';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
-import AllBlasts from './views/AllBlasts';
+import Releases from './views/Releases';
 import EditProfile from './views/EditProfile';
 import Introduction from './views/Introduction';
 import ResetPassword from './views/ResetPassword';
@@ -58,7 +58,7 @@ const App = () => {
             <AuthRoute path='/get-started' exact component={GetStarted} />
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
             <PrivateRoute path='/dashboard' exact component={Dashboard} />
-            <PrivateRoute path='/releases' exact component={AllBlasts} />
+            <PrivateRoute path='/releases' exact component={Releases} />
             <PrivateRoute path='/releases/new' exact component={NewRelease} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
             <PrivateRoute path='/introduction' exact component={Introduction} />

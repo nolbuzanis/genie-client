@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../../components/Button';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const Container = styled.div`
   margin: 0 auto;
