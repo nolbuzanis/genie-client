@@ -156,7 +156,7 @@ const SideMenu = ({ open, setOpen }) => {
             </UserDate>
           </div>
         </ProfileSection>
-        <HomeLink to='/dashboard' onClick={() => setOpen(false)}>
+        <HomeLink to='/home' onClick={() => setOpen(false)}>
           <img src='/dashboard-icon.png' alt='' />
           Dashboard
           </HomeLink>

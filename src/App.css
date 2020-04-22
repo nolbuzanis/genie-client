@@ -5,9 +5,11 @@ body, html, #root {
   margin:0;
   padding:0;
   height:100%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   position: relative;
 }
+html { height: 100%; overflow:auto; }
+body { height: 100%; }
 
 div {
   box-sizing: border-box;

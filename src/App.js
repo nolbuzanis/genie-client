@@ -1,8 +1,8 @@
 import React from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
-import Dashboard from './views/Dashboard';
+//import Dashboard from './views/Dashboard';
 import Signup from './views/SignUp';
 import Header from './components/Header';
 import Landing from './views/Landing';
@@ -18,6 +18,8 @@ import NewRelease from './views/NewRelease';
 import GetStarted from './views/GetStarted';
 import ArtistURIExplained from './views/ArtistURIExplained';
 import ExtendedMenu from './views/ExtendedMenu';
+import Home from './views/Home';
+import ScrollToTop from './components/ScrollToTop';
 // import NewPassword from './components/NewPassword';
 // import Account from './components/Account';
 // import MyFollowers from './components/MyFollowers';
@@ -49,7 +51,8 @@ const App = () => {
   return (
     <authContext.Provider value={{ ...auth, setAuth }}>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
-        <Router history={history}>
+        <BrowserRouter>
+          <ScrollToTop />
           <Header />
           <Switch>
             <Route path='/' exact render={() => <Landing />} />
@@ -58,7 +61,7 @@ const App = () => {
             <AuthRoute path='/signup' exact component={Signup} />
             <AuthRoute path='/get-started' exact component={GetStarted} />
             <Route path='/forgot-password' exact render={() => <ResetPassword />} />
-            <PrivateRoute path='/home' exact component={Dashboard} />
+            <PrivateRoute path='/home' exact component={Home} />
             <PrivateRoute path='/releases' exact component={Releases} />
             <PrivateRoute path='/releases/new' exact component={NewRelease} />
             <PrivateRoute path='/profile' exact component={EditProfile} />
@@ -67,7 +70,7 @@ const App = () => {
             <PrivateRoute path='/menu' exact component={ExtendedMenu} />
             <Route render={() => <Redirect to='/profile' />} />
           </Switch>
-        </Router>
+        </BrowserRouter>
       </AlertProvider>
     </authContext.Provider>
   );

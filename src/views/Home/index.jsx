@@ -1,0 +1,185 @@
+import React from 'react';
+import styled from 'styled-components';
+import { useAuth } from '../../Context/authContext';
+import { Link } from 'react-router-dom';
+
+const Background = styled.div`
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(to bottom, #4568dc, #8872ff 20%, #ffffff 45%);
+  background-attachment: fixed;
+`;
+const Content = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+`;
+const Title = styled.h1`
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+`;
+const Graph = styled.div`
+  width: 100%;
+  background: white;
+  height: 170px;
+  border-radius: 5px;
+  box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
+  margin-top: 40px;
+`;
+const StatBox = styled.div`
+  width: 48%;
+  height: 80px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: white;
+  background-image: ${({ colorOne, colorTwo }) => `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+`;
+const StatsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 35px;
+`;
+const StatIcon = styled.img`
+  width: 28px;
+  height: 28px;
+  margin-right: 15px;
+`;
+const Stat = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+`;
+const StatContent = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+`;
+
+const EditContainer = styled.div`
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
+  margin-top: 24px;
+`;
+const Divider = styled.div`
+border-bottom: solid 1px rgba(112, 112, 112, 0.24);
+`;
+const EditBox = styled.div`
+  height: 65px;
+  width: 100%;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+const CircularNumber = styled.div`
+  width: 40px;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  color: white;
+  border-radius: 50px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  border: solid 1px #ffffff;
+  text-align: center;
+  font-size: ${props => props.children > 99 ? '12px' : '18px'};
+  font-weight: 600;
+  background-color: #4568dc;
+  background-image: ${({ colorOne, colorTwo }) => `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
+`;
+const EditBoxText = styled.p`
+  display: inline;
+  font-weight: 600;
+  padding: 0 2vw;
+  font-size: calc(14px + 0.4vw);
+`;
+const EditButton = styled.button`
+  width: 60px;
+  height: 30px;
+  border-radius: 15px;
+  border: solid 1px #818181;
+  font-size: 16px;
+  font-weight: 600;
+  color: #717171;
+  background: white;
+  cursor: pointer;
+`;
+const PublicArtistPage = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  height: 70px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
+  background-image: linear-gradient(to bottom, rgba(69, 104, 220, 0.7), #8872ff);
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+`;
+const GlobeIcon = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+`;
+
+const Home = () => {
+
+  const { user } = useAuth();
+  console.log(user);
+
+  return <Background>
+    <Content>
+      <Title>Genie Dashboard</Title>
+      <Graph>graph</Graph>
+      <StatsContainer>
+        <StatBox colorOne='#ff9b9b' colorTwo='#f7a865'>
+          <StatIcon src='/assets/people-stat-icon.png' />
+          <StatContent>
+            <Stat>{user.followers}</Stat>
+            Followers
+        </StatContent>
+        </StatBox>
+        <StatBox colorOne='#9bcdff' colorTwo='#65f7e6'>
+          <StatIcon src='/assets/save-icon-white.png' />
+          <StatContent>
+            <Stat>{user.saves}</Stat>
+            Total Saves
+        </StatContent>
+        </StatBox>
+      </StatsContainer>
+      <EditContainer>
+        <EditBox>
+          <div>
+            <CircularNumber colorOne='#4568dc' colorTwo='#8872ff'>3</CircularNumber>
+            <EditBoxText>Releases</EditBoxText>
+          </div>
+          <EditButton>Edit</EditButton>
+        </EditBox>
+        <Divider />
+        <EditBox>
+          <div>
+            <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>1000</CircularNumber>
+            <EditBoxText>Saves Remaining</EditBoxText>
+          </div>
+          <EditButton>Edit</EditButton>
+        </EditBox>
+      </EditContainer>
+      <PublicArtistPage to={'/artist/' + user.uri}>
+        <GlobeIcon src='/assets/globe-icon-white.png' />
+        My public artist page
+      </PublicArtistPage>
+    </Content>
+  </Background>
+};
+
+export default Home;

@@ -4,7 +4,7 @@ import authContext from '../../Context/authContext';
 import { getCurrentUser } from '../../api';
 import styled from 'styled-components';
 import SideMenu from '../SideMenu';
-import InternalHeader from '../InternalHeader';
+//import InternalHeader from '../InternalHeader';
 import { css } from "@emotion/core";
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import MobileNavigation from '../../components/MobileNavigation';
@@ -87,7 +87,7 @@ const PrivateRoute = ({ component: Component, ...props }) => {
         <FlexContainer>
           <SideMenu open={open} setOpen={setOpen} />
           <ContentContainer>
-            <InternalHeader open={open} setOpen={setOpen} />
+            {/* <InternalHeader open={open} setOpen={setOpen} /> */}
             <MaxContent>
               <Component {...componentProps} />
               <MobileNavigation />
