@@ -68,7 +68,7 @@ const App = () => {
             <PrivateRoute path='/introduction' exact component={Introduction} />
             <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
             <PrivateRoute path='/menu' exact component={ExtendedMenu} />
-            <Route render={() => <Redirect to='/profile' />} />
+            <Route render={() => <Redirect to='/home' />} />
           </Switch>
         </BrowserRouter>
       </AlertProvider>

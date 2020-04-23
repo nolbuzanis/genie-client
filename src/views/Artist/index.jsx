@@ -167,6 +167,7 @@ const Artist = () => {
 
   const { id } = useParams();
   const [artist, setArtist] = React.useState(undefined);
+  const [submitting, setSubmitting] = React.useState(false);
   const alert = useAlert();
   const { follower, setAuth, user } = React.useContext(authContext);
   console.log(follower);
@@ -179,6 +180,7 @@ const Artist = () => {
   }
 
   const handleFollow = async () => {
+    setSubmitting(true);
 
     if (!follower || follower.error) {
       // No one logged in.. redirect to spotify oauth and will also handle following in this case
@@ -190,6 +192,7 @@ const Artist = () => {
     // If already following then unfollow (in future), for now return
 
     const response = await followArtist(artist);
+    setSubmitting(false);
     if (response.error) {
       return alert.show('Error following artist!');
     }
@@ -213,7 +216,7 @@ const Artist = () => {
           <Mask />
           <PhotoContent>
             <ArtistName>{artist.name}</ArtistName>
-            <FollowButton onClick={handleFollow} disabled={isFollowing}>{isFollowing ? 'Following' : 'Follow'}</FollowButton>
+            <FollowButton onClick={handleFollow} disabled={isFollowing || submitting}>{isFollowing ? 'Following' : 'Follow'}</FollowButton>
           </PhotoContent>
         </ArtistPic>
         <ArtistContent>

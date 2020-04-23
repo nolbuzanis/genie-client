@@ -36,6 +36,7 @@ export const getSpotifyArtistDetails = async (id) => {
 export const logUserOut = async () => {
   try {
     const res = await axios.get(`${SERVER_URL}/user/logout`, axiosConfig);
+    window.location.reload();
     return res.data;
   } catch (error) {
     console.log(error);
@@ -212,4 +213,16 @@ export const createNewSong = async (uri, songName, releaseDate) => {
     console.log(error);
     return { error };
   }
-}
+};
+
+export const fetchFollowerCountData = async () => {
+
+  try {
+    const { data } = await axios.get(`${SERVER_URL}/user/followers/count`, axiosConfig);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+
+};

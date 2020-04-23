@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { createNewSong } from '../../api';
 import Calendar from 'react-calendar';
 import { useAlert } from 'react-alert';
+//import { useAuth } from '../../Context/authContext';
 
 const SubHeading = styled.p`
   text-transform: uppercase;
@@ -143,7 +144,8 @@ const NewRelease = ({ history }) => {
   const STATES = {
     calendar: 'calendar',
     songName: 'song_name'
-  }
+  };
+  //const { user, setAuth } = useAuth();
   const alert = useAlert();
   const [state, setState] = React.useState(undefined);
   const [releaseDate, setReleaseDate] = React.useState(new Date());
@@ -181,7 +183,8 @@ const NewRelease = ({ history }) => {
       return setState(undefined);
     }
     //setSubmitting(false);
-    alert.show('Successfully created song!', { type: 'success' });
+    //alert.show('Successfully created song!', { type: 'success' });
+    //setAuth({ user: { ...user, releases: user.releases++ } });
     return history.push('/releases');
   };
 

@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { logUserOut } from '../../api';
 
 const MenuContainer = styled.div`
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     //background: white;
 `;
 const MenuItem = styled(Link)`
@@ -42,6 +46,7 @@ const Icon = styled.img`
 `;
 const Header = styled.h1`
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 50px 10px 20px 17px;
     margin: 0 18px 14px;
@@ -60,69 +65,70 @@ const ArrowIcon = styled.img`
     width: 26px;
     height: 26px;
 `;
-const LogoutIcon = styled.img`
-    width: 20px;
-    height: 20px;
-    margin-right: 20px;
-`;
 const LogoutMenuItem = styled.button`
-    width: 100%;
+    width: calc(100% - 36px);
     display: flex;
     align-items: center;
     background: white;
     border: none;
     cursor: pointer;
-    padding: 20px 33px;
+    padding: 20px 13px;
     line-height: 16px;
     color: #757575;
-    margin-top: 30px;
+    border-top: solid 1px #818181;
+    margin: 0 18px;
 `;
 const MenuText = styled.p`
     font-size: 20px;
     font-weight: 500;
 `;
+const MenuItemContainer = styled.div`
+    flex-grow: 1;
+`;
 
 const menuItems = [
   // { image: 'notification', title: 'Notifications', route: '/notifications' },
-  { image: "settings", title: "Account Settings", route: '/settings' },
-  { image: "help", title: "Contact Us", route: "/help" },
-  { image: "update", title: "Latest Changes", route: "/help" }
+  // { image: "settings", title: "Account Settings", route: '/settings' },
+  // { image: "help", title: "Contact Us", route: "/help" },
+  // { image: "update", title: "Latest Changes", route: "/help" }
 ];
 
-const ExtendedMenu = ({ history, title = 'Menu', setLogoutModalOpen }) => {
+const ExtendedMenu = () => {
+  const history = useHistory();
   return (
     <MenuContainer>
       <Header>
-        {title}
+        Menu
         <CloseArrow onClick={() => history.goBack()} src='/assets/back-arrow-grey.png' />
       </Header>
-      {menuItems.map((item, index) => (
-        <MenuItem
-          key={index}
-          to={item.route}
-        >
-          <MenuItemContent image={item.image}>
-            {item.image
-              ? <>
-                <Icon src={`/assets/${item.image}-menu-icon.png`} />
-                <MenuText>{item.title}</MenuText>
-              </>
-              : <>
-                <MenuText>{item.title}</MenuText>
-                <ArrowIcon src='/assets/arrow-right.png' />
-              </>
-            }
-          </MenuItemContent>
-          {/* <Divider /> */}
-        </MenuItem>
-      ))}
-      {setLogoutModalOpen && <LogoutMenuItem onClick={() => setLogoutModalOpen(true)}>
-        <LogoutIcon src='/logout-menu-icon.png' />
-        <p>Log Out</p>
+      <MenuItemContainer>
+        {menuItems.map((item, index) => (
+          <MenuItem
+            key={index}
+            to={item.route}
+          >
+            <MenuItemContent image={item.image}>
+              {item.image
+                ? <>
+                  <Icon src={`/assets/${item.image}-menu-icon.png`} />
+                  <MenuText>{item.title}</MenuText>
+                </>
+                : <>
+                  <MenuText>{item.title}</MenuText>
+                  <ArrowIcon src='/assets/arrow-right.png' />
+                </>
+              }
+            </MenuItemContent>
+            {/* <Divider /> */}
+          </MenuItem>
+        ))}
+      </MenuItemContainer>
+      <LogoutMenuItem onClick={logUserOut}>
+        <Icon src='/assets/logout-menu-icon.png' />
+        <MenuText>Log Out</MenuText>
       </LogoutMenuItem>
-      }
-    </MenuContainer>
+    </MenuContainer >
   );
 };
 
-export default withRouter(ExtendedMenu);
+export default ExtendedMenu;

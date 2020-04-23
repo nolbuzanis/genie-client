@@ -32,6 +32,7 @@ const loadingStyles = css`
 const MaxContent = styled.div`
         max-width: 1300px;
         margin: 0 auto;
+        height: 100%;
         position: relative;
       `
 
@@ -53,7 +54,7 @@ const PrivateRoute = ({ component: Component, ...props }) => {
       />;
     }
     if (user && !user.error) {
-      if (!user.uri && window.location.pathname !== '/introduction') {
+      if (!user.uri && !lockedRoutes.includes(window.location.pathname)) {
         return (
           <Redirect
             to={{
@@ -65,18 +66,18 @@ const PrivateRoute = ({ component: Component, ...props }) => {
           />
         );
       }
-      // if (user.uri && window.location.pathname === '/introduction') {
-      //   return (
-      //     <Redirect
-      //       to={{
-      //         pathname: '/dashboard',
-      //         state: {
-      //           from: componentProps.location
-      //         }
-      //       }}
-      //     />
-      //   );
-      // }
+      if (user.uri && window.location.pathname === '/introduction') {
+        return (
+          <Redirect
+            to={{
+              pathname: '/dashboard',
+              state: {
+                from: componentProps.location
+              }
+            }}
+          />
+        );
+      }
       if (lockedRoutes.includes(window.location.pathname)) {
         return <MaxContent>
           <Component {...componentProps} />

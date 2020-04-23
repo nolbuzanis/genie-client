@@ -2,12 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../Context/authContext';
 import { Link } from 'react-router-dom';
+import FollowersGraph from '../../components/FollowersGraph';
+import { fetchFollowerCountData } from '../../api';
+import moment from 'moment';
 
 const Background = styled.div`
   height: 100%;
   width: 100%;
   background-image: linear-gradient(to bottom, #4568dc, #8872ff 20%, #ffffff 45%);
-  background-attachment: fixed;
+  //background-attachment: fixed;
 `;
 const Content = styled.div`
   max-width: 600px;
@@ -21,9 +24,10 @@ const Title = styled.h1`
   text-align: center;
 `;
 const Graph = styled.div`
+  position: relative;
   width: 100%;
   background: white;
-  height: 170px;
+  height: 210px;
   border-radius: 5px;
   box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
   margin-top: 40px;
@@ -44,7 +48,7 @@ const StatsContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-top: 35px;
+  padding-top: 25px;
 `;
 const StatIcon = styled.img`
   width: 28px;
@@ -101,8 +105,10 @@ const EditBoxText = styled.p`
   padding: 0 2vw;
   font-size: calc(14px + 0.4vw);
 `;
-const EditButton = styled.button`
+const EditButton = styled(Link)`
   width: 60px;
+  line-height: 30px;
+  text-align: center;
   height: 30px;
   border-radius: 15px;
   border: solid 1px #818181;
@@ -131,18 +137,82 @@ const GlobeIcon = styled.img`
   height: 30px;
   margin-right: 10px;
 `;
+const GraphTitle = styled.h3`
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #4568dc;
+`;
+
+const getLastWeek = () => {
+  const today = moment().format('YYYY-MM-DD');
+  const week = [today];
+  const longMonths = [1, 3, 5, 7, 8, 10, 12];
+
+  let day = parseInt(today.split('-')[2]) - 1;
+  let month = parseInt(today.split('-')[1]);
+  let year = parseInt(today.split('-')[0]);
+
+  for (let i = 0; i < 6; i++) {
+    if (day < 1) {
+      // change month as well
+      month += -1;
+      if (month < 1) {
+        //change year!!
+        year += -1;
+        month = 12;
+      }
+      day = longMonths.includes(month) ? 31 : 30;
+    }
+    week.push(`${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`);
+    day += -1;
+  }
+  return week.reverse();
+};
 
 const Home = () => {
 
   const { user } = useAuth();
-  console.log(user);
+  const [followerData, setFollowerData] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchFollowerData = async () => {
+      const data = await fetchFollowerCountData();
+      const { followersByDay } = data;
+
+      const daysToPlot = getLastWeek();
+      const finalData = daysToPlot.map(date => {
+        return {
+          x: parseInt(date.split('-')[2]),
+          y: followersByDay ? followersByDay[date] || 0 : 0
+        };
+      });
+
+      return setFollowerData(finalData);
+    };
+
+    fetchFollowerData();
+  }, []);
+
+  const followersData = [
+    {
+      "id": "daily",
+      "color": "rgba(69,104,220,0.7)",
+      "data": followerData
+    }
+  ];
 
   return <Background>
     <Content>
       <Title>Genie Dashboard</Title>
-      <Graph>graph</Graph>
+      <Graph>
+        <GraphTitle>Followers per day</GraphTitle>
+        <FollowersGraph data={followersData} />
+      </Graph>
       <StatsContainer>
-        <StatBox colorOne='#ff9b9b' colorTwo='#f7a865'>
+        <StatBox colorOne='#ff9b9b' colorTwo='#f7db65'>
           <StatIcon src='/assets/people-stat-icon.png' />
           <StatContent>
             <Stat>{user.followers}</Stat>
@@ -160,18 +230,18 @@ const Home = () => {
       <EditContainer>
         <EditBox>
           <div>
-            <CircularNumber colorOne='#4568dc' colorTwo='#8872ff'>3</CircularNumber>
+            <CircularNumber colorOne='#4568dc' colorTwo='#8872ff'>{user.releases}</CircularNumber>
             <EditBoxText>Releases</EditBoxText>
           </div>
-          <EditButton>Edit</EditButton>
+          <EditButton to='/releases'>Edit</EditButton>
         </EditBox>
         <Divider />
         <EditBox>
           <div>
-            <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>1000</CircularNumber>
+            <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>{1000 - user.saves}</CircularNumber>
             <EditBoxText>Saves Remaining</EditBoxText>
           </div>
-          <EditButton>Edit</EditButton>
+          {/* <EditButton>Edit</EditButton> */}
         </EditBox>
       </EditContainer>
       <PublicArtistPage to={'/artist/' + user.uri}>

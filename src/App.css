@@ -28,6 +28,7 @@ textarea:focus {
 button,
 a {
   cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
 }
 
 h1,

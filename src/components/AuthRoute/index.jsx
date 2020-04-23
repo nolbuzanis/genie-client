@@ -15,7 +15,7 @@ const AuthRoute = ({ component: Component, ...props }) => {
         user && !user.error ? (
           <Redirect
             to={{
-              pathname: '/dashboard',
+              pathname: '/home',
               state: {
                 from: componentProps.location
               }

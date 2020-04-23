@@ -116,7 +116,7 @@ const Content = styled.div`
 const ReleaseIconContainer = styled.div`
   cursor: ${props => props.edit && 'pointer'};
   position: absolute;
-  right: 10px;
+  right: 0;
   width: 60px;
   text-align: center;
 `;
