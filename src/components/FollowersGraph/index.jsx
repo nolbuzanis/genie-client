@@ -37,9 +37,9 @@ const FollowersGraph = ({ data }) => {
     }}
     curve='cardinal'
     data={data}
-    margin={{ top: 40, right: 20, bottom: 30, left: 40 }}
+    margin={{ top: 50, right: 25, bottom: 30, left: 40 }}
     xScale={{ type: 'point' }}
-    yScale={{ type: 'linear', min: '0', max: 'auto', stacked: true, reverse: false }}
+    yScale={{ type: 'linear', min: '0', max: 'auto', stacked: false, reverse: false }}
     axisTop={null}
     axisRight={null}
     axisBottom={{
@@ -83,33 +83,33 @@ const FollowersGraph = ({ data }) => {
     enableGridX={true}
     areaOpacity={1}
     useMesh={true}
-    // legends={
-    //   [
-    //     {
-    //       anchor: 'bottom-right',
-    //       direction: 'column',
-    //       justify: false,
-    //       translateX: 100,
-    //       translateY: 0,
-    //       itemsSpacing: 0,
-    //       itemDirection: 'left-to-right',
-    //       itemWidth: 80,
-    //       itemHeight: 20,
-    //       itemOpacity: 0.75,
-    //       symbolSize: 12,
-    //       symbolShape: 'circle',
-    //       symbolBorderColor: 'rgba(0, 0, 0, .5)',
-    //       effects: [
-    //         {
-    //           on: 'hover',
-    //           style: {
-    //             itemBackground: 'rgba(0, 0, 0, .03)',
-    //             itemOpacity: 1
-    //           }
-    //         }
-    //       ]
-    //     }
-    //   ]}
+    legends={
+      [
+        {
+          anchor: 'top-right',
+          direction: 'column',
+          justify: false,
+          translateX: 0,
+          translateY: -40,
+          itemsSpacing: 0,
+          itemDirection: 'left-to-right',
+          itemWidth: 80,
+          itemHeight: 15,
+          itemOpacity: 0.75,
+          symbolSize: 9,
+          symbolShape: 'circle',
+          symbolBorderColor: 'rgba(0, 0, 0, .5)',
+          effects: [
+            {
+              on: 'hover',
+              style: {
+                itemBackground: 'rgba(0, 0, 0, .03)',
+                itemOpacity: 1
+              }
+            }
+          ]
+        }
+      ]}
     enableCrosshair={false}
     xPadding={0.5}
     xOuterPadding={0.5}

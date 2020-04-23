@@ -4,7 +4,6 @@ import Login from './views/LogIn';
 import authContext from './Context/authContext';
 //import Dashboard from './views/Dashboard';
 import Signup from './views/SignUp';
-import Header from './components/Header';
 import Landing from './views/Landing';
 import history from './history';
 import PrivateRoute from './components/PrivateRoute';
@@ -53,7 +52,6 @@ const App = () => {
       <AlertProvider template={AlertTemplate} {...alertOptions}>
         <BrowserRouter>
           <ScrollToTop />
-          <Header />
           <Switch>
             <Route path='/' exact render={() => <Landing />} />
             <Route path='/artist/:id' exact render={() => <Artist />} />

@@ -237,7 +237,7 @@ const EditProfile = () => {
       <Header>Edit Profile</Header>
       <UniqueLink>
         {'Your unique artist url: '}
-        <Link to={'artist/' + user.uri}>{'www.idpt.artists/' + user.uri}</Link>
+        <Link to={'artist/' + user.uri + '?view=preview'}>{'www.idpt.artists/' + user.uri}</Link>
       </UniqueLink>
 
       <Formik

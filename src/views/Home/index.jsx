@@ -146,14 +146,13 @@ const GraphTitle = styled.h3`
   color: #4568dc;
 `;
 
-const getLastWeek = () => {
-  const today = moment().format('YYYY-MM-DD');
-  const week = [today];
+const getLastWeek = (startDate = moment().format('YYYY-MM-DD')) => {
+  const week = [startDate];
   const longMonths = [1, 3, 5, 7, 8, 10, 12];
 
-  let day = parseInt(today.split('-')[2]) - 1;
-  let month = parseInt(today.split('-')[1]);
-  let year = parseInt(today.split('-')[0]);
+  let day = parseInt(startDate.split('-')[2]) - 1;
+  let month = parseInt(startDate.split('-')[1]);
+  let year = parseInt(startDate.split('-')[0]);
 
   for (let i = 0; i < 6; i++) {
     if (day < 1) {
@@ -175,7 +174,7 @@ const getLastWeek = () => {
 const Home = () => {
 
   const { user } = useAuth();
-  const [followerData, setFollowerData] = React.useState([]);
+  const [followerData, setFollowerData] = React.useState([[], []]);
 
   React.useEffect(() => {
     const fetchFollowerData = async () => {
@@ -183,14 +182,20 @@ const Home = () => {
       const { followersByDay } = data;
 
       const daysToPlot = getLastWeek();
-      const finalData = daysToPlot.map(date => {
+      const lastWeeksData = getLastWeek(moment().subtract(7, 'd').format('YYYY-MM-DD'));
+      let finalData2 = [];
+      const finalData = daysToPlot.map((date, i) => {
+        finalData2.push({
+          x: parseInt(date.split('-')[2]),
+          y: followersByDay ? followersByDay[lastWeeksData[i]] || 0 : 0
+        });
         return {
           x: parseInt(date.split('-')[2]),
           y: followersByDay ? followersByDay[date] || 0 : 0
         };
       });
 
-      return setFollowerData(finalData);
+      return setFollowerData([finalData, finalData2]);
     };
 
     fetchFollowerData();
@@ -198,9 +203,14 @@ const Home = () => {
 
   const followersData = [
     {
-      "id": "daily",
-      "color": "rgba(69,104,220,0.7)",
-      "data": followerData
+      "id": "Last 7 days",
+      "color": "rgba(69,104,220,0.8)",
+      "data": followerData[0]
+    },
+    {
+      "id": "Week before",
+      "color": "rgba(69,104,220,0.4)",
+      "data": followerData[1]
     }
   ];
 
@@ -244,7 +254,7 @@ const Home = () => {
           {/* <EditButton>Edit</EditButton> */}
         </EditBox>
       </EditContainer>
-      <PublicArtistPage to={'/artist/' + user.uri}>
+      <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>
         <GlobeIcon src='/assets/globe-icon-white.png' />
         My public artist page
       </PublicArtistPage>

@@ -330,7 +330,7 @@ const Release = ({ song, setURIModal, edit }) => {
           song.spotifyUri ?
             <>
               <ReleaseIcon released={released} src={released ? '/assets/save-icon-blue.png' : '/clock-icon.png'} />
-              <Span released={released}>{released ? song.saves + ' saves' : time}</Span>
+              <Span released={released}>{released ? song.saves + ' save' + (song.saves !== 1 ? 's' : '') : time}</Span>
             </>
             :
             <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>

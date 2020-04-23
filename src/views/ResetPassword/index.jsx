@@ -7,6 +7,7 @@ import Input from '../../components/Input';
 import Heading from '../../components/Heading';
 import Button from '../../components/Button';
 import { Link } from 'react-router-dom';
+import Header from '../../components/Header';
 
 const ResetPassword = () => {
   const Form = styled.form`
@@ -83,40 +84,43 @@ const ResetPassword = () => {
   };
 
   return (
-    <BodyContainer>
-      {success ? (
-        <Form>
-          <Heading title='Check your email' />
-          <Note>Check your email for a link to reset your password.</Note>
-          <Button as={Link} to='/login'>Back to login</Button>
-        </Form>
-      ) : (
-          <Formik
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            {props => (
-              <Form onSubmit={props.handleSubmit}>
-                <Heading title='Reset password' />
-                <Note>Please enter the email address associated with your Genie account.</Note>
-                <InputSection
-                  {...props}
-                  name='email'
-                  type='email'
-                  placeholder='Email'
-                />
-                <Button
-                  disabled={props.isSubmitting}
-                  type='submit'
-                >
-                  {props.isSubmitting ? 'Submitting...' : 'Continue'}
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        )}
-    </BodyContainer>
+    <>
+      <Header />
+      <BodyContainer>
+        {success ? (
+          <Form>
+            <Heading title='Check your email' />
+            <Note>Check your email for a link to reset your password.</Note>
+            <Button as={Link} to='/login'>Back to login</Button>
+          </Form>
+        ) : (
+            <Formik
+              initialValues={initialValues}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              {props => (
+                <Form onSubmit={props.handleSubmit}>
+                  <Heading title='Reset password' />
+                  <Note>Please enter the email address associated with your Genie account.</Note>
+                  <InputSection
+                    {...props}
+                    name='email'
+                    type='email'
+                    placeholder='Email'
+                  />
+                  <Button
+                    disabled={props.isSubmitting}
+                    type='submit'
+                  >
+                    {props.isSubmitting ? 'Submitting...' : 'Continue'}
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          )}
+      </BodyContainer>
+    </>
   );
 };
 

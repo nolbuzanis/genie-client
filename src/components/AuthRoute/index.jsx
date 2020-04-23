@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import authContext from '../../Context/authContext';
 import { getCurrentUser } from '../../api';
+import Header from '../../components/Header';
 
 const AuthRoute = ({ component: Component, ...props }) => {
   const { user, follower, setAuth } = React.useContext(authContext);
@@ -22,7 +23,10 @@ const AuthRoute = ({ component: Component, ...props }) => {
             }}
           />
         ) : (
-            <Component {...componentProps} />
+            <>
+              <Header />
+              <Component {...componentProps} />
+            </>
           )
       }
     />
