@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
+import { Event } from '../../analytics';
 
 const Landing = () => {
 
@@ -211,7 +212,12 @@ const Landing = () => {
 
   const FAQ = ({ faq, last }) => {
     const [open, setOpen] = React.useState(false);
-    return <FaqItem onClick={() => setOpen(!open)} last={last}>
+    const handleClick = () => {
+      setOpen(!open)
+      Event('FAQ', faq.question, 'LANDING_PAGE');
+    };
+
+    return <FaqItem onClick={handleClick} last={last}>
       <Flex >
         <FaqQuestion>{faq.question}</FaqQuestion>
         <OpenFAQ src={open ? '/assets/purple-minus-icon.png' : '/assets/purple-add-icon.png'} />
@@ -234,7 +240,9 @@ const Landing = () => {
           <Attention>
             Revolutionizing the way music artists engage with their followers.
         </Attention>
-          <Button to='/signup'>Get Started</Button>
+          <Button to='/signup' onClick={() => Event("ENGAGEMENTS", "Get Started", "LANDING_PAGE")}>
+            Get Started
+          </Button>
         </AttentionWrapper>
         <HeadphonesImg src='/headphones-white.webp' />
         <BottomWave src='assets/landing-image-bottom.png' />
@@ -247,7 +255,7 @@ const Landing = () => {
         <Heading>FAQs</Heading>
         <SubHeading>Here are some commonly asked questions about Genie.</SubHeading>
         {renderFAQs()}
-        <CallToAction to='/signup'>Sign me up!</CallToAction>
+        <CallToAction to='/signup' onClick={() => Event("ENGAGEMENTS", "Sign me up", "LANDING_PAGE")}>Sign me up!</CallToAction>
       </BodyContainer>
       <Footer>
         <FooterLogo>Genie</FooterLogo>

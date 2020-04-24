@@ -2,15 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import ReactGA from 'react-ga';
-if (process.env.REACT_APP_ENV === 'production') {
-  ReactGA.initialize('218385872');
-} else {
-  ReactGA.initialize('223056304');
-}
+import { BrowserRouter } from 'react-router-dom';
+import { initGA } from './analytics';
 
+initGA();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

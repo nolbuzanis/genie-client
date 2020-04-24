@@ -1,11 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
 //import Dashboard from './views/Dashboard';
 import Signup from './views/SignUp';
 import Landing from './views/Landing';
-import history from './history';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
@@ -30,6 +29,7 @@ import ReactGA from 'react-ga';
 
 const App = () => {
   const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
+  const history = useHistory();
 
   history.listen(location => {
     ReactGA.set({ page: location.pathname }); // Update the user's current page
@@ -50,27 +50,25 @@ const App = () => {
   return (
     <authContext.Provider value={{ ...auth, setAuth }}>
       <AlertProvider template={AlertTemplate} {...alertOptions}>
-        <BrowserRouter>
-          <ScrollToTop />
-          <Switch>
-            <Route path='/' exact render={() => <Landing />} />
-            <Route path='/artist/:id' exact render={() => <Artist />} />
-            <AuthRoute path='/login' exact component={Login} />
-            <AuthRoute path='/signup' exact component={Signup} />
-            <AuthRoute path='/get-started' exact component={GetStarted} />
-            <Route path='/forgot-password' exact render={() => <ResetPassword />} />
-            <PrivateRoute path='/home' exact component={Home} />
-            <PrivateRoute path='/releases' exact component={Releases} />
-            <PrivateRoute path='/releases/new' exact component={NewRelease} />
-            <PrivateRoute path='/profile' exact component={EditProfile} />
-            <PrivateRoute path='/introduction' exact component={Introduction} />
-            <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
-            <PrivateRoute path='/menu' exact component={ExtendedMenu} />
-            <Route render={() => <Redirect to='/home' />} />
-          </Switch>
-        </BrowserRouter>
+        <ScrollToTop />
+        <Switch>
+          <Route path='/' exact render={() => <Landing />} />
+          <Route path='/artist/:id' exact render={() => <Artist />} />
+          <AuthRoute path='/login' exact component={Login} />
+          <AuthRoute path='/signup' exact component={Signup} />
+          <AuthRoute path='/get-started' exact component={GetStarted} />
+          <Route path='/forgot-password' exact render={() => <ResetPassword />} />
+          <PrivateRoute path='/home' exact component={Home} />
+          <PrivateRoute path='/releases' exact component={Releases} />
+          <PrivateRoute path='/releases/new' exact component={NewRelease} />
+          <PrivateRoute path='/profile' exact component={EditProfile} />
+          <PrivateRoute path='/introduction' exact component={Introduction} />
+          <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
+          <PrivateRoute path='/menu' exact component={ExtendedMenu} />
+          <Route render={() => <Redirect to='/home' />} />
+        </Switch>
       </AlertProvider>
-    </authContext.Provider>
+    </authContext.Provider >
   );
 };
 
