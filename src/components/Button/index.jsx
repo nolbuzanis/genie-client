@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Button = styled.button`
   display: block;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'default' : 'pointer'};
   width: 100%;
   background: ${props => (props.disabled ? '#DDDDDD' : props.alt ? 'white' : 'linear-gradient(90deg, #8872ff, #4568DC)')};
   height: 44px;

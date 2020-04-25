@@ -163,9 +163,17 @@ const ArtistSocialMedia = styled.div`
   z-index: 10;
   height: 70px;
   width: 100%;
+  border-top: solid 1px #a2a2a2;
+`;
+const SocialMediaMax = styled.div`
+  max-width: 360px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
-`
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+`;
 const loadingStyles = css`
   position: relative;
   display: block;
@@ -253,6 +261,16 @@ const PreviewButton = styled.button`
   font-weight: 600;
   box-shadow: ${props => !props.alt && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
   margin: 5px 0;
+`;
+const SocialMediaLink = styled.a`
+  cursor: pointer;
+  &:hover{
+    opacity: 0.8;
+     transition: all ease 0.3s;
+  }
+`;
+const SocialMediaIcon = styled.img`
+  height: 30px;
 `;
 
 const SpotifyIcon = () => (
@@ -376,7 +394,20 @@ const Artist = () => {
         </ArtistContent>
       </FlexContainer>
       {hasSocialMedia && <ArtistSocialMedia>
-
+        <SocialMediaMax>
+          {artist.instagram && <SocialMediaLink href={artist.instagram}>
+            <SocialMediaIcon src='/assets/instagram-icon-blue.png' />
+          </SocialMediaLink>}
+          {artist.facebook && <SocialMediaLink href={artist.facebook}>
+            <SocialMediaIcon src='/assets/facebook-icon-blue.png' />
+          </SocialMediaLink>}
+          {artist.twitter && <SocialMediaLink href={artist.twitter}>
+            <SocialMediaIcon src='/assets/twitter-icon-blue.png' />
+          </SocialMediaLink>}
+          {artist.website && <SocialMediaLink href={artist.website}>
+            <SocialMediaIcon src='/assets/website-icon-blue.png' />
+          </SocialMediaLink>}
+        </SocialMediaMax>
       </ArtistSocialMedia>}
     </PageContainer>
   );

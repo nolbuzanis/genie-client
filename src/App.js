@@ -1,15 +1,19 @@
 import React from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from './components/Alert';
+import ReactGA from 'react-ga';
+import './App.css';
+
+//views and components
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
-//import Dashboard from './views/Dashboard';
 import Signup from './views/SignUp';
 import Landing from './views/Landing';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
 import Releases from './views/Releases';
-import EditProfile from './views/EditProfile';
 import Introduction from './views/Introduction';
 import ResetPassword from './views/ResetPassword';
 import NewRelease from './views/NewRelease';
@@ -18,14 +22,7 @@ import ArtistURIExplained from './views/ArtistURIExplained';
 import ExtendedMenu from './views/ExtendedMenu';
 import Home from './views/Home';
 import ScrollToTop from './components/ScrollToTop';
-// import NewPassword from './components/NewPassword';
-// import Account from './components/Account';
-// import MyFollowers from './components/MyFollowers';
-import './App.css';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert';
-import AlertTemplate from './components/Alert';
-//import PublicRoute from './components/PublicRoute';
-import ReactGA from 'react-ga';
+import Profile from './views/Profile';
 
 const App = () => {
   const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
@@ -61,7 +58,7 @@ const App = () => {
           <PrivateRoute path='/home' exact component={Home} />
           <PrivateRoute path='/releases' exact component={Releases} />
           <PrivateRoute path='/releases/new' exact component={NewRelease} />
-          <PrivateRoute path='/profile' exact component={EditProfile} />
+          <PrivateRoute path='/profile' exact component={Profile} />
           <PrivateRoute path='/introduction' exact component={Introduction} />
           <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
