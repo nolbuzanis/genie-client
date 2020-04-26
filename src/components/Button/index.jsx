@@ -5,7 +5,11 @@ const Button = styled.button`
   display: block;
   cursor: ${props => props.disabled ? 'default' : 'pointer'};
   width: 100%;
-  background: ${props => (props.disabled ? '#DDDDDD' : props.alt ? 'white' : 'linear-gradient(90deg, #8872ff, #4568DC)')};
+  background: ${props => {
+    if (props.disabled) return '#DDDDDD'
+    if (props.alt) return 'white'
+    return props.bgColor ? props.bgColor : 'linear-gradient(90deg, #8872ff, #4568DC)'
+  }};
   height: 44px;
   border: ${props => props.alt ? '1px solid #4568DC' : 'none'};
   color: ${props => props.alt ? '#4568DC' : 'white'};

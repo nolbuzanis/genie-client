@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { useAuth } from '../../Context/authContext';
 
 const HeaderContainer = styled.div`
   position: absolute;
@@ -70,11 +70,16 @@ const Nav = styled.nav`
     
   }
 `;
+const DashboardLink = styled(SignupLink)`
+  width: inherit;
+  padding: 0 15px;
+`;
 
 
 const Header = ({ history }) => {
 
   const landing = history.location.pathname === '/' ? true : false;
+  const { user } = useAuth();
   // const path = history.location.pathname.split('/')[1];
 
   // const exclusionArray = ['profile', 'releases', 'home', 'releases', 'introduction', 'get-started', 'find-artist-uri', 'menu', 'artist'];
@@ -84,10 +89,16 @@ const Header = ({ history }) => {
   return (
     <HeaderContainer landing={landing}>
       <Logo to='/' landing={landing}>Genie</Logo>
-      <Nav>
-        <SignupLink to='/signup' landing={landing}>Sign Up</SignupLink>
-        <StyledLink to='/login' landing={landing}>Log In</StyledLink>
-      </Nav>
+      {user && !user.error ?
+        <Nav>
+          <DashboardLink to='/home' landing={landing}>Go to dashboard</DashboardLink>
+        </Nav>
+        :
+        <Nav>
+          <SignupLink to='/signup' landing={landing}>Sign Up</SignupLink>
+          <StyledLink to='/login' landing={landing}>Log In</StyledLink>
+        </Nav>
+      }
     </HeaderContainer>
   );
 };

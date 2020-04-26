@@ -256,7 +256,7 @@ const Home = () => {
       </EditContainer>
       <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>
         <GlobeIcon src='/assets/globe-icon-white.png' />
-        My public artist page
+        My artist page
       </PublicArtistPage>
     </Content>
   </Background>

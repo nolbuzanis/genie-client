@@ -23,6 +23,9 @@ import ExtendedMenu from './views/ExtendedMenu';
 import Home from './views/Home';
 import ScrollToTop from './components/ScrollToTop';
 import Profile from './views/Profile';
+import PrivacyPolicy from './views/PrivacyPolicy';
+import TermsOfService from './views/TermsOfService';
+// import Followers from './views/Followers';
 
 const App = () => {
   const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
@@ -51,6 +54,8 @@ const App = () => {
         <Switch>
           <Route path='/' exact render={() => <Landing />} />
           <Route path='/artist/:id' exact render={() => <Artist />} />
+          <Route path='/privacy-policy' exact render={() => <PrivacyPolicy />} />
+          <Route path='/terms-of-service' exact render={() => <TermsOfService />} />
           <AuthRoute path='/login' exact component={Login} />
           <AuthRoute path='/signup' exact component={Signup} />
           <AuthRoute path='/get-started' exact component={GetStarted} />
@@ -62,6 +67,7 @@ const App = () => {
           <PrivateRoute path='/introduction' exact component={Introduction} />
           <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
+          {/* <PrivateRoute path='/follower' exact component={Followers} /> */}
           <Route render={() => <Redirect to='/home' />} />
         </Switch>
       </AlertProvider>
