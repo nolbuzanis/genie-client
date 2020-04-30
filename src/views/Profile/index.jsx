@@ -4,7 +4,7 @@ import { useAuth } from '../../Context/authContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { uploadUserPhoto, updateUserProfile } from '../../api';
-import { useAlert } from 'react-alert';
+import { useToasts } from 'react-toast-notifications';
 import Button from '../../components/Button';
 
 const Header = styled.h1`
@@ -141,7 +141,7 @@ const InputSection = props => (
 const Profile = () => {
   const { user, follower, setAuth } = useAuth();
   const [uploading, setUploading] = React.useState(false);
-  const alert = useAlert();
+  const { addToast } = useToasts();
 
   const handlePhotoSubmit = async (e) => {
     const photo = e.target.files[0];
@@ -152,12 +152,12 @@ const Profile = () => {
 
     if (response.error) {
       console.log(response.error);
-      alert.show('Error!');
+      addToast(response.error.message, { appearance: 'error' });
       return setUploading(false);
     }
     user.img = response;
     setAuth({ user, follower });
-    alert.show('Updated Picture!', { type: 'success' });
+    addToast('Profile picture saved.', { appearance: 'success' });
     return setUploading(false);
 
     // If success, show success alert
@@ -180,12 +180,11 @@ const Profile = () => {
     const response = await updateUserProfile(values);
 
     if (response.error) {
-      alert.show('Error!');
+      addToast(response.error.message, { appearance: 'error' });
       return setSubmitting(false);
     }
 
-
-    alert.show('Updated Profile!', { type: 'success' });
+    addToast('Profile saved.', { appearance: 'success' });
     setSubmitting(false);
     return setAuth({ user: { ...user, ...values }, follower });
 

@@ -298,9 +298,14 @@ const Artist = () => {
   const view = urlParams.get('view');
   let previewMode = view === 'preview' && user && user.uri;
 
-  if (!follower) {
-    getCurrentFollower().then((response) => setAuth({ user, follower: response }));
-  }
+  React.useEffect(() => {
+    if (!follower) {
+      getCurrentFollower().then((response) => setAuth({ user, follower: response }));
+    }
+    // eslint-disable-next-line
+  }, []);
+
+
   if (previewMode && !artist) {
     // fetch artistdata from local
     setArtist(user);
@@ -325,7 +330,7 @@ const Artist = () => {
       //size={"150px"} this also works
       color='#4568DC'
       loading={true}
-    />;;
+    />;
   }
   if (artist.error) {
     return <Redirect to='/' />

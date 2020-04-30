@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 import { submitSpotifyURI, getSpotifyArtistDetails } from '../../api';
 import authContext from '../../Context/authContext';
 import { withRouter, Link } from 'react-router-dom';
-import { useAlert } from 'react-alert';
 import Button from '../../components/Button';
+import { useToasts } from 'react-toast-notifications';
 
 const Container = styled.div`
   //margin: 0 auto;
@@ -102,7 +102,7 @@ const validationSchema = Yup.object().shape({
 
 
 const Introduction = ({ history }) => {
-  const alert = useAlert();
+  const { addToasts } = useToasts();
   const { follower, setAuth } = React.useContext(authContext);
   const [artist, setArtist] = React.useState();
   const handleSubmit = async ({ uri }, { setFieldError, setSubmitting }) => {
@@ -116,7 +116,7 @@ const Introduction = ({ history }) => {
       return setSubmitting(false);
     }
     if (artist.error) {
-      alert.show('Error submitting URI!');
+      addToasts(artist.error.message, { appearace: 'error' });
       return setSubmitting(false);
     }
     setSubmitting(false);

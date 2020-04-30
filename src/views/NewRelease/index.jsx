@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { withRouter } from 'react-router-dom';
 import { createNewSong } from '../../api';
 import Calendar from 'react-calendar';
-import { useAlert } from 'react-alert';
+import { useToasts } from 'react-toast-notifications';
 //import { useAuth } from '../../Context/authContext';
 
 const SubHeading = styled.p`
@@ -146,7 +146,7 @@ const NewRelease = ({ history }) => {
     songName: 'song_name'
   };
   //const { user, setAuth } = useAuth();
-  const alert = useAlert();
+  const { addToast } = useToasts();
   const [state, setState] = React.useState(undefined);
   const [releaseDate, setReleaseDate] = React.useState(new Date());
   const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -178,12 +178,12 @@ const NewRelease = ({ history }) => {
     }
     if (response.error) {
       console.log(response.error.response);
-      alert.show('Error creating song!');
+      addToast(response.error.message, { appearance: 'error' });
       setSubmitting(false);
       return setState(undefined);
     }
     //setSubmitting(false);
-    //alert.show('Successfully created song!', { type: 'success' });
+    addToast('Release created!', { appearance: 'success' });
     //setAuth({ user: { ...user, releases: user.releases++ } });
     return history.push('/releases');
   };

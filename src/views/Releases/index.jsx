@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { getMySongs } from '../../api';
-import { useAlert } from 'react-alert';
+import { useToasts } from 'react-toast-notifications';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
@@ -344,11 +344,11 @@ const Releases = () => {
   const [URIModal, setURIModal] = React.useState(false);
   const [songs, setSongs] = React.useState([]);
   const [edit, setEdit] = React.useState(true);
-  const alert = useAlert();
+  const { addToast } = useToasts();
   const fetchSongs = async () => {
     const songs = await getMySongs();
     if (songs.error) {
-      return alert.show('Error fetching songs!');
+      return addToast('Error fetching songs.', { appearance: 'error' });
     }
     setSongs(songs);
   }

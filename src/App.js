@@ -1,9 +1,8 @@
 import React from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert';
-import AlertTemplate from './components/Alert';
 import ReactGA from 'react-ga';
 import './App.css';
+import { ToastProvider } from 'react-toast-notifications';
 
 //views and components
 import Login from './views/LogIn';
@@ -25,6 +24,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Profile from './views/Profile';
 import PrivacyPolicy from './views/PrivacyPolicy';
 import TermsOfService from './views/TermsOfService';
+//import Pricing from './views/Pricing';
 // import Followers from './views/Followers';
 
 const App = () => {
@@ -36,20 +36,12 @@ const App = () => {
     ReactGA.pageview(location.pathname); // Record a pageview for the given page
   });
 
-  const alertOptions = {
-    // you can also just use 'bottom center'
-    position: positions.BOTTOM_CENTER,
-    timeout: 4000,
-    offset: "30px",
-    // you can also just use 'scale'
-    transition: transitions.SCALE,
-    containerStyle: {
-      width: "100%"
-    }
-  };
   return (
     <authContext.Provider value={{ ...auth, setAuth }}>
-      <AlertProvider template={AlertTemplate} {...alertOptions}>
+      <ToastProvider
+        autoDismiss
+        autoDismissTimeout={4000}
+      >
         <ScrollToTop />
         <Switch>
           <Route path='/' exact render={() => <Landing />} />
@@ -67,10 +59,11 @@ const App = () => {
           <PrivateRoute path='/introduction' exact component={Introduction} />
           <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
+          {/* <Route path='/pricing' exact component={Pricing} /> */}
           {/* <PrivateRoute path='/follower' exact component={Followers} /> */}
           <Route render={() => <Redirect to='/home' />} />
         </Switch>
-      </AlertProvider>
+      </ToastProvider>
     </authContext.Provider >
   );
 };
