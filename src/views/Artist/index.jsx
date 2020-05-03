@@ -357,7 +357,7 @@ const Artist = () => {
         </div>
         <div>
           <PreviewButton onClick={() => history.goBack()}>Back</PreviewButton>
-          <PreviewButton alt onClick={() => window.location.replace(history.location.pathname)}>Disable</PreviewButton>
+          <PreviewButton alt={1} onClick={() => window.location.replace(history.location.pathname)}>Disable</PreviewButton>
         </div>
       </PreviewBanner>}
       <HeaderContainer>

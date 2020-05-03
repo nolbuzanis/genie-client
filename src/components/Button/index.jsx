@@ -18,7 +18,7 @@ const Button = styled.button`
   font-size: 18px;
   border-radius: 22px;
   height: 44px;
-  font-weight: 700;
+  font-weight: 600;
   box-shadow: ${props => !props.alt && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
 `;
 

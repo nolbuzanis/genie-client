@@ -24,7 +24,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Profile from './views/Profile';
 import PrivacyPolicy from './views/PrivacyPolicy';
 import TermsOfService from './views/TermsOfService';
-//import Pricing from './views/Pricing';
+import Pricing from './views/Pricing';
 // import Followers from './views/Followers';
 
 const App = () => {
@@ -59,7 +59,7 @@ const App = () => {
           <PrivateRoute path='/introduction' exact component={Introduction} />
           <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
-          {/* <Route path='/pricing' exact component={Pricing} /> */}
+          <PrivateRoute path='/pricing' exact component={Pricing} />
           {/* <PrivateRoute path='/follower' exact component={Followers} /> */}
           <Route render={() => <Redirect to='/home' />} />
         </Switch>

@@ -87,16 +87,16 @@ const Header = ({ history }) => {
   // if (exclusionArray.indexOf(history.location.pathname) >= 0) return null;
 
   return (
-    <HeaderContainer landing={landing}>
-      <Logo to='/' landing={landing}>Genie</Logo>
+    <HeaderContainer landing={landing ? 1 : 0}>
+      <Logo to='/' landing={landing ? 1 : 0}>Genie</Logo>
       {user && !user.error ?
         <Nav>
-          <DashboardLink to='/home' landing={landing}>Go to dashboard</DashboardLink>
+          <DashboardLink to='/home' landing={landing ? 1 : 0}>Go to dashboard</DashboardLink>
         </Nav>
         :
         <Nav>
-          <SignupLink to='/signup' landing={landing}>Sign Up</SignupLink>
-          <StyledLink to='/login' landing={landing}>Log In</StyledLink>
+          <SignupLink to='/signup' landing={landing ? 1 : 0}>Sign Up</SignupLink>
+          <StyledLink to='/login' landing={landing ? 1 : 0}>Log In</StyledLink>
         </Nav>
       }
     </HeaderContainer>

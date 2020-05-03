@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export let SERVER_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/indepdent-8833f/us-central1/api' : 'https://purplegenie.ca/api';
-SERVER_URL = 'https://purplegenie.ca/api';
+//export let SERVER_URL = 'https://purplegenie.ca/api';
 
 const axiosConfig = {
   withCredentials: true,
@@ -216,7 +216,6 @@ export const createNewSong = async (uri, songName, releaseDate) => {
 };
 
 export const fetchFollowerCountData = async () => {
-
   try {
     const { data } = await axios.get(`${SERVER_URL}/user/followers/count`, axiosConfig);
     return data;
@@ -224,5 +223,19 @@ export const fetchFollowerCountData = async () => {
     console.error(error);
     return { error };
   }
+};
 
+export const createPremiumSubscription = async (paymentMethod) => {
+
+  const bodyData = JSON.stringify({
+    payment_method: paymentMethod.id
+  });
+  try {
+    const { data } = await axios.post(`${SERVER_URL}/user/premium-subscription/create`, bodyData, axiosConfig);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
 };

@@ -7,10 +7,11 @@ import { fetchFollowerCountData } from '../../api';
 import moment from 'moment';
 
 const Background = styled.div`
-  height: 100%;
+  //height: 100%;
   width: 100%;
-  background-image: linear-gradient(to bottom, #4568dc, #8872ff 20%, #ffffff 45%);
+  background-image: linear-gradient(to bottom, #4568dc, #8872ff);
   //background-attachment: fixed;
+  height: 240px;
 `;
 const Content = styled.div`
   max-width: 600px;
@@ -103,7 +104,7 @@ const EditBoxText = styled.p`
   display: inline;
   font-weight: 600;
   padding: 0 2vw;
-  font-size: calc(14px + 0.4vw);
+  font-size: calc(13px + 0.5vw);
 `;
 const EditButton = styled(Link)`
   width: 60px;
@@ -251,7 +252,7 @@ const Home = () => {
             <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>{1000 - user.saves}</CircularNumber>
             <EditBoxText>Saves Remaining</EditBoxText>
           </div>
-          {/* <EditButton>Edit</EditButton> */}
+          <EditButton to='/pricing'>Edit</EditButton>
         </EditBox>
       </EditContainer>
       <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>

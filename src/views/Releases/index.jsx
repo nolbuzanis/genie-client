@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 
 const BlastList = styled.div`
   margin: 0 auto;
-  padding: 0 30px;
+  padding: 0 30px 30px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-column-gap: 40px;

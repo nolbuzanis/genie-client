@@ -132,7 +132,7 @@ const menuItems = [
 
 const MobileNavigation = () => {
   const path = window.location.pathname;
-  const lockedRoutes = ['/menu', '/introduction', '/find-artist-uri']
+  const lockedRoutes = ['/menu', '/introduction', '/find-artist-uri', '/pricing']
   if (window.innerWidth >= 1024 || lockedRoutes.includes(path)) return null;
   return (
     <>

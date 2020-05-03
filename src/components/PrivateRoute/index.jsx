@@ -32,7 +32,7 @@ const loadingStyles = css`
 const MaxContent = styled.div`
         max-width: 1300px;
         margin: 0 auto;
-        height: 100%;
+        //height: 100%;
         position: relative;
       `
 
@@ -88,11 +88,8 @@ const PrivateRoute = ({ component: Component, ...props }) => {
         <FlexContainer>
           <SideMenu open={open} setOpen={setOpen} />
           <ContentContainer>
-            {/* <InternalHeader open={open} setOpen={setOpen} /> */}
-            <MaxContent>
-              <Component {...componentProps} />
-              <MobileNavigation />
-            </MaxContent>
+            <Component {...componentProps} />
+            <MobileNavigation />
           </ContentContainer>
         </FlexContainer>
       );

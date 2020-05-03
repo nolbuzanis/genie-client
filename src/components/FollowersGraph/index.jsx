@@ -3,7 +3,6 @@ import { ResponsiveLine } from '@nivo/line';
 import { linearGradientDef } from '@nivo/core';
 
 const FollowersGraph = ({ data }) => {
-  console.log();
   let max;
   if (data[0].data) {
     max = Math.max.apply(Math, data[0].data.map(function (o) { return o.y; })) || 1;
@@ -39,7 +38,7 @@ const FollowersGraph = ({ data }) => {
     data={data}
     margin={{ top: 50, right: 25, bottom: 30, left: 40 }}
     xScale={{ type: 'point' }}
-    yScale={{ type: 'linear', min: '0', max: 'auto', stacked: false, reverse: false }}
+    //yScale={{ type: 'linear', min: '0', max: 'auto', stacked: false, reverse: false }}
     axisTop={null}
     axisRight={null}
     axisBottom={{
