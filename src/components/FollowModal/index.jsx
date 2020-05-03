@@ -24,7 +24,7 @@ const modalStyles = {
     background: 'none',
   }
 };
-Modal.setAppElement('#modal');
+Modal.setAppElement('body');
 
 const ModalContainer = styled.div`
   background: white;

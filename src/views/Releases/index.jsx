@@ -367,7 +367,7 @@ const Releases = () => {
     setSubmitting(true);
     console.log(values);
   }
-  Modal.setAppElement('#modal');
+  Modal.setAppElement('body');
 
   return (
     <>
