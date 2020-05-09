@@ -2,16 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
 import {
-  getArtistByURI,
-  //SERVER_URL 
+  getArtistByURI
+  //SERVER_URL
 } from '../../api';
 //import { useAlert } from 'react-alert';
 import { useAuth } from '../../Context/authContext';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { css } from "@emotion/core";
+import { css } from '@emotion/core';
 import {
-  getCurrentFollower,
-  //logoutFollower 
+  getCurrentFollower
+  //logoutFollower
 } from '../../api';
 import { Logo } from '../../components/Header';
 import FollowModal from '../../components/FollowModal';
@@ -20,20 +20,21 @@ const ArtistPic = styled.div`
   width: 100%;
   position: relative;
   display: block;
-  background: ${props => props.img ? `url('${props.img}') center center no-repeat` : '#000000'};
+  background: ${props =>
+    props.img ? `url('${props.img}') center center no-repeat` : '#000000'};
   background-size: cover;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   padding: 0 25px;
   height: 380px;
   @media (min-width: 750px) {
-   width: 360px;
+    width: 360px;
   }
-`
+`;
 const ArtistName = styled.h2`
   font-size: 30px;
   font-weight: 900;
   text-align: center;
-`
+`;
 const PhotoContent = styled.div`
   position: absolute;
   width: 100%;
@@ -41,18 +42,18 @@ const PhotoContent = styled.div`
   color: white;
   text-align: center;
   left: 0;
-`
+`;
 const Mask = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0,0,0,0.3);
-`
+  background: rgba(0, 0, 0, 0.3);
+`;
 const FollowButton = styled.button`
   display: block;
-  background-color: ${props => props.disabled ? '#333333' : '#8872FF'};
+  background-color: ${props => (props.disabled ? '#333333' : '#8872FF')};
   width: 180px;
   height: 40px;
   border-radius: 20px;
@@ -64,13 +65,13 @@ const FollowButton = styled.button`
   line-height: 40px;
   color: white;
   font-weight: 900;
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   transition: all ease 0.3s;
-  cursor: ${props => props.disabled ? 'auto' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'auto' : 'pointer')};
   &:hover {
-    background-color: ${props => props.disabled ? '#333333' : '#9986FF'};
+    background-color: ${props => (props.disabled ? '#333333' : '#9986FF')};
   }
-`
+`;
 const FollowerCount = styled.div`
   font-size: 24px;
   font-weight: 900;
@@ -79,23 +80,23 @@ const FollowerCount = styled.div`
     height: 15px;
     margin-left: 5px;
   }
-`
+`;
 const ArtistContent = styled.div`
   flex: 1;
   padding: 0 25px;
   font-size: 20px;
   //height: 100%;
   background: #f2f2f2;
-`
+`;
 const ContentHeader = styled.h3`
   font-size: 20px;
   font-weight: 600;
   padding: 35px 25px 0;
-`
+`;
 const Bio = styled.p`
   font-size: 18px;
   padding: 15px 25px 30px;
-`
+`;
 const FlexContainer = styled.div`
   position: relative;
   z-index: 10;
@@ -116,7 +117,7 @@ const FlexContainer = styled.div`
     box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.3);
     margin-bottom: 30px;
   }
-`
+`;
 const SpotifyPlay = styled.div`
   display: flex;
   justify-content: space-between;
@@ -124,7 +125,7 @@ const SpotifyPlay = styled.div`
   margin: 0 4.1%;
   align-items: center;
   border-bottom: 1px solid #979797;
-`
+`;
 const ListenOnSpotify = styled.a`
   display: flex;
   align-items: center;
@@ -143,10 +144,10 @@ const PageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,1);;
-  
+  background: rgba(0, 0, 0, 1);
+
   @media (min-width: 750px) {
-   padding-top: 100px;
+    padding-top: 100px;
   }
 `;
 const PageOverlay = styled.div`
@@ -156,7 +157,8 @@ const PageOverlay = styled.div`
   width: 100%;
   opacity: 0.5;
   height: 100%;
-  background: ${props => props.img ? `url('${props.img}') center center no-repeat` : '#000000'};
+  background: ${props =>
+    props.img ? `url('${props.img}') center center no-repeat` : '#000000'};
   background-size: cover;
   filter: blur(2px);
   -webkit-filter: blur(2px);
@@ -257,10 +259,15 @@ const PreviewButton = styled.button`
   display: block;
   cursor: pointer;
   width: 80px;
-  background: ${props => (props.disabled ? '#DDDDDD' : props.alternate ? 'white' : 'linear-gradient(90deg, #8872ff, #4568DC)')};
+  background: ${props =>
+    props.disabled
+      ? '#DDDDDD'
+      : props.alternate
+      ? 'white'
+      : 'linear-gradient(90deg, #8872ff, #4568DC)'};
   height: 30px;
-  border: ${props => props.alternate ? '1px solid #4568DC' : 'none'};
-  color: ${props => props.alternate ? '#4568DC' : 'white'};
+  border: ${props => (props.alternate ? '1px solid #4568DC' : 'none')};
+  color: ${props => (props.alternate ? '#4568DC' : 'white')};
   line-height: 30px;
   text-align: center;
   border-radius: 15px;
@@ -271,9 +278,9 @@ const PreviewButton = styled.button`
 `;
 const SocialMediaLink = styled.a`
   cursor: pointer;
-  &:hover{
+  &:hover {
     opacity: 0.8;
-     transition: all ease 0.3s;
+    transition: all ease 0.3s;
   }
 `;
 const SocialMediaIcon = styled.img`
@@ -300,11 +307,12 @@ const Artist = () => {
 
   React.useEffect(() => {
     if (!follower) {
-      getCurrentFollower().then((response) => setAuth({ user, follower: response }));
+      getCurrentFollower().then(response =>
+        setAuth({ user, follower: response })
+      );
     }
     // eslint-disable-next-line
   }, []);
-
 
   if (previewMode && !artist) {
     // fetch artistdata from local
@@ -324,23 +332,27 @@ const Artist = () => {
 
   if (!artist) {
     getArtistByURI(id).then(setArtist);
-    return <BeatLoader
-      css={loadingStyles}
-      size={20}
-      //size={"150px"} this also works
-      color='#4568DC'
-      loading={true}
-    />;
+    return (
+      <BeatLoader
+        css={loadingStyles}
+        size={20}
+        //size={"150px"} this also works
+        color='#4568DC'
+        loading={true}
+      />
+    );
   }
   if (artist.error) {
-    return <Redirect to='/' />
+    return <Redirect to='/' />;
   }
 
-  const isFollowing = follower && follower.following && follower.following.includes(id);
-  const hasSocialMedia = (artist.instagram && artist.instagram.trim().length !== 0)
-    || (artist.twitter && artist.twitter.trim().length !== 0)
-    || (artist.website && artist.website.trim().length !== 0)
-    || (artist.facebook && artist.facebook.trim().length !== 0);
+  const isFollowing =
+    follower && follower.following && follower.following.includes(id);
+  const hasSocialMedia =
+    (artist.instagram && artist.instagram.trim().length !== 0) ||
+    (artist.twitter && artist.twitter.trim().length !== 0) ||
+    (artist.website && artist.website.trim().length !== 0) ||
+    (artist.facebook && artist.facebook.trim().length !== 0);
 
   return (
     <PageContainer>
@@ -350,18 +362,27 @@ const Artist = () => {
         previewMode={previewMode}
         artist={artist}
       />
-      {previewMode && <PreviewBanner>
-        <div>
-          <PreviewHeader>Preview Mode</PreviewHeader>
-          <PreviewText>Buttons and links have been disabled.</PreviewText>
-        </div>
-        <div>
-          <PreviewButton onClick={() => history.goBack()}>Back</PreviewButton>
-          <PreviewButton alt={1} onClick={() => window.location.replace(history.location.pathname)}>Disable</PreviewButton>
-        </div>
-      </PreviewBanner>}
+      {previewMode && (
+        <PreviewBanner>
+          <div>
+            <PreviewHeader>Preview Mode</PreviewHeader>
+            <PreviewText>Buttons and links have been disabled.</PreviewText>
+          </div>
+          <div>
+            <PreviewButton onClick={() => history.goBack()}>Back</PreviewButton>
+            <PreviewButton
+              alternate
+              onClick={() => window.location.replace(history.location.pathname)}
+            >
+              Disable
+            </PreviewButton>
+          </div>
+        </PreviewBanner>
+      )}
       <HeaderContainer>
-        <Logo to='/' landing={true}>Genie</Logo>
+        <Logo to='/' landing={true}>
+          Genie
+        </Logo>
         {/* {follower && !follower.error ? <SpotifyLogin as='button' onClick={handleLogout}>Log Out <SpotifyIcon /></SpotifyLogin>
           : <SpotifyLogin
             disabled={previewMode}
@@ -376,37 +397,58 @@ const Artist = () => {
           <Mask />
           <PhotoContent>
             <ArtistName>{artist.name}</ArtistName>
-            <FollowButton onClick={() => setModalOpen(true)} disabled={isFollowing}>{isFollowing ? 'Following' : 'Follow'}</FollowButton>
+            <FollowButton
+              onClick={() => setModalOpen(true)}
+              disabled={isFollowing}
+            >
+              {isFollowing ? 'Following' : 'Follow'}
+            </FollowButton>
           </PhotoContent>
         </ArtistPic>
         <ArtistContent>
           <SpotifyPlay>
-            <ListenOnSpotify href={`https://open.spotify.com/artist/${artist.uri}`} target='_blank'>
+            <ListenOnSpotify
+              href={`https://open.spotify.com/artist/${artist.uri}`}
+              target='_blank'
+            >
               <img src='/play-circle-button.png' alt='play' />
               Listen on Spotify
-        </ListenOnSpotify>
-            <FollowerCount>{artist.followers}<img src='/follower-black-icon.png' alt='followers' /></FollowerCount>
+            </ListenOnSpotify>
+            <FollowerCount>
+              {artist.followers}
+              <img src='/follower-black-icon.png' alt='followers' />
+            </FollowerCount>
           </SpotifyPlay>
           <ContentHeader>Bio</ContentHeader>
           <Bio>{artist.bio}</Bio>
         </ArtistContent>
       </FlexContainer>
-      {hasSocialMedia && <ArtistSocialMedia>
-        <SocialMediaMax>
-          {artist.instagram && <SocialMediaLink href={artist.instagram}>
-            <SocialMediaIcon src='/assets/instagram-icon-blue.png' />
-          </SocialMediaLink>}
-          {artist.facebook && <SocialMediaLink href={artist.facebook}>
-            <SocialMediaIcon src='/assets/facebook-icon-blue.png' />
-          </SocialMediaLink>}
-          {artist.twitter && <SocialMediaLink href={artist.twitter}>
-            <SocialMediaIcon src='/assets/twitter-icon-blue.png' />
-          </SocialMediaLink>}
-          {artist.website && <SocialMediaLink href={artist.website}>
-            <SocialMediaIcon src='/assets/website-icon-blue.png' />
-          </SocialMediaLink>}
-        </SocialMediaMax>
-      </ArtistSocialMedia>}
+      {hasSocialMedia && (
+        <ArtistSocialMedia>
+          <SocialMediaMax>
+            {artist.instagram && (
+              <SocialMediaLink href={artist.instagram}>
+                <SocialMediaIcon src='/assets/instagram-icon-blue.png' />
+              </SocialMediaLink>
+            )}
+            {artist.facebook && (
+              <SocialMediaLink href={artist.facebook}>
+                <SocialMediaIcon src='/assets/facebook-icon-blue.png' />
+              </SocialMediaLink>
+            )}
+            {artist.twitter && (
+              <SocialMediaLink href={artist.twitter}>
+                <SocialMediaIcon src='/assets/twitter-icon-blue.png' />
+              </SocialMediaLink>
+            )}
+            {artist.website && (
+              <SocialMediaLink href={artist.website}>
+                <SocialMediaIcon src='/assets/website-icon-blue.png' />
+              </SocialMediaLink>
+            )}
+          </SocialMediaMax>
+        </ArtistSocialMedia>
+      )}
     </PageContainer>
   );
 };

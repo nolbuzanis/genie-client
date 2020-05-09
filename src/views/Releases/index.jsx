@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { getMySongs } from '../../api';
 import { useToasts } from 'react-toast-notifications';
@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import Button from '../../components/Button';
 import * as Yup from 'yup';
+import { useAuth } from '../../Context/authContext';
+import { hasNoSavesRemaining } from '../../auth';
+import Popup from '../../components/Popup';
 
 const BlastList = styled.div`
   margin: 0 auto;
@@ -80,7 +83,7 @@ const Pic = styled.div`
     height 45px;
   }
   
-`
+`;
 const SongName = styled.p`
   //font-weight: 500;
   font-size: calc(14px + 0.4vw);
@@ -89,13 +92,14 @@ const SongName = styled.p`
   white-space: nowrap;
   width: 100%;
   overflow: hidden;
-  //border-bottom: solid 3px ${props => props.released ? '#b4b4b4' : '#4568dc'};
-`
+  //border-bottom: solid 3px ${props =>
+    props.released ? '#b4b4b4' : '#4568dc'};
+`;
 const ReleasedOn = styled.p`
   font-size: 13px;
   font-weight: 300;
   //padding-top: 3px;
-`
+`;
 const ReleaseCard = styled.div`
   position: relative;
   padding: 10px 0;
@@ -105,14 +109,13 @@ const ReleaseCard = styled.div`
   flex-wrap: wrap;
   margin: 0 auto;
   width: 100%;
-`
+`;
 const Content = styled.div`
   display: inline-block;
   padding-left: 10px;
   width: 60%;
   overflow-x: hidden;
-
-`
+`;
 const ReleaseIconContainer = styled.div`
   cursor: ${props => props.edit && 'pointer'};
   position: absolute;
@@ -130,9 +133,9 @@ const Span = styled.span`
   font-weight: 500;
   font-size: 11px;
   letter-spacing: -0.31px;
-`
+`;
 const AddURI = styled.button`
-  background: linear-gradient(90deg, #8872ff, #4568DC);
+  background: linear-gradient(90deg, #8872ff, #4568dc);
   width: 60px;
   height: 44px;
   border-radius: 22px;
@@ -140,9 +143,9 @@ const AddURI = styled.button`
   font-size: 14px;
   font-weight: 500;
   color: white;
-  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
   margin: 0 auto;
-`
+`;
 const modalStyles = {
   overlay: {
     display: 'flex',
@@ -157,7 +160,7 @@ const modalStyles = {
     justifyContent: 'center',
     padding: 'none',
     border: 'none',
-    background: 'none',
+    background: 'none'
   }
 };
 const ModalContainer = styled.div`
@@ -165,19 +168,19 @@ const ModalContainer = styled.div`
   border-radius: 20px;
   max-width: 300px;
   padding: 20px;
-  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
-`
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
+`;
 const ModalHeader = styled.h3`
   font-size: 20px;
   padding-top: 10px;
   font-weight: 500;
   text-align: center;
-`
+`;
 const ModalText = styled.p`
   padding-top: 20px;
   font-size: 14px;
   font-weight: 300;
-`
+`;
 const Input = styled.input`
   display: block;
   width: 100%;
@@ -190,7 +193,7 @@ const Input = styled.input`
   font-size: 16px;
   margin: 20px auto 0;
   box-sizing: border-box;
-`
+`;
 const ErrorMsg = styled.label`
   display: block;
   font-size: 12px;
@@ -205,21 +208,21 @@ const ButtonContainer = styled.div`
   width: 140px;
   padding: 20px 0;
   margin: 0 auto;
-`
+`;
 const Spacing = styled.div`
   height: 15px;
-`
+`;
 const HelpLink = styled.a`
   font-size: 12px;
-  color: #8872FF;
+  color: #8872ff;
   text-decoration: underline;
   display: block;
   margin-top: 5px;
   margin-left: 5px;
   &:hover {
-    color: #8872FF;
+    color: #8872ff;
   }
-`
+`;
 // const EditIcon = styled.img`
 //   width: 25px;
 //   height: 25px;
@@ -230,7 +233,7 @@ const Delete = styled.p`
   color: #910505;
   font-size: 12px;
   font-weight: 500;
-`
+`;
 const AddImg = styled.img`
   width: 22px;
   height: 22px;
@@ -253,33 +256,45 @@ const AddContainer = styled.div`
   }
 `;
 const AddText = styled.p`
-font-weight: 500;
-color: black;
-font-size: calc(15px + 0.5vw);
-padding-left: 20px;
+  font-weight: 500;
+  color: black;
+  font-size: calc(15px + 0.5vw);
+  padding-left: 20px;
 `;
 
 const validationSchema = Yup.object().shape({
-  uri: Yup.string().trim().required('Invalid URI.')
+  uri: Yup.string()
+    .trim()
+    .required('Invalid URI.')
 });
 
-const parseDate = (timestamp) => {
+const parseDate = timestamp => {
   if (!timestamp) return '';
   const date = new Date(timestamp);
-  const parsed = date.toLocaleString('default', { month: 'short', day: 'numeric', year: 'numeric' }).split(' ');
+  const parsed = date
+    .toLocaleString('default', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+    .split(' ');
   return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
-}
-const timeUntilRelease = (releaseDate) => {
+};
+const timeUntilRelease = releaseDate => {
   const now = new Date();
 
-  const timeRemaining = Math.round((releaseDate.getTime() - now.getTime()) / 1000);
+  const timeRemaining = Math.round(
+    (releaseDate.getTime() - now.getTime()) / 1000
+  );
   const hours = Math.floor(timeRemaining / 3600);
   const minutes = Math.floor(timeRemaining / 60) - hours * 60;
   const seconds = timeRemaining - (hours * 60 + minutes) * 60;
 
-  const parsedHours = hours < 10 ? '0' + hours.toString() : hours.toString()
-  const parsedMinutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
-  const parsedSeconds = seconds < 10 ? '0' + seconds.toString() : seconds.toString();
+  const parsedHours = hours < 10 ? '0' + hours.toString() : hours.toString();
+  const parsedMinutes =
+    minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+  const parsedSeconds =
+    seconds < 10 ? '0' + seconds.toString() : seconds.toString();
 
   return parsedHours + ' : ' + parsedMinutes + ' : ' + parsedSeconds;
 };
@@ -288,8 +303,8 @@ const Release = ({ song, setURIModal, edit }) => {
   const now = new Date();
 
   const releaseDate = new Date(song.releaseDate);
-  const [time, setTime] = React.useState('-- : -- : --');
-  const [confirm, setConfirm] = React.useState(false);
+  const [time, setTime] = useState('-- : -- : --');
+  const [confirm, setConfirm] = useState(false);
 
   React.useEffect(() => {
     if (song.status === 'scheduled' && song.spotifyUri) {
@@ -311,47 +326,66 @@ const Release = ({ song, setURIModal, edit }) => {
       // Delete song
     }
     return setConfirm(true);
-  }
+  };
 
   return (
     <ReleaseCard>
       <Pic src={song.img || '/rec.png'} />
       <Content>
         <SongName released={released}>{song.name}</SongName>
-        <ReleasedOn>{(released ? 'Released ' : 'Releasing ') + parseDate(song.releaseDate)}</ReleasedOn>
+        <ReleasedOn>
+          {(released ? 'Released ' : 'Releasing ') +
+            parseDate(song.releaseDate)}
+        </ReleasedOn>
       </Content>
       <ReleaseIconContainer edit={edit} onClick={handleDeleteClick}>
-        {edit ?
+        {edit ? (
           <>
-            <ReleaseIcon src={confirm ? '/assets/confirm_delete_icon.png' : '/assets/delete_icon.png'} />
-            <Delete >{confirm ? 'are you sure?' : 'delete'}</Delete>
+            <ReleaseIcon
+              src={
+                confirm
+                  ? '/assets/confirm_delete_icon.png'
+                  : '/assets/delete_icon.png'
+              }
+            />
+            <Delete>{confirm ? 'are you sure?' : 'delete'}</Delete>
           </>
-          :
-          song.spotifyUri ?
-            <>
-              <ReleaseIcon released={released} src={released ? '/assets/save-icon-blue.png' : '/clock-icon.png'} />
-              <Span released={released}>{released ? song.saves + ' save' + (song.saves !== 1 ? 's' : '') : time}</Span>
-            </>
-            :
-            <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>
-
-        }
+        ) : song.spotifyUri ? (
+          <>
+            <ReleaseIcon
+              released={released}
+              src={released ? '/assets/save-icon-blue.png' : '/clock-icon.png'}
+            />
+            <Span released={released}>
+              {released
+                ? song.saves + ' save' + (song.saves !== 1 ? 's' : '')
+                : time}
+            </Span>
+          </>
+        ) : (
+          <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>
+        )}
       </ReleaseIconContainer>
-    </ReleaseCard>)
+    </ReleaseCard>
+  );
 };
 
 const Releases = () => {
-  const [URIModal, setURIModal] = React.useState(false);
-  const [songs, setSongs] = React.useState([]);
-  const [edit, setEdit] = React.useState(true);
+  const [URIModal, setURIModal] = useState(false);
+  const [songs, setSongs] = useState([]);
+  const [edit, setEdit] = useState(true);
   const { addToast } = useToasts();
+  const { user } = useAuth();
+  const [popup, setPopup] = useState(false);
+
   const fetchSongs = async () => {
     const songs = await getMySongs();
     if (songs.error) {
       return addToast('Error fetching songs.', { appearance: 'error' });
     }
     setSongs(songs);
-  }
+  };
+
   React.useEffect(() => {
     fetchSongs();
     return setEdit(false);
@@ -360,27 +394,42 @@ const Releases = () => {
 
   const renderSongs = () => {
     return songs.map((song, i) => {
-      return <Release key={i} song={song} setURIModal={setURIModal} edit={edit} />
+      return (
+        <Release key={i} song={song} setURIModal={setURIModal} edit={edit} />
+      );
     });
   };
   const handleAddUri = (values, { setSubmitting }) => {
     setSubmitting(true);
     console.log(values);
-  }
+  };
   Modal.setAppElement('body');
+
+  const checkIfAllowed = e => {
+    if (hasNoSavesRemaining(user)) {
+      e.preventDefault();
+      setPopup(true);
+    }
+  };
 
   return (
     <>
-      <Modal style={modalStyles} isOpen={URIModal} onRequestClose={() => setURIModal(false)}>
+      <Modal
+        style={modalStyles}
+        isOpen={URIModal}
+        onRequestClose={() => setURIModal(false)}
+      >
         <ModalContainer>
           <ModalHeader>Add Spotify URI</ModalHeader>
-          <ModalText>Please enter the spotify URI of the song before it can be released.</ModalText>
+          <ModalText>
+            Please enter the spotify URI of the song before it can be released.
+          </ModalText>
           <Formik
             initialValues={{ uri: '' }}
             onSubmit={handleAddUri}
             validationSchema={validationSchema}
           >
-            {(props) => (
+            {props => (
               <form onSubmit={props.handleSubmit}>
                 <Input
                   name='uri'
@@ -391,18 +440,34 @@ const Releases = () => {
                   error={props.errors['uri'] && props.touched['uri']}
                   placeholder='Spotify Song URI'
                 />
-                {props.errors['uri'] && props.touched['uri'] && <ErrorMsg>{props.errors['uri']}</ErrorMsg>}
-                <HelpLink href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201' target='_blank'>Where do I find this?</HelpLink>
+                {props.errors['uri'] && props.touched['uri'] && (
+                  <ErrorMsg>{props.errors['uri']}</ErrorMsg>
+                )}
+                <HelpLink
+                  href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201'
+                  target='_blank'
+                >
+                  Where do I find this?
+                </HelpLink>
                 <ButtonContainer>
-                  <Button type='submit' disabled={props.isSubmitting}>{props.isSubmitting ? 'Adding' : 'Add'}</Button>
+                  <Button type='submit' disabled={props.isSubmitting}>
+                    {props.isSubmitting ? 'Adding' : 'Add'}
+                  </Button>
                   <Spacing />
-                  <Button type='button' alternate onClick={() => setURIModal(false)}>Cancel</Button>
+                  <Button
+                    type='button'
+                    alternate
+                    onClick={() => setURIModal(false)}
+                  >
+                    Cancel
+                  </Button>
                 </ButtonContainer>
               </form>
             )}
           </Formik>
         </ModalContainer>
       </Modal>
+      <Popup open={popup} setOpen={setPopup} />
       <Header>
         Releases
         {/* <CreateSongButton to='/releases/new'>
@@ -410,19 +475,16 @@ const Releases = () => {
         </CreateSongButton> */}
       </Header>
       <BlastList>
-        <ReleaseCard as={Link} to='/releases/new'>
+        <ReleaseCard as={Link} to='/releases/new' onClick={checkIfAllowed}>
           <AddContainer>
             <AddImg src='/add-icon.png' />
           </AddContainer>
-          <AddText>
-            Create Release
-          </AddText>
+          <AddText>Create Release</AddText>
         </ReleaseCard>
         {renderSongs()}
       </BlastList>
     </>
   );
-}
-
+};
 
 export default Releases;

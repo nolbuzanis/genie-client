@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import FollowersGraph from '../../components/FollowersGraph';
 import { fetchFollowerCountData } from '../../api';
 import moment from 'moment';
+import Popup from '../../components/Popup';
+import { freeUser } from '../../config';
+import { isPremium } from '../../auth/index';
 
 const Background = styled.div`
   position: absolute;
@@ -40,7 +43,8 @@ const StatBox = styled.div`
   border-radius: 5px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   background-color: white;
-  background-image: ${({ colorOne, colorTwo }) => `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
+  background-image: ${({ colorOne, colorTwo }) =>
+    `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,7 +80,7 @@ const EditContainer = styled.div`
   margin-top: 24px;
 `;
 const Divider = styled.div`
-border-bottom: solid 1px rgba(112, 112, 112, 0.24);
+  border-bottom: solid 1px rgba(112, 112, 112, 0.24);
 `;
 const EditBox = styled.div`
   height: 65px;
@@ -96,10 +100,11 @@ const CircularNumber = styled.div`
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   border: solid 1px #ffffff;
   text-align: center;
-  font-size: ${props => props.children > 99 ? '12px' : '18px'};
+  font-size: ${props => (props.children > 99 ? '12px' : '18px')};
   font-weight: 600;
   background-color: #4568dc;
-  background-image: ${({ colorOne, colorTwo }) => `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
+  background-image: ${({ colorOne, colorTwo }) =>
+    `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
 `;
 const EditBoxText = styled.p`
   display: inline;
@@ -129,7 +134,11 @@ const PublicArtistPage = styled(Link)`
   cursor: pointer;
   border-radius: 5px;
   box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
-  background-image: linear-gradient(to bottom, rgba(69, 104, 220, 0.7), #8872ff);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(69, 104, 220, 0.7),
+    #8872ff
+  );
   width: 100%;
   font-size: 16px;
   font-weight: 600;
@@ -167,16 +176,20 @@ const getLastWeek = (startDate = moment().format('YYYY-MM-DD')) => {
       }
       day = longMonths.includes(month) ? 31 : 30;
     }
-    week.push(`${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`);
+    week.push(
+      `${year}-${month < 10 ? '0' + month : month}-${
+        day < 10 ? '0' + day : day
+      }`
+    );
     day += -1;
   }
   return week.reverse();
 };
 
 const Home = () => {
-
   const { user } = useAuth();
   const [followerData, setFollowerData] = React.useState([[], []]);
+  const isUserPremium = isPremium(user);
 
   React.useEffect(() => {
     const fetchFollowerData = async () => {
@@ -184,7 +197,11 @@ const Home = () => {
       const { followersByDay } = data;
 
       const daysToPlot = getLastWeek();
-      const lastWeeksData = getLastWeek(moment().subtract(7, 'd').format('YYYY-MM-DD'));
+      const lastWeeksData = getLastWeek(
+        moment()
+          .subtract(7, 'd')
+          .format('YYYY-MM-DD')
+      );
       let finalData2 = [];
       const finalData = daysToPlot.map((date, i) => {
         finalData2.push({
@@ -205,64 +222,75 @@ const Home = () => {
 
   const followersData = [
     {
-      "id": "Last 7 days",
-      "color": "rgba(69,104,220,0.8)",
-      "data": followerData[0]
+      id: 'Last 7 days',
+      color: 'rgba(69,104,220,0.8)',
+      data: followerData[0]
     },
     {
-      "id": "Week before",
-      "color": "rgba(69,104,220,0.4)",
-      "data": followerData[1]
+      id: 'Week before',
+      color: 'rgba(69,104,220,0.4)',
+      data: followerData[1]
     }
   ];
 
-  return <>
-    <Background />
-    <Content>
-      <Title>Genie Dashboard</Title>
-      <Graph>
-        <GraphTitle>Followers per day</GraphTitle>
-        <FollowersGraph data={followersData} />
-      </Graph>
-      <StatsContainer>
-        <StatBox colorOne='#ff9b9b' colorTwo='#f7db65'>
-          <StatIcon src='/assets/people-stat-icon.png' />
-          <StatContent>
-            <Stat>{user.followers}</Stat>
-            Followers
-        </StatContent>
-        </StatBox>
-        <StatBox colorOne='#9bcdff' colorTwo='#65f7e6'>
-          <StatIcon src='/assets/save-icon-white.png' />
-          <StatContent>
-            <Stat>{user.saves}</Stat>
-            Total Saves
-        </StatContent>
-        </StatBox>
-      </StatsContainer>
-      <EditContainer>
-        <EditBox>
-          <div>
-            <CircularNumber colorOne='#4568dc' colorTwo='#8872ff'>{user.releases}</CircularNumber>
-            <EditBoxText>Releases</EditBoxText>
-          </div>
-          <EditButton to='/releases'>Edit</EditButton>
-        </EditBox>
-        <Divider />
-        <EditBox>
-          <div>
-            <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>{1000 - user.saves}</CircularNumber>
-            <EditBoxText>Saves Remaining</EditBoxText>
-          </div>
-          <EditButton to='/pricing'>Edit</EditButton>
-        </EditBox>
-      </EditContainer>
-      <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>
-        <GlobeIcon src='/assets/globe-icon-white.png' />
-        My artist page
-      </PublicArtistPage>
-    </Content>
-  </>
+  return (
+    <>
+      <Background />
+      <Popup />
+      <Content>
+        <Title>Genie Dashboard</Title>
+        <Graph>
+          <GraphTitle>Followers per day</GraphTitle>
+          <FollowersGraph data={followersData} />
+        </Graph>
+        <StatsContainer>
+          <StatBox colorOne='#ff9b9b' colorTwo='#f7db65'>
+            <StatIcon src='/assets/people-stat-icon.png' />
+            <StatContent>
+              <Stat>{user.followers}</Stat>
+              Followers
+            </StatContent>
+          </StatBox>
+          <StatBox colorOne='#9bcdff' colorTwo='#65f7e6'>
+            <StatIcon src='/assets/save-icon-white.png' />
+            <StatContent>
+              <Stat>{user.saves}</Stat>
+              Total Saves
+            </StatContent>
+          </StatBox>
+        </StatsContainer>
+        <EditContainer>
+          <EditBox>
+            <div>
+              <CircularNumber colorOne='#4568dc' colorTwo='#8872ff'>
+                {user.releases}
+              </CircularNumber>
+              <EditBoxText>Releases</EditBoxText>
+            </div>
+            <EditButton to='/releases'>View</EditButton>
+          </EditBox>
+          <Divider />
+          <EditBox>
+            <div>
+              <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>
+                {isUserPremium
+                  ? '∞'
+                  : freeUser.maxSaves - user.saves < 0
+                  ? 0
+                  : freeUser.maxSaves - user.saves}
+              </CircularNumber>
+              <EditBoxText>Saves Remaining</EditBoxText>
+            </div>
+            <EditButton to='/billing'>View</EditButton>
+          </EditBox>
+        </EditContainer>
+        <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>
+          <GlobeIcon src='/assets/globe-icon-white.png' />
+          My artist page
+        </PublicArtistPage>
+      </Content>
+    </>
+  );
 };
 
 export default Home;

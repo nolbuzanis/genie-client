@@ -6,7 +6,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { userSignup } from '../../api';
+import { userSignup, getCurrentUser } from '../../api';
 import authContext from '../../Context/authContext';
 
 const Form = styled.form`
@@ -42,8 +42,16 @@ const StyledLink = styled(Link)`
 
 const BodyContainer = styled.div`
   padding-top: 100px;
-  background: -webkit-linear-gradient(#FFFFFF 7%, #DFEBFC 60%, #9E8CFF);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(#FFFFFF 10%, #DFEBFC 60%, #9E8CFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: -webkit-linear-gradient(
+    #ffffff 7%,
+    #dfebfc 60%,
+    #9e8cff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    #ffffff 10%,
+    #dfebfc 60%,
+    #9e8cff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   min-height: 100%;
   padding-bottom: 40px;
 `;
@@ -53,13 +61,21 @@ const Spacing = styled.div`
 `;
 
 const validationSchema = Yup.object({
-  email: Yup.string().trim()
+  email: Yup.string()
+    .trim()
     .email('Please enter a valid email.')
     .required('Please enter a valid email.'),
-  email2: Yup.string().trim()
+  email2: Yup.string()
+    .trim()
     .oneOf([Yup.ref('email')], 'Emails do not match.')
     .required('Please enter a valid email.'),
-  phone: Yup.string().trim().matches(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/, 'Please enter a valid phone number.').required('Please enter a valid phone number.'),
+  phone: Yup.string()
+    .trim()
+    .matches(
+      /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/,
+      'Please enter a valid phone number.'
+    )
+    .required('Please enter a valid phone number.'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters long.')
     .required('Password is required.')
@@ -86,7 +102,7 @@ const InputSection = props => (
 );
 
 const Signup = () => {
-  const { follower, setAuth } = React.useContext(authContext);
+  const { setAuth } = React.useContext(authContext);
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
     values.email = values.email.trim().toLowerCase();
@@ -99,8 +115,8 @@ const Signup = () => {
       return setSubmitting(false);
     }
 
-    //console.log(response);
-    return setAuth({ follower, user: undefined });
+    const newUser = await getCurrentUser();
+    setAuth({ user: newUser });
   };
 
   return (
@@ -149,6 +165,6 @@ const Signup = () => {
       </Formik>
     </BodyContainer>
   );
-}
+};
 
 export default Signup;

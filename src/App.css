@@ -1,15 +1,22 @@
-body, html, #root {
+body,
+html,
+#root {
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
   height: 100%;
-  margin:0;
-  padding:0;
-  height:100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
   /* overflow-x: hidden; */
   position: relative;
 }
-html { height: 100%; overflow:auto; }
-body { height: 100%; }
+html {
+  height: 100%;
+  overflow: auto;
+}
+body {
+  height: 100%;
+}
 
 div {
   box-sizing: border-box;
@@ -29,6 +36,13 @@ button,
 a {
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
 h1,
@@ -50,7 +64,8 @@ p {
   color: #757575;
   line-height: 1.44;
 }
-input, textarea {
+input,
+textarea {
   font-family: 'Montserrat', sans-serif;
 }
 .ReactModal__Body--open {

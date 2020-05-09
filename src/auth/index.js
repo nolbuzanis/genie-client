@@ -1,5 +1,6 @@
-export const isPremium = (user) => {
+import { freeUser } from '../config';
 
+export const isPremium = user => {
   if (!user || (user && !user.premium)) return false;
 
   const { nextPaymentDate } = user.premium;
@@ -9,3 +10,7 @@ export const isPremium = (user) => {
   return nowInMS <= premiumDateInMS;
 };
 
+export const hasNoSavesRemaining = user => {
+  if (isPremium(user)) return false;
+  return user.saves >= freeUser.maxSaves;
+};

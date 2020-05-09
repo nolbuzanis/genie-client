@@ -5,14 +5,15 @@ import { withRouter } from 'react-router-dom';
 import { createNewSong } from '../../api';
 import Calendar from 'react-calendar';
 import { useToasts } from 'react-toast-notifications';
-//import { useAuth } from '../../Context/authContext';
+import { useAuth } from '../../Context/authContext';
+import { hasNoSavesRemaining } from '../../auth';
 
 const SubHeading = styled.p`
   text-transform: uppercase;
   font-weight: 500;
   font-size: 16px;
   color: #8872ff;
-`
+`;
 const BodyContainer = styled.div`
   margin: 0 auto;
   max-width: 400px;
@@ -20,15 +21,15 @@ const BodyContainer = styled.div`
   @media (min-width: 920px) {
     padding-top: 40px;
   }
-`
+`;
 const Heading = styled.h1`
   font-size: 30px;
   font-weight: 500;
-`
+`;
 const Description = styled.p`
   padding-top: 10px;
   font-size: 18px;
-`
+`;
 const Input = styled.input`
   display: block;
   width: 100%;
@@ -39,21 +40,23 @@ const Input = styled.input`
   font-size: 16px;
   margin: 20px auto 0;
   box-sizing: border-box;
-`
+`;
 const Button = styled.button`
   display: block;
   margin-top: 25px;
   width: 100%;
   height: 44px;
-  color: ${props => props.alternate ? '#4568dc' : 'white'};;
+  color: ${props => (props.alternate ? '#4568dc' : 'white')};
   font-weight: 300;
   border-radius: 22px;
   font-size: 20px;
   background: ${props => {
     if (props.alternate) return 'white';
-    return props.disabled ? '#C7C7C7' : 'linear-gradient(90deg, #8872ff, #4568DC)'
+    return props.disabled
+      ? '#C7C7C7'
+      : 'linear-gradient(90deg, #8872ff, #4568DC)';
   }};
-  border: ${props => props.alternate ? '#4568dc 1px solid' : 'none'};
+  border: ${props => (props.alternate ? '#4568dc 1px solid' : 'none')};
   box-shadow: ${props => !props.alternate && '4px 4px 6px rgba(0, 0, 0, 0.16)'};
 `;
 const ErrorMsg = styled.label`
@@ -67,23 +70,23 @@ const ErrorMsg = styled.label`
 `;
 const HelpLink = styled.a`
   font-size: 12px;
-  color: #8872FF;
+  color: #8872ff;
   text-decoration: underline;
   display: block;
   margin-top: 5px;
   &:hover {
-    color: #8872FF;
+    color: #8872ff;
   }
-`
+`;
 const Spacing = styled.div`
-height: 20px;
-`
+  height: 20px;
+`;
 const SmallDescription = styled(Description)`
   font-size: 16px;
   font-weight: 300;
-`
+`;
 const StyledCalendar = styled(Calendar)`
-  box-shadow: 4px 4px 6px rgba(0,0,0,0.16);
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
   border: none !important;
   margin-top: 15px;
   .react-calendar__navigation {
@@ -93,7 +96,8 @@ const StyledCalendar = styled(Calendar)`
     width: 100%;
     margin: 0;
   }
-  button.react-calendar__navigation__label, .react-calendar__navigation__arrow{
+  button.react-calendar__navigation__label,
+  .react-calendar__navigation__arrow {
     color: white;
     font-size: 15px;
     font-weight: 500;
@@ -130,7 +134,7 @@ const StyledCalendar = styled(Calendar)`
     color: white;
     border-radius: 5px;
   }
-`
+`;
 const Toggle = styled.button`
   display: block;
   font-size: 18px;
@@ -138,9 +142,13 @@ const Toggle = styled.button`
   background: none;
   margin: 0 auto;
   color: #8872ff;
-`
+`;
 
 const NewRelease = ({ history }) => {
+  const { user } = useAuth();
+
+  if (hasNoSavesRemaining(user)) history.push('/releases');
+
   const STATES = {
     calendar: 'calendar',
     songName: 'song_name'
@@ -151,9 +159,14 @@ const NewRelease = ({ history }) => {
   const [releaseDate, setReleaseDate] = React.useState(new Date());
   const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-  const handleSubmit = async ({ uri, name }, { setSubmitting, setFieldError }) => {
+  const handleSubmit = async (
+    { uri, name },
+    { setSubmitting, setFieldError }
+  ) => {
     setSubmitting(true);
-    const parsedUri = uri.includes('spotify:track') ? uri.trim().split(':')[2] : uri.trim();
+    const parsedUri = uri.includes('spotify:track')
+      ? uri.trim().split(':')[2]
+      : uri.trim();
     if (!parsedUri || parsedUri.length === 0) {
       // If uri field empty, check for song name
       if (!name || name.length === 0) {
@@ -166,13 +179,16 @@ const NewRelease = ({ history }) => {
     const response = await createNewSong(parsedUri, name, releaseDate);
     if (response.error && response.error.response.status === 401) {
       console.log(response.error.response);
-      setFieldError('uri', 'This song does not belong to your Spotify artist account.')
+      setFieldError(
+        'uri',
+        'This song does not belong to your Spotify artist account.'
+      );
       setSubmitting(false);
       return setState(undefined);
     }
     if (response.error && response.error.response.status === 409) {
       console.log(response.error.response);
-      setFieldError('uri', 'This song has already been created.')
+      setFieldError('uri', 'This song has already been created.');
       setSubmitting(false);
       return setState(undefined);
     }
@@ -191,76 +207,109 @@ const NewRelease = ({ history }) => {
   return (
     <BodyContainer>
       <Formik onSubmit={handleSubmit} initialValues={{ uri: '', name: '' }}>
-        {(props) => (
+        {props => (
           <form onSubmit={props.handleSubmit}>
-            {state === STATES.calendar ?
+            {state === STATES.calendar ? (
               <>
                 <SubHeading>New Release +</SubHeading>
                 <Heading>Enter Release Date</Heading>
-                <Description>The date you want the song to be pre-saved on.</Description>
-                <SmallDescription>(Usually the date this song will be release on Spotify)</SmallDescription>
+                <Description>
+                  The date you want the song to be pre-saved on.
+                </Description>
+                <SmallDescription>
+                  (Usually the date this song will be release on Spotify)
+                </SmallDescription>
                 <StyledCalendar
                   onChange={setReleaseDate}
                   value={releaseDate}
                   minDate={new Date()}
-                  maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
+                  maxDate={
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() + 1)
+                    )
+                  }
                   formatShortWeekday={(locate, date) => days[date.getDay()]}
                 />
                 <Spacing />
-                <Button type='submit' disabled={props.isSubmitting}>{props.isSubmitting ? 'Creating...' : 'Create'}</Button>
+                <Button type='submit' disabled={props.isSubmitting}>
+                  {props.isSubmitting ? 'Creating...' : 'Create'}
+                </Button>
               </>
-              : state === STATES.songName ?
-                <>
-                  <SubHeading>New Release +</SubHeading>
-                  <Heading>Enter Song Name</Heading>
-                  <Description>Enter your song name for now.</Description>
-                  <Description>We’ll send you an email or text on release day and you can add it before it’s pre-saved.</Description>
-                  <Input
-                    name='name'
-                    value={props.values['name']}
-                    type='text'
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.errors['name'] && props.touched['name']}
-                    placeholder='Song Name'
-                  />
-                  {props.errors['name'] && props.touched['name'] && (
-                    <ErrorMsg>{props.errors['name']}</ErrorMsg>
-                  )}
-                  <Spacing />
-                  <Toggle type='button' onClick={() => setState(undefined)}> Want to enter your URI instead?</Toggle>
-                  <Button type='button' onClick={() => setState(STATES.calendar)}>Next</Button>
-                </>
-                :
-                <>
-                  <SubHeading>New Release +</SubHeading>
-                  <Heading>Enter Spotify URI</Heading>
-                  <Description>Please enter the spotify URI of the song you want to import.</Description>
-                  <Input
-                    name='uri'
-                    value={props.values['uri']}
-                    type='text'
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.errors['uri'] && props.touched['uri']}
-                    placeholder='spotify:track:6QtGlUje…'
-                  />
-                  {props.errors['uri'] && props.touched['uri'] && (
-                    <ErrorMsg>{props.errors['uri']}</ErrorMsg>
-                  )}
-                  <HelpLink href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201' target='_blank'>Where do I find this?</HelpLink>
-                  <Spacing />
-                  {/* <Toggle type='button' onClick={() => setState(STATES.songName)}>Don’t have your URI yet?</Toggle> */}
-                  <Button type='button' onClick={() => setState(STATES.calendar)}>Next</Button>
-                </>
-            }
+            ) : state === STATES.songName ? (
+              <>
+                <SubHeading>New Release +</SubHeading>
+                <Heading>Enter Song Name</Heading>
+                <Description>Enter your song name for now.</Description>
+                <Description>
+                  We’ll send you an email or text on release day and you can add
+                  it before it’s pre-saved.
+                </Description>
+                <Input
+                  name='name'
+                  value={props.values['name']}
+                  type='text'
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  error={props.errors['name'] && props.touched['name']}
+                  placeholder='Song Name'
+                />
+                {props.errors['name'] && props.touched['name'] && (
+                  <ErrorMsg>{props.errors['name']}</ErrorMsg>
+                )}
+                <Spacing />
+                <Toggle type='button' onClick={() => setState(undefined)}>
+                  {' '}
+                  Want to enter your URI instead?
+                </Toggle>
+                <Button type='button' onClick={() => setState(STATES.calendar)}>
+                  Next
+                </Button>
+              </>
+            ) : (
+              <>
+                <SubHeading>New Release +</SubHeading>
+                <Heading>Enter Spotify URI</Heading>
+                <Description>
+                  Please enter the spotify URI of the song you want to import.
+                </Description>
+                <Input
+                  name='uri'
+                  value={props.values['uri']}
+                  type='text'
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  error={props.errors['uri'] && props.touched['uri']}
+                  placeholder='spotify:track:6QtGlUje…'
+                />
+                {props.errors['uri'] && props.touched['uri'] && (
+                  <ErrorMsg>{props.errors['uri']}</ErrorMsg>
+                )}
+                <HelpLink
+                  href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201'
+                  target='_blank'
+                >
+                  Where do I find this?
+                </HelpLink>
+                <Spacing />
+                {/* <Toggle type='button' onClick={() => setState(STATES.songName)}>Don’t have your URI yet?</Toggle> */}
+                <Button type='button' onClick={() => setState(STATES.calendar)}>
+                  Next
+                </Button>
+              </>
+            )}
           </form>
-        )}</Formik>
-      <Button alternate onClick={() => state === STATES.calendar ? setState(undefined) : history.goBack()}>{state === STATES.calendar ? 'Back' : 'Cancel'}</Button>
+        )}
+      </Formik>
+      <Button
+        alternate
+        onClick={() =>
+          state === STATES.calendar ? setState(undefined) : history.goBack()
+        }
+      >
+        {state === STATES.calendar ? 'Back' : 'Cancel'}
+      </Button>
     </BodyContainer>
-
-
-  )
+  );
 };
 
 export default withRouter(NewRelease);
