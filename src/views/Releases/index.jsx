@@ -10,10 +10,11 @@ import * as Yup from 'yup';
 import { useAuth } from '../../Context/authContext';
 import { hasNoSavesRemaining } from '../../auth';
 import Popup from '../../components/Popup';
+import Header from '../../components/PageHeader';
 
 const BlastList = styled.div`
   margin: 0 auto;
-  padding: 0 30px 30px;
+  padding: 30px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-column-gap: 40px;
@@ -25,17 +26,6 @@ const BlastList = styled.div`
   }
 `;
 
-const Header = styled.h1`
-  margin: 0;
-  text-align: center;
-  font-size: 24px;
-  padding: 40px 40px 25px;
-  font-weight: 600;
-  color: #4568dc;
-  //align-items: center;
-  //display: flex;
-  //justify-content: space-between;
-`;
 // const CreateSongButton = styled(Link)`
 //   position: relative;
 //   background: #8872ff;
@@ -412,61 +402,65 @@ const Releases = () => {
     }
   };
 
+  const ReleaseEditModal = () => (
+    <Modal
+      style={modalStyles}
+      isOpen={URIModal}
+      onRequestClose={() => setURIModal(false)}
+    >
+      <ModalContainer>
+        <ModalHeader>Add Spotify URI</ModalHeader>
+        <ModalText>
+          Please enter the spotify URI of the song before it can be released.
+        </ModalText>
+        <Formik
+          initialValues={{ uri: '' }}
+          onSubmit={handleAddUri}
+          validationSchema={validationSchema}
+        >
+          {props => (
+            <form onSubmit={props.handleSubmit}>
+              <Input
+                name='uri'
+                value={props.values['uri']}
+                type='text'
+                onChange={props.handleChange}
+                onBlur={props.handleBlur}
+                error={props.errors['uri'] && props.touched['uri']}
+                placeholder='Spotify Song URI'
+              />
+              {props.errors['uri'] && props.touched['uri'] && (
+                <ErrorMsg>{props.errors['uri']}</ErrorMsg>
+              )}
+              <HelpLink
+                href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201'
+                target='_blank'
+              >
+                Where do I find this?
+              </HelpLink>
+              <ButtonContainer>
+                <Button type='submit' disabled={props.isSubmitting}>
+                  {props.isSubmitting ? 'Adding' : 'Add'}
+                </Button>
+                <Spacing />
+                <Button
+                  type='button'
+                  alternate
+                  onClick={() => setURIModal(false)}
+                >
+                  Cancel
+                </Button>
+              </ButtonContainer>
+            </form>
+          )}
+        </Formik>
+      </ModalContainer>
+    </Modal>
+  );
+
   return (
     <>
-      <Modal
-        style={modalStyles}
-        isOpen={URIModal}
-        onRequestClose={() => setURIModal(false)}
-      >
-        <ModalContainer>
-          <ModalHeader>Add Spotify URI</ModalHeader>
-          <ModalText>
-            Please enter the spotify URI of the song before it can be released.
-          </ModalText>
-          <Formik
-            initialValues={{ uri: '' }}
-            onSubmit={handleAddUri}
-            validationSchema={validationSchema}
-          >
-            {props => (
-              <form onSubmit={props.handleSubmit}>
-                <Input
-                  name='uri'
-                  value={props.values['uri']}
-                  type='text'
-                  onChange={props.handleChange}
-                  onBlur={props.handleBlur}
-                  error={props.errors['uri'] && props.touched['uri']}
-                  placeholder='Spotify Song URI'
-                />
-                {props.errors['uri'] && props.touched['uri'] && (
-                  <ErrorMsg>{props.errors['uri']}</ErrorMsg>
-                )}
-                <HelpLink
-                  href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201'
-                  target='_blank'
-                >
-                  Where do I find this?
-                </HelpLink>
-                <ButtonContainer>
-                  <Button type='submit' disabled={props.isSubmitting}>
-                    {props.isSubmitting ? 'Adding' : 'Add'}
-                  </Button>
-                  <Spacing />
-                  <Button
-                    type='button'
-                    alternate
-                    onClick={() => setURIModal(false)}
-                  >
-                    Cancel
-                  </Button>
-                </ButtonContainer>
-              </form>
-            )}
-          </Formik>
-        </ModalContainer>
-      </Modal>
+      <ReleaseEditModal />
       <Popup open={popup} setOpen={setPopup} />
       <Header>
         Releases

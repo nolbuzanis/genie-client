@@ -17,7 +17,7 @@ const MenuContainer = styled.div`
   height: 100%;
   width: 270px;
   min-width: 270px;
-  background: linear-gradient(#8872FF, #4568DC);
+  background: linear-gradient(#8872ff, #4568dc);
   transition: all 0.3s ease;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   @media (min-width: 920px) {
@@ -30,8 +30,7 @@ const ProfileSection = styled.div`
   border-bottom: 1px solid #404854;
   display: flex;
   padding: 20px;
-  
-`
+`;
 const ProfilePic = styled.div`
   background: url(${props => props.img}) center center no-repeat;
   background-size: cover;
@@ -42,7 +41,7 @@ const ProfilePic = styled.div`
 `;
 const MenuHeader = styled.div`
   border-bottom: 1px solid #404854;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 `;
 const ArtistName = styled.p`
   margin: 0;
@@ -59,7 +58,7 @@ const UserDate = styled.p`
   font-weight: 300;
   padding-top: 2px;
   font-size: 14px;
-  color: #E1E1E1;
+  color: #e1e1e1;
 `;
 const MenuContent = styled.div`
   display: flex;
@@ -72,14 +71,14 @@ const StyledLink = styled(Link)`
   font-size: 20px;
   height: 45px;
   line-height: 45px;
-  color: #E1E1E1;
+  color: #e1e1e1;
   padding-left: 30px;
   &:hover,
   &:active {
-    background: rgba(255,255,255,0.2);
-    color: #E1E1E1;
+    background: rgba(255, 255, 255, 0.2);
+    color: #e1e1e1;
   }
-  >img {
+  > img {
     height: 20px;
     margin-right: 20px;
     margin-top: 13px;
@@ -89,33 +88,33 @@ const StyledLink = styled(Link)`
 const Logo = styled(Link)`
   display: block;
   font-weight: 700;
-  color: #9FC7FF;
+  color: #9fc7ff;
   font-size: 24px;
   padding-left: 25px;
   padding-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #404854;
-  &:hover{
-    color: #9FC7FF;
+  &:hover {
+    color: #9fc7ff;
   }
-`
+`;
 const HomeLink = styled(Link)`
   display: block;
   padding: 20px 25px;
-  font-size: 24px; 
+  font-size: 24px;
   > img {
     height: 24px;
     margin-right: 9px;
   }
   &:hover {
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
   }
-`
+`;
 const LogoSpan = styled.span`
   color: white;
-  font-weight: 400;
+  font-weight: 600;
   padding-left: 10px;
-`
+`;
 
 const SideMenu = ({ open, setOpen, lockedRoutes }) => {
   const { user } = React.useContext(authContext);
@@ -149,7 +148,9 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
   return (
     <MenuContainer open={open}>
       <MenuHeader>
-        <Logo to='/'>g<LogoSpan>Genie</LogoSpan></Logo>
+        <Logo to='/'>
+          <LogoSpan>Genie</LogoSpan>
+        </Logo>
         <ProfileSection>
           <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
           <div>
@@ -162,7 +163,7 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
         <HomeLink to='/home'>
           <img src='/dashboard-icon.png' alt='' />
           Dashboard
-          </HomeLink>
+        </HomeLink>
       </MenuHeader>
       <MenuContent>
         <div>
@@ -178,14 +179,23 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
             Releases
           </StyledLink>
           <StyledLink to='/billing'>
-            <img src='/assets/card-membership-icon.png' alt='' />
+            <img src='/assets/card-icon.png' alt='' />
             Plans & Pricing
+          </StyledLink>
+          <StyledLink to='/help'>
+            <img src='/assets/help-icon-grey.png' alt='' />
+            Contact Us
           </StyledLink>
           {/* <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
             Followers
           </StyledLink> */}
         </div>
-        <div style={{ backgroundColor: 'rgba(0,0,0,0.2)', borderTop: '1px solid #404854' }}>
+        <div
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.2)',
+            borderTop: '1px solid #404854'
+          }}
+        >
           {/* <StyledLink to='/account' onClick={() => props.setOpen()}>
             Account Settings
           </StyledLink> */}

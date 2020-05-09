@@ -24,7 +24,7 @@ const premium = [
   'Unlimited presaves with Spotify',
   'Apple Music presaves (soon)',
   'Analytics & data on followers',
-  'Followers emailing list',
+  //'Followers emailing list',
   'Have a say in future features'
 ];
 

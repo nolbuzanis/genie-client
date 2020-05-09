@@ -16,14 +16,16 @@ const TextContainer = styled.div`
 `;
 
 const PrivacyPolicy = () => {
-  return <>
-    <BackPageHeader>Privacy Policy</BackPageHeader>
-    <TextContainer>
-      {privacyPolicy.content.map((term, i) => (
-        <Text key={i}>{term}</Text>
-      ))}
-    </TextContainer>
-  </>
+  return (
+    <>
+      <BackPageHeader backAllways>Privacy Policy</BackPageHeader>
+      <TextContainer>
+        {privacyPolicy.content.map((term, i) => (
+          <Text key={i}>{term}</Text>
+        ))}
+      </TextContainer>
+    </>
+  );
 };
 
 export default PrivacyPolicy;

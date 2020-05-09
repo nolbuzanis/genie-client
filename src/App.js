@@ -28,10 +28,11 @@ import Pricing from './views/Pricing';
 import SubMenu from './components/SubMenu';
 import PlanAndBilling from './views/PlanAndBilling';
 import UpdatePayment from './views/UpdatePayment';
+import Help from './views/Help';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
-  { title: 'Plans & Billing', route: '/billing' },
+  { title: 'Plans & Billing', route: '/billing' }
   //{ title: "Change Password", route: '/settings' }
 ];
 const legalMenuItems = [
@@ -40,7 +41,10 @@ const legalMenuItems = [
 ];
 
 const App = () => {
-  const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
+  const [auth, setAuth] = React.useState({
+    user: undefined,
+    follower: undefined
+  });
   const history = useHistory();
 
   history.listen(location => {
@@ -50,37 +54,67 @@ const App = () => {
 
   return (
     <authContext.Provider value={{ ...auth, setAuth }}>
-      <ToastProvider
-        autoDismiss
-        autoDismissTimeout={4000}
-      >
+      <ToastProvider autoDismiss autoDismissTimeout={5000}>
         <ScrollToTop />
         <Switch>
           <Route path='/' exact render={() => <Landing />} />
           <Route path='/artist/:id' exact render={() => <Artist />} />
-          <Route path='/privacy-policy' exact render={() => <PrivacyPolicy />} />
-          <Route path='/terms-of-service' exact render={() => <TermsOfService />} />
+          <Route
+            path='/privacy-policy'
+            exact
+            render={() => <PrivacyPolicy />}
+          />
+          <Route
+            path='/terms-of-service'
+            exact
+            render={() => <TermsOfService />}
+          />
           <AuthRoute path='/login' exact component={Login} />
           <AuthRoute path='/signup' exact component={Signup} />
           <AuthRoute path='/get-started' exact component={GetStarted} />
-          <Route path='/forgot-password' exact render={() => <ResetPassword />} />
+          <Route
+            path='/forgot-password'
+            exact
+            render={() => <ResetPassword />}
+          />
           <PrivateRoute path='/home' exact component={Home} />
           <PrivateRoute path='/releases' exact component={Releases} />
           <PrivateRoute path='/releases/new' exact component={NewRelease} />
           <PrivateRoute path='/profile' exact component={Profile} />
           <PrivateRoute path='/introduction' exact component={Introduction} />
-          <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
+          <PrivateRoute
+            path='/find-artist-uri'
+            exact
+            component={ArtistURIExplained}
+          />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
           <PrivateRoute path='/pricing' exact component={Pricing} />
-          <PrivateRoute path='/settings' exact render={() => <SubMenu title='Settings' menuItems={settingsMenuItems} />} />
+          <PrivateRoute
+            path='/settings'
+            exact
+            render={() => (
+              <SubMenu title='Settings' menuItems={settingsMenuItems} />
+            )}
+          />
           <PrivateRoute path='/billing' exact component={PlanAndBilling} />
-          <PrivateRoute path='/legal' exact render={() => <SubMenu title={"Legal & Privacy"} menuItems={legalMenuItems} />} />
-          <PrivateRoute path='/update-payment' exact component={UpdatePayment} />
+          <PrivateRoute
+            path='/legal'
+            exact
+            render={() => (
+              <SubMenu title={'Legal & Privacy'} menuItems={legalMenuItems} />
+            )}
+          />
+          <PrivateRoute
+            path='/update-payment'
+            exact
+            component={UpdatePayment}
+          />
+          <PrivateRoute path='/help' exact component={Help} />
           {/* <PrivateRoute path='/follower' exact component={Followers} /> */}
           <Route render={() => <Redirect to='/home' />} />
         </Switch>
       </ToastProvider>
-    </authContext.Provider >
+    </authContext.Provider>
   );
 };
 

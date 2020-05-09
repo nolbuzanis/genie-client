@@ -6,15 +6,9 @@ import * as Yup from 'yup';
 import { uploadUserPhoto, updateUserProfile } from '../../api';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../components/Button';
+import Header from '../../components/PageHeader';
+import InputSection from '../../components/InternalInput';
 
-const Header = styled.h1`
-  margin: 0;
-  text-align: center;
-  font-size: 24px;
-  padding: 40px 40px 0;
-  font-weight: 600;
-  color: #4568dc;
-`;
 const ArtistPhoto = styled.img`
   position: relative;
   width: 200px;
@@ -35,42 +29,17 @@ const ChangePhotoButton = styled(Button)`
   text-align: center;
   line-height: 36px;
   color: white;
-  background: linear-gradient(90deg, #8872ff, #4568DC);
+  background: linear-gradient(90deg, #8872ff, #4568dc);
   display: block;
 `;
 const FileInput = styled.input`
   visibility: hidden;
   display: none;
 `;
-const Input = styled.input`
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
-  border: ${props => {
-    if (props.disabled) {
-      return '1px solid #D8D8D8';
-    } else {
-      return props.error ? '1px solid #BD3200' : 'solid 1px #818181';
-    }
-  }};
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 10px;
-  margin: 5px 0;
-  line-height: 26px;
-  color: #212121;
-  height: ${({ type }) => type === 'textarea' ? '120px' : '40px'};
-  background-color: ${props => (props.disabled ? '#D8D8D8' : '')};
-
-  &::placeholder {
-  color: #818181;
-  font-weight: 300;
-}
-`;
 const Form = styled.form`
   width: 100%;
   padding: 0 30px;
-  box-sizing:border-box;
+  box-sizing: border-box;
 `;
 const SubHeader = styled(Header)`
   font-size: 20px;
@@ -78,24 +47,29 @@ const SubHeader = styled(Header)`
 
 const urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/;
 const validationSchema = Yup.object().shape({
-  name: Yup.string().trim().required('Name is required.'),
-  bio: Yup.string().trim().required('Bio is required.'),
-  uri: Yup.string().trim().required('URI is required.'),
-  instagram: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
-  facebook: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
-  twitter: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
-  website: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.')
+  name: Yup.string()
+    .trim()
+    .required('Name is required.'),
+  bio: Yup.string()
+    .trim()
+    .required('Bio is required.'),
+  uri: Yup.string()
+    .trim()
+    .required('URI is required.'),
+  instagram: Yup.string()
+    .trim()
+    .matches(urlRegex, 'Must be a valid URL.'),
+  facebook: Yup.string()
+    .trim()
+    .matches(urlRegex, 'Must be a valid URL.'),
+  twitter: Yup.string()
+    .trim()
+    .matches(urlRegex, 'Must be a valid URL.'),
+  website: Yup.string()
+    .trim()
+    .matches(urlRegex, 'Must be a valid URL.')
 });
 
-const ErrorMsg = styled.label`
-  display: block;
-  font-size: 12px;
-  color: #bd3200;
-`;
-const InputLabel = styled.p`
-  padding-top: 20px;
-  color: #4568dc;
-`;
 // const ChangeUriLink = styled(Link)`
 //   display: inline-block;
 //   font-size: 12px;
@@ -118,32 +92,12 @@ const ButtonWrapper = styled.div`
   width: 200px;
 `;
 
-const InputSection = props => (
-  <div>
-    <InputLabel>{props.label}</InputLabel>
-    <Input
-      as={props.type === 'textarea' ? 'textarea' : ''}
-      value={props.values[props.name]}
-      type={props.type || 'text'}
-      onChange={props.handleChange}
-      onBlur={props.handleBlur}
-      name={props.name}
-      error={props.errors[props.name] && props.touched[props.name]}
-      disabled={props.name === 'uri'}
-      placeholder={props.placeholder}
-    />
-    {props.errors[props.name] && props.touched[props.name] && (
-      <ErrorMsg>{props.errors[props.name]}</ErrorMsg>
-    )}
-  </div>
-);
-
 const Profile = () => {
   const { user, follower, setAuth } = useAuth();
   const [uploading, setUploading] = React.useState(false);
   const { addToast } = useToasts();
 
-  const handlePhotoSubmit = async (e) => {
+  const handlePhotoSubmit = async e => {
     const photo = e.target.files[0];
     setUploading(true);
     console.log(photo);
@@ -162,7 +116,7 @@ const Profile = () => {
 
     // If success, show success alert
     // If error, show error alert
-  }
+  };
 
   const initialValues = {
     name: user.name,
@@ -175,7 +129,6 @@ const Profile = () => {
   };
 
   const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
-
     setSubmitting(true);
     const response = await updateUserProfile(values);
 
@@ -187,7 +140,6 @@ const Profile = () => {
     addToast('Profile saved.', { appearance: 'success' });
     setSubmitting(false);
     return setAuth({ user: { ...user, ...values }, follower });
-
   };
 
   return (
@@ -199,7 +151,7 @@ const Profile = () => {
         onSubmit={handleFormSubmit}
       >
         {props => (
-          < Form onSubmit={props.handleSubmit}>
+          <Form onSubmit={props.handleSubmit}>
             <ArtistPhoto src={user.img} />
             <FileInput
               onChange={e => handlePhotoSubmit(e)}
@@ -208,7 +160,12 @@ const Profile = () => {
               name='img'
               id='img'
             ></FileInput>
-            <ChangePhotoButton as='label' htmlFor='img' className='artist-file-button' disabled={uploading}>
+            <ChangePhotoButton
+              as='label'
+              htmlFor='img'
+              className='artist-file-button'
+              disabled={uploading}
+            >
               {uploading ? 'Uploading...' : 'Change Photo'}
             </ChangePhotoButton>
             <InputSection {...props} name='name' label='Name'></InputSection>
@@ -217,14 +174,12 @@ const Profile = () => {
               name='bio'
               label='Bio'
               type='textarea'
-            >
-            </InputSection>
+            ></InputSection>
             <InputSection
               {...props}
               name='uri'
               label='Spotify URI'
-            >
-            </InputSection>
+            ></InputSection>
             {/* <ChangeUriLink to='#'>Need to change your spotify URI?</ChangeUriLink> */}
             <SubHeader>Social Media</SubHeader>
             <InputSection
@@ -232,29 +187,25 @@ const Profile = () => {
               name='instagram'
               label='Instagram'
               placeholder='Optional'
-            >
-            </InputSection>
+            ></InputSection>
             <InputSection
               {...props}
               name='facebook'
               label='Facebook'
               placeholder='Optional'
-            >
-            </InputSection>
+            ></InputSection>
             <InputSection
               {...props}
               name='twitter'
               label='Twitter'
               placeholder='Optional'
-            >
-            </InputSection>
+            ></InputSection>
             <InputSection
               {...props}
               name='website'
               label='Website'
               placeholder='Optional'
-            >
-            </InputSection>
+            ></InputSection>
             <ButtonWrapper>
               <Button type='submit' disabled={!(props.isValid && props.dirty)}>
                 {props.isSubmitting ? 'Saving...' : 'Save'}
@@ -263,8 +214,7 @@ const Profile = () => {
           </Form>
         )}
       </Formik>
-
-    </Container >
+    </Container>
   );
 };
 

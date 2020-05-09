@@ -24,33 +24,40 @@ const TermTitle = styled.h2`
 `;
 
 const TermsOfService = () => {
-  return <>
-    <BackPageHeader>Terms of Service</BackPageHeader>
-    <TextContainer>
-      {termsOfService.content.map((term, i) => {
-        return <li key={i}>
-          <TermTitle>{term.title}</TermTitle>
-          {term.points ?
-            <ol key={i.j} style={{ paddingInlineStart: '0' }}>
-              {term.points.map((point, j) => (
-                <Text as='li' key={j}>{point.title}
-                  {point.text.length ?
-                    point.text.map((text, k) => (
-                      <Text key={k} style={{ fontSize: '11px' }}>{text}</Text>
-                    ))
-                    :
-                    <Text>{point.text}</Text>
-                  }
-                </Text>
-              ))}
-            </ol>
-            :
-            <Text>{term.text}</Text>
-          }
-        </li>
-      })}
-    </TextContainer>
-  </>
+  return (
+    <>
+      <BackPageHeader backAllways>Terms of Service</BackPageHeader>
+      <TextContainer>
+        {termsOfService.content.map((term, i) => {
+          return (
+            <li key={i}>
+              <TermTitle>{term.title}</TermTitle>
+              {term.points ? (
+                <ol key={i.j} style={{ paddingInlineStart: '0' }}>
+                  {term.points.map((point, j) => (
+                    <Text as='li' key={j}>
+                      {point.title}
+                      {point.text.length ? (
+                        point.text.map((text, k) => (
+                          <Text key={k} style={{ fontSize: '11px' }}>
+                            {text}
+                          </Text>
+                        ))
+                      ) : (
+                        <Text>{point.text}</Text>
+                      )}
+                    </Text>
+                  ))}
+                </ol>
+              ) : (
+                <Text>{term.text}</Text>
+              )}
+            </li>
+          );
+        })}
+      </TextContainer>
+    </>
+  );
 };
 
 export default TermsOfService;

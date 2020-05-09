@@ -21,7 +21,8 @@ const modalStyles = {
     padding: '0 30px 20px',
     border: 'none',
     background: 'none',
-    width: '100%'
+    width: '100%',
+    maxWidth: '400px'
   }
 };
 Modal.setAppElement('body');
@@ -91,6 +92,14 @@ const StyledButton = styled(Button)`
   margin-bottom: 15px;
   margin-top: 10px;
 `;
+const CloseButton = styled.button`
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+  color: white;
+  background: none;
+  border: none;
+`;
 
 const Popup = ({ open, setOpen }) => {
   const { user } = useAuth();
@@ -119,7 +128,7 @@ const Popup = ({ open, setOpen }) => {
         <StyledButton alternate onClick={handleClick}>
           View Plans
         </StyledButton>
-        <FadedText onClick={() => setOpen(false)}>Not now</FadedText>
+        <CloseButton onClick={() => setOpen(false)}>Not now</CloseButton>
       </ModalBackground>
     </Modal>
   );

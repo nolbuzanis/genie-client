@@ -5,8 +5,8 @@ import styled from 'styled-components';
 const Header = styled.h1`
   font-size: 26px;
   font-weight: 600;
-  color: #444444; 
-  border-bottom: solid 1px rgba(129, 129, 129, 0.25); 
+  color: #444444;
+  border-bottom: solid 1px rgba(129, 129, 129, 0.25);
   text-align: center;
   padding: 40px 10px 35px;
   margin: 0 20px;
@@ -17,7 +17,7 @@ const ArrowImg = styled.img`
   float: left;
 `;
 
-const BackPageHeader = ({ children, returnRoute }) => {
+const BackPageHeader = ({ children, returnRoute, backAllways }) => {
   const history = useHistory();
 
   const handleGoBack = () => {
@@ -26,11 +26,19 @@ const BackPageHeader = ({ children, returnRoute }) => {
     else history.push('/home');
   };
 
-  return <Header>
-    <ArrowImg src='/assets/back-arrow-darkgrey.png' onClick={handleGoBack} />
-    {children}
-  </Header>;
+  const isMobile = window.innerWidth < 1024;
 
+  return (
+    <Header>
+      {(isMobile || backAllways) && (
+        <ArrowImg
+          src='/assets/back-arrow-darkgrey.png'
+          onClick={handleGoBack}
+        />
+      )}
+      {children}
+    </Header>
+  );
 };
 
 export default BackPageHeader;
