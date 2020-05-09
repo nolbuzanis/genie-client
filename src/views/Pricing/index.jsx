@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Checkout from '../../components/Checkout';
 import Button from '../../components/Button';
+import Features from '../../components/Features';
+import CancelButton from '../../components/CancelButton';
 
 const GenieLogo = styled.img`
   width: 70px;
@@ -18,37 +20,11 @@ const PageContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
-const CancelButton = styled.img`
-  width: 60px;
-  height: 60px;
-  position: absolute;
-  top: 20px;
-  left: 30px;
-  cursor: pointer;
-`;
 const Tagline = styled.h2`
   font-size: 18px;
   font-weight: 500;
   color: #818181;
   padding: 20px 20px 0;
-`;
-const Features = styled.ul`
-  padding: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #818181;
-  text-align: left;
-  list-style-type: none;
-  margin: 0;
-  > li {
-    padding-bottom: 10px;
-    padding-left: 10px;
-  }
-`;
-const Checkmark = styled.img`
-  width: 14.8px;
-  height: 11.5px;
-  margin-right: 10px;
 `;
 const InnerButton = styled.div`
   width: 100%;
@@ -162,17 +138,11 @@ const Pricing = () => {
 
   const [plan, setPlan] = useState(1);
   const [checkout, setCheckout] = useState(false);
-  const history = useHistory();
-
-  const handleGoBack = () => {
-    if (history.length > 2) return history.goBack();
-    else history.push('/home');
-  };
 
   if (checkout) {
     return <CheckoutContent>
       <TopSpacing />
-      <CancelButton src='/assets/cancel-button.png' onClick={() => setCheckout(false)} />
+      <CancelButton onClick={() => setCheckout(false)} />
       <Heading>Your Plan</Heading>
       <SmallSpacing />
       <OuterButton>
@@ -181,35 +151,19 @@ const Pricing = () => {
       </OuterButton>
       <SmallSpacing />
       <Heading>Add Payment Details</Heading>
-      <Checkout paymentButtonText={plan === 1 ? 'Start Yearly Plan' : 'Start Monthly Plan'} />
+      <Checkout plan={plan - 1} />
     </CheckoutContent>;
   }
 
   return <PageContainer>
-    <CancelButton src='/assets/cancel-button.png' onClick={handleGoBack} />
     <Content>
+      <CancelButton />
       <GenieLogo src='/assets/genie-logo-round.png' />
       <Tagline>
         Engage followers, establish your brand, promote your music
     </Tagline>
-      <Features>
-        <li>
-          <Checkmark src='/assets/blue-checkmark-icon.png' />
-          Unlimited presaves
-      </li>
-        <li>
-          <Checkmark src='/assets/blue-checkmark-icon.png' />
-          Custom public artist page
-      </li>
-        <li>
-          <Checkmark src='/assets/blue-checkmark-icon.png' />
-          {'Analytics & data on followers'}
-        </li>
-        <li>
-          <Checkmark src='/assets/blue-checkmark-icon.png' />
-          Followers email list
-      </li>
-      </Features>
+      <Features />
+      <SmallSpacing />
       <Selector
         active={plan === 1}
         onClick={() => setPlan(1)}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
-import { createPremiumSubscription } from '../../api';
+import { createPremiumSubscription, updatePaymentInfo } from '../../api';
 import { useAuth } from '../../Context/authContext';
 import styled from 'styled-components';
 import Button from '../Button';
@@ -96,7 +96,7 @@ const SuccessText = styled.h3`
   padding-bottom: 30px;
 `;
 
-const Checkout = ({ paymentButtonText, onSuccess, successMsg }) => {
+const Checkout = ({ onSuccess, successMsg, updateCard, yearly, monthly }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { user } = useAuth();
@@ -105,6 +105,8 @@ const Checkout = ({ paymentButtonText, onSuccess, successMsg }) => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const history = useHistory();
+
+  const paymentButtonText = yearly ? 'Start Yearly Plan' : monthly ? 'Start Monthly Plan' : 'Update Payment Details';
 
   const handleSubmit = async (e) => {
     setSubmitting(true);
@@ -134,7 +136,10 @@ const Checkout = ({ paymentButtonText, onSuccess, successMsg }) => {
       return;
     }
 
-    const serverResponse = await createPremiumSubscription(paymentMethod);
+    const planType = yearly ? 'yearly' : 'monthly';
+
+    const apiCall = updateCard ? () => updatePaymentInfo(paymentMethod) : () => createPremiumSubscription(paymentMethod, planType);
+    const serverResponse = await apiCall();
     setSubmitting(false);
     if (serverResponse.error) {
       console.log('[error]', serverResponse.error);
@@ -173,7 +178,7 @@ const Checkout = ({ paymentButtonText, onSuccess, successMsg }) => {
   if (success) {
     return <>
       <SuccessImg src='/assets/blue-success-icon-large.png' />
-      <SuccessText>{successMsg || 'Payment processed!'}</SuccessText>
+      <SuccessText>{successMsg || 'Payment processed. Thank you!'}</SuccessText>
       <Button onClick={() => history.goBack()}>Return</Button>
     </>
   }

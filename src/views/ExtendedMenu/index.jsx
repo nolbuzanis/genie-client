@@ -52,12 +52,12 @@ const Header = styled.h1`
     margin: 0 18px 14px;
     font-size: 30px;
     font-weight: 600;
-    color: #757575;
+    color: #444444;
     border-bottom: solid 1px #818181;
 `;
 const CloseArrow = styled.img`
-    width: 25px;
-    height: 25px;
+    //width: 25px;
+    height: 40px;
     cursor: pointer;
 `;
 const ArrowIcon = styled.img`
@@ -88,7 +88,8 @@ const MenuItemContainer = styled.div`
 
 const menuItems = [
   // { image: 'notification', title: 'Notifications', route: '/notifications' },
-  // { image: "settings", title: "Account Settings", route: '/settings' },
+  { image: "settings", title: "Account Settings", route: '/settings' },
+  { image: "policy", title: 'Legal & Privacy', route: '/legal' }
   // { image: "help", title: "Contact Us", route: "/help" },
   // { image: "update", title: "Latest Changes", route: "/help" }
 ];
@@ -99,7 +100,7 @@ const ExtendedMenu = () => {
     <MenuContainer>
       <Header>
         Menu
-        <CloseArrow onClick={() => history.goBack()} src='/assets/back-arrow-grey.png' />
+        <CloseArrow onClick={() => history.goBack()} src='/assets/back-arrow-darkgrey.png' />
       </Header>
       <MenuItemContainer>
         {menuItems.map((item, index) => (

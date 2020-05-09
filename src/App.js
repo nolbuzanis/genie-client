@@ -25,7 +25,19 @@ import Profile from './views/Profile';
 import PrivacyPolicy from './views/PrivacyPolicy';
 import TermsOfService from './views/TermsOfService';
 import Pricing from './views/Pricing';
+import SubMenu from './components/SubMenu';
+import PlanAndBilling from './views/PlanAndBilling';
+import UpdatePayment from './views/UpdatePayment';
 // import Followers from './views/Followers';
+
+const settingsMenuItems = [
+  { title: 'Plans & Billing', route: '/billing' },
+  //{ title: "Change Password", route: '/settings' }
+];
+const legalMenuItems = [
+  { title: 'Terms of Service', route: '/terms-of-service' },
+  { title: 'Privacy Policy', route: '/privacy-policy' }
+];
 
 const App = () => {
   const [auth, setAuth] = React.useState({ user: undefined, follower: undefined });
@@ -60,6 +72,10 @@ const App = () => {
           <PrivateRoute path='/find-artist-uri' exact component={ArtistURIExplained} />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
           <PrivateRoute path='/pricing' exact component={Pricing} />
+          <PrivateRoute path='/settings' exact render={() => <SubMenu title='Settings' menuItems={settingsMenuItems} />} />
+          <PrivateRoute path='/billing' exact component={PlanAndBilling} />
+          <PrivateRoute path='/legal' exact render={() => <SubMenu title={"Legal & Privacy"} menuItems={legalMenuItems} />} />
+          <PrivateRoute path='/update-payment' exact component={UpdatePayment} />
           {/* <PrivateRoute path='/follower' exact component={Followers} /> */}
           <Route render={() => <Redirect to='/home' />} />
         </Switch>

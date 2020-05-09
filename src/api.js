@@ -225,14 +225,60 @@ export const fetchFollowerCountData = async () => {
   }
 };
 
-export const createPremiumSubscription = async (paymentMethod) => {
+export const createPremiumSubscription = async (paymentMethod, planType) => {
+
+  const bodyData = JSON.stringify({
+    payment_method: paymentMethod.id,
+    planType
+  });
+  try {
+    const { data } = await axios.post(`${SERVER_URL}/user/premium-subscription/create`, bodyData, axiosConfig);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const cancelPremiumSubscription = async () => {
+  try {
+    const { data } = await axios.post(`${SERVER_URL}/user/premium-subscription/cancel`, {}, axiosConfig);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const resumePremiumSubscription = async () => {
+  try {
+    const { data } = await axios.post(`${SERVER_URL}/user/premium-subscription/resume`, {}, axiosConfig);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const fetchPaymentInfo = async () => {
+  try {
+    const { data } = await axios.get(`${SERVER_URL}/user/payment-information`, axiosConfig);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const updatePaymentInfo = async (paymentMethod) => {
 
   const bodyData = JSON.stringify({
     payment_method: paymentMethod.id
   });
   try {
-    const { data } = await axios.post(`${SERVER_URL}/user/premium-subscription/create`, bodyData, axiosConfig);
-    console.log(data);
+    const { data } = await axios.post(`${SERVER_URL}/user/payment-information/update`, bodyData, axiosConfig);
     return data;
   } catch (error) {
     console.error(error);

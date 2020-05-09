@@ -117,7 +117,7 @@ const LogoSpan = styled.span`
   padding-left: 10px;
 `
 
-const SideMenu = ({ open, setOpen }) => {
+const SideMenu = ({ open, setOpen, lockedRoutes }) => {
   const { user } = React.useContext(authContext);
 
   if (!user || user.error) {
@@ -143,6 +143,9 @@ const SideMenu = ({ open, setOpen }) => {
     window.location.replace('/');
   };
 
+  const path = window.location.pathname;
+  if (window.innerWidth < 1024 || lockedRoutes.includes(path)) return null;
+
   return (
     <MenuContainer open={open}>
       <MenuHeader>
@@ -156,7 +159,7 @@ const SideMenu = ({ open, setOpen }) => {
             </UserDate>
           </div>
         </ProfileSection>
-        <HomeLink to='/home' onClick={() => setOpen(false)}>
+        <HomeLink to='/home'>
           <img src='/dashboard-icon.png' alt='' />
           Dashboard
           </HomeLink>
@@ -166,13 +169,17 @@ const SideMenu = ({ open, setOpen }) => {
           {/* <StyledLink to='/dashboard' onClick={() => props.setOpen()}>
             Dashboard
           </StyledLink> */}
-          <StyledLink to='/profile' onClick={() => setOpen(false)}>
+          <StyledLink to='/profile'>
             <img src='/profile-icon.png' alt='' />
             Profile
           </StyledLink>
-          <StyledLink to='/releases' onClick={() => setOpen(false)}>
+          <StyledLink to='/releases'>
             <img src='/song-icon.png' alt='' />
             Releases
+          </StyledLink>
+          <StyledLink to='/billing'>
+            <img src='/assets/card-membership-icon.png' alt='' />
+            Plans & Pricing
           </StyledLink>
           {/* <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
             Followers

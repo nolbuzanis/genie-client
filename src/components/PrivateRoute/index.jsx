@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import authContext from '../../Context/authContext';
+import { useAuth } from '../../Context/authContext';
 import { getCurrentUser } from '../../api';
 import styled from 'styled-components';
 import SideMenu from '../SideMenu';
@@ -29,85 +29,53 @@ const loadingStyles = css`
   text-align: center;
   top: 40%;
 `;
-const MaxContent = styled.div`
-        max-width: 1300px;
-        margin: 0 auto;
-        //height: 100%;
-        position: relative;
-      `
 
 const lockedRoutes = ['/introduction', '/find-artist-uri'];
 
-const PrivateRoute = ({ component: Component, ...props }) => {
-  const { user, follower, setAuth } = React.useContext(authContext);
-  const [open, setOpen] = React.useState(false);
+const PrivateRoute = ({ component: Component, render, ...rest }) => {
+  const { user, follower, setAuth } = useAuth();
 
-  const renderComponent = componentProps => {
-    if (!user) {
-      getCurrentUser().then((response) => setAuth({ follower, user: { ...response } }));
-      return <ScaleLoader
-        css={loadingStyles}
-        size={100}
-        //size={"150px"} this also works
-        color='#8872FF'
-        loading={true}
-      />;
-    }
-    if (user && !user.error) {
-      if (!user.uri && !lockedRoutes.includes(window.location.pathname)) {
-        return (
-          <Redirect
-            to={{
-              pathname: '/introduction',
-              state: {
-                from: componentProps.location
-              }
-            }}
-          />
-        );
-      }
-      if (user.uri && window.location.pathname === '/introduction') {
-        return (
-          <Redirect
-            to={{
-              pathname: '/dashboard',
-              state: {
-                from: componentProps.location
-              }
-            }}
-          />
-        );
-      }
-      if (lockedRoutes.includes(window.location.pathname)) {
-        return <MaxContent>
-          <Component {...componentProps} />
-        </MaxContent>;
-      }
+  if (!user) {
+    getCurrentUser().then((response) => setAuth({ follower, user: { ...response } }));
+    return <ScaleLoader
+      css={loadingStyles}
+      size={100}
+      //size={"150px"} this also works
+      color='#8872FF'
+      loading={true}
+    />;
+  }
+  if (user && user.error) {
+    return <Redirect to='/login' />
+  }
 
-      return (
-        <FlexContainer>
-          <SideMenu open={open} setOpen={setOpen} />
-          <ContentContainer>
-            <Component {...componentProps} />
-            <MobileNavigation />
-          </ContentContainer>
-        </FlexContainer>
-      );
-    } else {
-      return (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: {
-              from: componentProps.location
-            }
-          }}
-        />
-      );
-    }
-  };
+  if (!user.uri && !lockedRoutes.includes(window.location.pathname)) {
+    return <Redirect to='/introduction' />
+  }
+  if (user.uri && window.location.pathname === '/introduction') {
+    return <Redirect to='/dashboard' />
+  }
 
-  return <Route {...props} render={renderComponent} />;
+  return ((Component)
+    ? <Route {...rest} render={(props) => (
+      <FlexContainer>
+        <SideMenu open={true} lockedRoutes={lockedRoutes} />
+        <ContentContainer>
+          <Component {...props} />
+          <MobileNavigation lockedRoutes={lockedRoutes} />
+        </ContentContainer>
+      </FlexContainer>
+    )} />
+    : <Route {...rest} render={() => (
+      <FlexContainer>
+        <SideMenu open={true} lockedRoutes={lockedRoutes} />
+        <ContentContainer>
+          {render()}
+          <MobileNavigation lockedRoutes={lockedRoutes} />
+        </ContentContainer>
+      </FlexContainer>
+    )} />
+  );
 };
 
 export default PrivateRoute;

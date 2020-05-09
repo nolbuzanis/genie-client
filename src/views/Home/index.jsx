@@ -7,13 +7,14 @@ import { fetchFollowerCountData } from '../../api';
 import moment from 'moment';
 
 const Background = styled.div`
-  //height: 100%;
+  position: absolute;
   width: 100%;
   background-image: linear-gradient(to bottom, #4568dc, #8872ff);
   //background-attachment: fixed;
   height: 240px;
 `;
 const Content = styled.div`
+  position: relative;
   max-width: 600px;
   margin: 0 auto;
   padding: 40px 20px 60px;
@@ -215,7 +216,8 @@ const Home = () => {
     }
   ];
 
-  return <Background>
+  return <>
+    <Background />
     <Content>
       <Title>Genie Dashboard</Title>
       <Graph>
@@ -260,7 +262,7 @@ const Home = () => {
         My artist page
       </PublicArtistPage>
     </Content>
-  </Background>
+  </>
 };
 
 export default Home;

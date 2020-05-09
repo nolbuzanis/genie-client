@@ -12,9 +12,11 @@ const Text = styled.p`
 const TextContainer = styled.ol`
   max-width: 700px;
   margin: 0 auto;
-  padding: 0 20px 30px;
+  padding: 0 20px 30px 40px;
+  color: #444444;
+  font-size: 18px;
 `;
-const TermTitle = styled.li`
+const TermTitle = styled.h2`
   font-size: 18px;
   font-weight: 500;
   color: #444444;
@@ -22,12 +24,11 @@ const TermTitle = styled.li`
 `;
 
 const TermsOfService = () => {
-
   return <>
     <BackPageHeader>Terms of Service</BackPageHeader>
     <TextContainer>
       {termsOfService.content.map((term, i) => {
-        return <div key={i}>
+        return <li key={i}>
           <TermTitle>{term.title}</TermTitle>
           {term.points ?
             <ol key={i.j} style={{ paddingInlineStart: '0' }}>
@@ -46,7 +47,7 @@ const TermsOfService = () => {
             :
             <Text>{term.text}</Text>
           }
-        </div>
+        </li>
       })}
     </TextContainer>
   </>

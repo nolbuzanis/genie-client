@@ -130,10 +130,10 @@ const menuItems = [
   },
 ];
 
-const MobileNavigation = () => {
+const MobileNavigation = ({ lockedRoutes }) => {
   const path = window.location.pathname;
-  const lockedRoutes = ['/menu', '/introduction', '/find-artist-uri', '/pricing']
-  if (window.innerWidth >= 1024 || lockedRoutes.includes(path)) return null;
+  const hiddenRoutes = [...lockedRoutes, '/menu', '/introduction', '/find-artist-uri', '/pricing', '/settings', '/billing', '/update-payment']
+  if (window.innerWidth >= 1024 || hiddenRoutes.includes(path)) return null;
   return (
     <>
       <MenuSpacing />
