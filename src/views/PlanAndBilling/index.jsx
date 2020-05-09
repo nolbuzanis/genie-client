@@ -159,7 +159,7 @@ const makeTwoDigits = (number) => {
 const mapCardIcons = {
   'visa': '/assets/visa-card.png',
   'mastercard': '/assets/mastercard-card.png',
-  'american express': '/assets/amex-card.png'
+  'amex': '/assets/amex-card.png'
 };
 
 const PlanAndBilling = () => {
@@ -168,9 +168,9 @@ const PlanAndBilling = () => {
   const { user, setAuth } = useAuth();
   const isPremiumUser = isPremium(user);
   const [submitting, setSubmitting] = useState(false);
-  const [paymentInfo, setPaymentInfo] = useState({});
+  const [paymentInfo, setPaymentInfo] = useState();
   const isCancelled = useRef(false);
-  console.log(isPremium(user), user);
+  console.log(paymentInfo);
 
   useEffect(() => {
     const getPaymentInfo = async () => {
@@ -185,9 +185,27 @@ const PlanAndBilling = () => {
     return () => isCancelled.current = true;
   }, []);
 
+  const PaymentDetails = () => (
+    <>
+      <Header>Payment Information</Header>
+      <PaymentDetailsCard>
+        <FlexContainer>
+          <CreditCardImg src={mapCardIcons[paymentInfo.brand]} />
+          <CardDetails>
+            <CardNumber>**** **** **** {paymentInfo.last4}</CardNumber>
+            <CardExpiry>Expires {makeTwoDigits(paymentInfo.exp_month)}/{paymentInfo.exp_year}</CardExpiry>
+          </CardDetails>
+        </FlexContainer>
+        <SmButtonWrapper>
+          <Button small as={Link} to='/update-payment'>Update</Button>
+        </SmButtonWrapper>
+      </PaymentDetailsCard>
+    </>
+  );
+
   // Shown to non-premium members or members without an active subscription
   if (!isPremiumUser) return <>
-    <BackPageHeader>Plan & Billing</BackPageHeader>
+    <BackPageHeader returnRoute='/settings'>Plan & Billing</BackPageHeader>
     <BodyContainer>
       <PlanContainer color='#818181'>
         <PlanHeader color='#818181'>Genie Free</PlanHeader>
@@ -201,11 +219,13 @@ const PlanAndBilling = () => {
   </>;
 
   const { status, nextPaymentDate } = user.premium;
-  const formattedDate = new moment(nextPaymentDate).format('MMM. M, YYYY');
+  console.log(user.premium);
+  const formattedDate = new moment(nextPaymentDate).format('MMM. D, YYYY');
   const statusMessages = {
     'active': `Next billing date is ${formattedDate}.`,
     'cancelled': `Your premium plan will end on ${formattedDate} and will not renew.`,
-    'past_due': `Please update your payment info, otherwise your premium plan will end on ${formattedDate}.`
+    'past_due': `Please update your payment info, otherwise your premium plan will end on ${formattedDate}.`,
+    'incomplete': `Oops! There's an issue with you credit card, please update your payment information.`
   };
 
   const handleSubscriptionResume = async () => {
@@ -246,32 +266,14 @@ const PlanAndBilling = () => {
         <CancelText>Are you sure you want to cancel Genie Premium?</CancelText>
         <Button color='#910505' onClick={handleSubscriptionCancel} disabled={submitting}>Yes, Cancel</Button>
         <Spacing />
-        <Button alt color='#910505' onClick={() => setCancelModal(false)}>Return</Button>
+        <Button alternate color='#910505' onClick={() => setCancelModal(false)}>Return</Button>
       </ModalContainer>
     </Modal>
   );
 
-  const PaymentDetails = () => (
-    <>
-      <Header>Payment Information</Header>
-      <PaymentDetailsCard>
-        <FlexContainer>
-          <CreditCardImg src={mapCardIcons[paymentInfo.brand]} />
-          <CardDetails>
-            <CardNumber>**** **** **** {paymentInfo.last4}</CardNumber>
-            <CardExpiry>Expires {makeTwoDigits(paymentInfo.exp_month)}/{paymentInfo.exp_year}</CardExpiry>
-          </CardDetails>
-        </FlexContainer>
-        <SmButtonWrapper>
-          <Button small as={Link} to='/update-payment'>Update</Button>
-        </SmButtonWrapper>
-      </PaymentDetailsCard>
-    </>
-  );
-
   return <>
     <CancelModal />
-    <BackPageHeader>Plan & Billing</BackPageHeader>
+    <BackPageHeader returnRoute='/settings'>Plan & Billing</BackPageHeader>
     <BodyContainer>
       <PlanContainer>
         <PlanHeader>Genie Premium</PlanHeader>
@@ -282,7 +284,7 @@ const PlanAndBilling = () => {
         <ButtonWrapper>
           {status === 'cancelled'
             ? <Button small onClick={handleSubscriptionResume} disabled={submitting}>Resume</Button>
-            : <Button small alt color='#910505' onClick={() => setCancelModal(true)}>Cancel</Button>
+            : <Button small alternate color='#910505' onClick={() => setCancelModal(true)}>Cancel</Button>
           }
         </ButtonWrapper>
       </PlanContainer>

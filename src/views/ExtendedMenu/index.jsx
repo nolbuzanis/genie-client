@@ -100,7 +100,7 @@ const ExtendedMenu = () => {
     <MenuContainer>
       <Header>
         Menu
-        <CloseArrow onClick={() => history.goBack()} src='/assets/back-arrow-darkgrey.png' />
+        <CloseArrow onClick={() => history.push('/home')} src='/assets/back-arrow-darkgrey.png' />
       </Header>
       <MenuItemContainer>
         {menuItems.map((item, index) => (

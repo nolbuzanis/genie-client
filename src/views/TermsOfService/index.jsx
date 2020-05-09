@@ -33,10 +33,10 @@ const TermsOfService = () => {
           {term.points ?
             <ol key={i.j} style={{ paddingInlineStart: '0' }}>
               {term.points.map((point, j) => (
-                <Text as='li'>{point.title}
+                <Text as='li' key={j}>{point.title}
                   {point.text.length ?
-                    point.text.map(text => (
-                      <Text key={text.length} style={{ fontSize: '11px' }}>{text}</Text>
+                    point.text.map((text, k) => (
+                      <Text key={k} style={{ fontSize: '11px' }}>{text}</Text>
                     ))
                     :
                     <Text>{point.text}</Text>

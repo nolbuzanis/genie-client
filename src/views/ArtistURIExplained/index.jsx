@@ -54,7 +54,7 @@ const ArtistURIExplained = ({ history }) => {
       </ol>
       <Pic src='/assets/how-to-find-artist-uri.png' />
       <ButtonWrapper>
-        <Button alt onClick={() => history.goBack()}>Return</Button>
+        <Button alternate onClick={() => history.goBack()}>Return</Button>
       </ButtonWrapper>
     </Container>
   </>

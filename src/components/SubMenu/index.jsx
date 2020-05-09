@@ -73,10 +73,16 @@ const MenuText = styled.p`
 
 const SubMenu = ({ menuItems, title }) => {
   const history = useHistory();
+
+  // const handleGoBack = () => {
+  //   if (history.length > 2) return history.goBack();
+  //   else history.push('/home');
+  // };
+
   return (
     <MenuContainer>
       <Header>
-        <CloseArrow onClick={() => history.goBack()} src='/assets/back-arrow-darkgrey.png' />
+        <CloseArrow onClick={() => history.push('/menu')} src='/assets/back-arrow-darkgrey.png' />
         {title}
         <div style={{ width: '25px' }} />
       </Header>

@@ -146,7 +146,7 @@ const Introduction = ({ history }) => {
       <ButtonWrapper>
         <Button onClick={confirmArtist}>Confirm</Button>
         <Spacing />
-        <Button alt onClick={() => setArtist(undefined)}>Back</Button>
+        <Button alternate onClick={() => setArtist(undefined)}>Back</Button>
       </ButtonWrapper>
     </Container>
   }

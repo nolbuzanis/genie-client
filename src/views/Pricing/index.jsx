@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Checkout from '../../components/Checkout';
 import Button from '../../components/Button';
 import Features from '../../components/Features';
 import CancelButton from '../../components/CancelButton';
+import { getCurrentUser } from '../../api';
+import { useAuth } from '../../Context/authContext';
+import { isPremium } from '../../auth/index';
 
 const GenieLogo = styled.img`
   width: 70px;
@@ -138,6 +141,14 @@ const Pricing = () => {
 
   const [plan, setPlan] = useState(1);
   const [checkout, setCheckout] = useState(false);
+  const { user, setAuth } = useAuth();
+  const isPremiumUser = isPremium(user);
+  const history = useHistory();
+
+  const refreshUser = async () => {
+    const newUser = await getCurrentUser();
+    setAuth((prev) => ({ ...prev, user: newUser }));
+  };
 
   if (checkout) {
     return <CheckoutContent>
@@ -151,9 +162,11 @@ const Pricing = () => {
       </OuterButton>
       <SmallSpacing />
       <Heading>Add Payment Details</Heading>
-      <Checkout plan={plan - 1} />
+      <Checkout yearly={(plan - 1) === 0} monthly={(plan - 1) === 1} onSuccess={refreshUser} />
     </CheckoutContent>;
   }
+
+  if (isPremiumUser) history.push('/billing');
 
   return <PageContainer>
     <Content>

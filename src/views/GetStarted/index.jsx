@@ -36,7 +36,7 @@ const GetStarted = () => {
     <Title>Genie</Title>
     <SubTitle>for artists</SubTitle>
     <Wrapper>
-      <Button alt as={StyledLink} to='/login'>Log in</Button>
+      <Button alternate as={StyledLink} to='/login'>Log in</Button>
       <Button as={Link} to='/signup'>Sign up</Button>
       {/* <StyledLink as={Link} to='/login'>Continue with google</StyledLink>
     <StyledLink as={Link} to='/login'>Continue with facebook</StyledLink> */}

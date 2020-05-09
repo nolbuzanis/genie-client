@@ -45,16 +45,16 @@ const Button = styled.button`
   margin-top: 25px;
   width: 100%;
   height: 44px;
-  color: ${props => props.alt ? '#4568dc' : 'white'};;
+  color: ${props => props.alternate ? '#4568dc' : 'white'};;
   font-weight: 300;
   border-radius: 22px;
   font-size: 20px;
   background: ${props => {
-    if (props.alt) return 'white';
+    if (props.alternate) return 'white';
     return props.disabled ? '#C7C7C7' : 'linear-gradient(90deg, #8872ff, #4568DC)'
   }};
-  border: ${props => props.alt ? '#4568dc 1px solid' : 'none'};
-  box-shadow: ${props => !props.alt && '4px 4px 6px rgba(0, 0, 0, 0.16)'};
+  border: ${props => props.alternate ? '#4568dc 1px solid' : 'none'};
+  box-shadow: ${props => !props.alternate && '4px 4px 6px rgba(0, 0, 0, 0.16)'};
 `;
 const ErrorMsg = styled.label`
   display: block;
@@ -256,7 +256,7 @@ const NewRelease = ({ history }) => {
             }
           </form>
         )}</Formik>
-      <Button alt onClick={() => state === STATES.calendar ? setState(undefined) : history.goBack()}>{state === STATES.calendar ? 'Back' : 'Cancel'}</Button>
+      <Button alternate onClick={() => state === STATES.calendar ? setState(undefined) : history.goBack()}>{state === STATES.calendar ? 'Back' : 'Cancel'}</Button>
     </BodyContainer>
 
 

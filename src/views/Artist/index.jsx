@@ -257,16 +257,16 @@ const PreviewButton = styled.button`
   display: block;
   cursor: pointer;
   width: 80px;
-  background: ${props => (props.disabled ? '#DDDDDD' : props.alt ? 'white' : 'linear-gradient(90deg, #8872ff, #4568DC)')};
+  background: ${props => (props.disabled ? '#DDDDDD' : props.alternate ? 'white' : 'linear-gradient(90deg, #8872ff, #4568DC)')};
   height: 30px;
-  border: ${props => props.alt ? '1px solid #4568DC' : 'none'};
-  color: ${props => props.alt ? '#4568DC' : 'white'};
+  border: ${props => props.alternate ? '1px solid #4568DC' : 'none'};
+  color: ${props => props.alternate ? '#4568DC' : 'white'};
   line-height: 30px;
   text-align: center;
   border-radius: 15px;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: ${props => !props.alt && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
+  box-shadow: ${props => !props.alternate && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
   margin: 5px 0;
 `;
 const SocialMediaLink = styled.a`

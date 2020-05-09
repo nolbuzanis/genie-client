@@ -396,7 +396,7 @@ const Releases = () => {
                 <ButtonContainer>
                   <Button type='submit' disabled={props.isSubmitting}>{props.isSubmitting ? 'Adding' : 'Add'}</Button>
                   <Spacing />
-                  <Button type='button' alt onClick={() => setURIModal(false)}>Cancel</Button>
+                  <Button type='button' alternate onClick={() => setURIModal(false)}>Cancel</Button>
                 </ButtonContainer>
               </form>
             )}
