@@ -7,20 +7,38 @@ import { Link as ScrollLink } from 'react-scroll';
 
 const HeroImage = styled.div`
   position: relative;
-  height: 680px;
+  height: 520px;
   width: 100%;
-  background: url('/assets/landing-image.png') center center no-repeat;
+  background: url(${window.innerWidth >= 1024
+      ? '/assets/landing-image-2.jpg'
+      : '/assets/landing-image-2-sm.jpg'})
+    center center no-repeat;
   background-size: cover;
+`;
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(136, 114, 255, 0.8),
+    #4568dc
+  );
+  opacity: 0.8;
 `;
 
 const Attention = styled.h1`
   color: white;
-  font-size: calc(15px + 1.4vw);
+  font-size: calc(15px + 1vw);
   font-style: 700;
   padding-bottom: 20px;
-  max-width: 450px;
+  max-width: 600px;
 `;
 const AttentionWrapper = styled.div`
+  position: relative;
+  background: none;
   padding: 280px calc(5px + 5.4vw) 0;
 `;
 
@@ -36,28 +54,30 @@ const Button = styled(Link)`
   border: none;
   box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.3);
   font-size: 24px;
-  font-weight: 700;
-  background: linear-gradient(to right, #c6b973 50%, white 50%);
-  background-size: 200% 100%;
-  background-position: right bottom;
-  transition: all 0.5s ease-out;
+  font-weight: 600;
+  // background: linear-gradient(to right, #c6b973 50%, white 50%);
+  // background-size: 200% 100%;
+  // background-position: right bottom;
+  transition: all 0.5s ease;
+  background: rgba(255, 255, 255, 1);
   &:hover {
-    color: white;
-    background-position: left bottom;
+    background: rgba(255, 255, 255, 0.8);
+    //   color: white;
+    //   background-position: left bottom;
   }
 `;
-const HeadphonesImg = styled.img`
-  display: none;
-  float: right;
-  display: block;
-  width: 300px;
-  position: absolute;
-  right: 160px;
-  top: 145px;
-  @media only screen and (max-width: 1000px) {
-    display: none;
-  }
-`;
+// const HeadphonesImg = styled.img`
+//   display: none;
+//   float: right;
+//   display: block;
+//   width: 300px;
+//   position: absolute;
+//   right: 160px;
+//   top: 145px;
+//   @media only screen and (max-width: 1000px) {
+//     display: none;
+//   }
+// `;
 // const BottomWave = styled.img`
 //   position: absolute;
 //   bottom: -1px;
@@ -70,32 +90,35 @@ const BodyContainer = styled.div`
   //height: 100%;
   width: 100%;
   background-color: #f3f8ff;
-  padding: 80px calc(5px + 5.4vw) 80px;
+  padding: 50px calc(5px + 5.4vw) 80px;
 `;
 const Heading = styled.h1`
-  font-size: 40px;
+  font-size: 30px;
+  text-align: center;
   color: #444444;
+  padding-bottom: 30px;
+  font-weight: 600;
 `;
 const Steps = styled.ul`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  padding: 65px 0 35px;
+  padding: 30px 0 35px;
   margin: 0;
 `;
 const StepImg = styled.img`
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
 `;
 const StepsHeading = styled.h2`
-  padding-top: 25px;
-  font-size: 24px;
-  font-weight: 700;
+  padding-top: 15px;
+  font-size: 20px;
+  font-weight: 600;
   color: #444444;
 `;
 const StepsContent = styled.p`
   font-size: 18px;
-  padding-top: 25px;
+  padding-top: 20px;
 `;
 const Step = styled.div`
   width: 240px;
@@ -116,7 +139,7 @@ const FaqItem = styled.div`
   cursor: pointer;
 `;
 const FaqQuestion = styled.h3`
-  font-size: calc(16px + 0.6vw);
+  font-size: calc(13px + 0.6vw);
   font-weight: 500;
   color: #444444;
 `;
@@ -152,7 +175,11 @@ const CallToAction = styled(Link)`
 const Footer = styled.div`
   width: 100%;
   min-height: 245px;
-  background-color: #8872ff;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(136, 114, 255, 0.8),
+    #4568dc
+  );
   color: white;
   padding: 50px calc(20px + 5.4vw);
 `;
@@ -289,9 +316,11 @@ const Landing = () => {
     <>
       <Header />
       <HeroImage>
+        <Overlay />
         <AttentionWrapper>
           <Attention>
-            Revolutionizing the way music artists engage with their followers.
+            Helping artists reach their fans anywhere, anytime with genie
+            presaves.
           </Attention>
           <Button
             to='/signup'
@@ -300,11 +329,11 @@ const Landing = () => {
             Get Started
           </Button>
         </AttentionWrapper>
-        <HeadphonesImg src='/headphones-white.webp' />
+        {/* <HeadphonesImg src='/headphones-white.webp' /> */}
         {/* <BottomWave src='assets/landing-image-bottom.png' /> */}
       </HeroImage>
       <BodyContainer>
-        <Heading>How it works...</Heading>
+        <Heading>How it works</Heading>
         <Steps>{renderHowItWorks()}</Steps>
         <Heading id='faqs'>FAQs</Heading>
         <SubHeading>
