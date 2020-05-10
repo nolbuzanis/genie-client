@@ -4,7 +4,7 @@ import ReactPixel from 'react-facebook-pixel';
 const production = process.env.REACT_APP_ENV === 'production';
 
 export const initGA = () => {
-  if (process.env.REACT_APP_ENV === 'production') {
+  if (production) {
     ReactGA.initialize('UA-104067820-3');
   } else {
     ReactGA.initialize('UA-104067820-4');
@@ -15,18 +15,28 @@ export const initFBPixel = () => {
   const facebookPixelID = '232351294764626';
   const FBPoptions = {
     autoConfig: true, // set pixel's autoConfig
-    debug: false // enable logs
+    debug: true // enable logs
   };
 
-  if (production) ReactPixel.init(facebookPixelID, FBPoptions);
+  if (production) {
+  ReactPixel.init(facebookPixelID, {}, FBPoptions);
+  console.log('FB Pixel active.');
+}
+  
 };
 
 export const TrackPixelEvent = (eventName, data) => {
-  if (production) ReactPixel.trackCustom(eventName, data);
+  if (production) {
+    ReactPixel.trackCustom(eventName, data);
+    console.log('Reporting event: ', eventName);
+  }
 };
 
 export const TrackPixelPageView = () => {
-  if (production) ReactPixel.pageView();
+  if (production) {
+  ReactPixel.pageView();
+  console.log('Pageview!');
+  }
 };
 
 // export const PageView = () => {
