@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
-import { Event } from '../../analytics';
+import { Event, TrackPixelEvent } from '../../analytics';
 import { Link as ScrollLink } from 'react-scroll';
 
 const HeroImage = styled.div`
   position: relative;
-  height: 520px;
+  height: 560px;
   width: 100%;
   background: url(${window.innerWidth >= 1024
       ? '/assets/landing-image-2.jpg'
@@ -39,7 +39,7 @@ const Attention = styled.h1`
 const AttentionWrapper = styled.div`
   position: relative;
   background: none;
-  padding: 280px calc(5px + 5.4vw) 0;
+  padding: 300px calc(5px + 5.4vw) 0;
 `;
 
 const Button = styled(Link)`
@@ -130,6 +130,7 @@ const SubHeading = styled.p`
   font-size: 20px;
   padding-top: 10px;
   padding-bottom: 20px;
+  text-align: center;
 `;
 
 const FaqItem = styled.div`
@@ -255,7 +256,7 @@ const FAQs = [
   {
     question: 'How will this help me?',
     answer:
-      'Presaving allows artists to acquire listeners on releases much faster than they normally would. As well, followers can be rewarded with exclusive content, discounts on tickets or merch, and stay up to date with every new song you release!'
+      'Presaving allows music artists to acquire listeners on releases much faster than they normally would. As well, followers can be rewarded with exclusive content, discounts on tickets or merch, and stay up to date with every new song you release!'
   },
   {
     question: 'How long does it take to setup?',
@@ -319,12 +320,15 @@ const Landing = () => {
         <Overlay />
         <AttentionWrapper>
           <Attention>
-            Helping artists reach their fans anywhere, anytime with genie
+            Helping music artists reach their fans anywhere, anytime with genie
             presaves.
           </Attention>
           <Button
             to='/signup'
-            onClick={() => Event('ENGAGEMENTS', 'Get Started', 'LANDING_PAGE')}
+            onClick={() => {
+              Event('ENGAGEMENTS', 'Get Started', 'LANDING_PAGE');
+              TrackPixelEvent('Get Started (Landing)', { v: 1 });
+            }}
           >
             Get Started
           </Button>
@@ -342,7 +346,10 @@ const Landing = () => {
         {renderFAQs()}
         <CallToAction
           to='/signup'
-          onClick={() => Event('ENGAGEMENTS', 'Sign me up', 'LANDING_PAGE')}
+          onClick={() => {
+            Event('ENGAGEMENTS', 'Sign me up', 'LANDING_PAGE');
+            TrackPixelEvent('Sign me up! (Landing)', { v: 1 });
+          }}
         >
           Sign me up!
         </CallToAction>
