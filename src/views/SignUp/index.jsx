@@ -2,25 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Heading from '../../components/Heading';
 import styled from 'styled-components';
-import Input from '../../components/Input';
+import InputSection from '../../components/InputSection';
 import Button from '../../components/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { userSignup, getCurrentUser } from '../../api';
 import authContext from '../../Context/authContext';
+import Footer from '../../components/Footer';
 
 const Form = styled.form`
-  margin: 0 auto;
-  padding: 0 30px;
-  max-width: 450px;
-`;
-
-const Label = styled.label`
-  display: block;
-  height: 26px;
-  color: #bd3200;
-  font-size: 12px;
-  padding-top: 4px;
+  //margin: 0 auto;
+  max-width: 400px;
+  //min-width: 260px;
+  flex-grow: 1;
+  padding: 0 calc(5px + 10vw);
 `;
 
 const ButtonWraper = styled.div`
@@ -29,35 +24,51 @@ const ButtonWraper = styled.div`
 
 const initialValues = {
   email: '',
+  phone: '',
   password: ''
 };
 
-const StyledLink = styled(Link)`
-  color: #8872ff;
-  font-weight: 500;
-  &:hover {
-    color: #8872ff;
+const BodyContainer = styled.div`
+  padding-top: 130px;
+  min-height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  //padding-bottom: 40px;
+`;
+const TermsAndConditions = styled.p`
+  font-size: 12px;
+  color: #444444;
+  padding-top: 30px;
+`;
+const BoldLink = styled(Link)`
+  font-weight: 600;
+  color: #444444;
+  &:hover{
+    color: #444444;
   }
 `;
-
-const BodyContainer = styled.div`
-  padding-top: 100px;
-  background: -webkit-linear-gradient(
-    #ffffff 7%,
-    #dfebfc 60%,
-    #9e8cff
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    #ffffff 10%,
-    #dfebfc 60%,
-    #9e8cff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  min-height: 100%;
-  padding-bottom: 40px;
+const Smoke = styled.img`
+width: 100%;
+margin-bottom: -100px;
 `;
-
-const Spacing = styled.div`
-  height: 35px;
+const SmokeContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 45%;
+  min-height: 360px;
+  flex-grow: 1;
+`;
+const FlexWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+`;
+const Extra = styled.p`
+font-weight: 600;
+color: #656ded;
+text-align: center;
+padding-top: 13px;
 `;
 
 const validationSchema = Yup.object({
@@ -65,10 +76,10 @@ const validationSchema = Yup.object({
     .trim()
     .email('Please enter a valid email.')
     .required('Please enter a valid email.'),
-  email2: Yup.string()
-    .trim()
-    .oneOf([Yup.ref('email')], 'Emails do not match.')
-    .required('Please enter a valid email.'),
+  // email2: Yup.string()
+  //   .trim()
+  //   .oneOf([Yup.ref('email')], 'Emails do not match.')
+  //   .required('Please enter a valid email.'),
   phone: Yup.string()
     .trim()
     .matches(
@@ -81,29 +92,10 @@ const validationSchema = Yup.object({
     .required('Password is required.')
 });
 
-const InputSection = props => (
-  <>
-    <Input
-      id={props.name}
-      name={props.name}
-      type={props.type}
-      onChange={props.handleChange}
-      onBlur={props.handleBlur}
-      value={props.values[props.name]}
-      error={props.errors[props.name] && props.touched[props.name]}
-      placeholder={props.placeholder}
-    />
-    <Label>
-      {props.errors[props.name] &&
-        props.touched[props.name] &&
-        props.errors[props.name]}
-    </Label>
-  </>
-);
-
 const Signup = () => {
   const { setAuth } = React.useContext(authContext);
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+    console.log('Submitting!');
     setSubmitting(true);
     values.email = values.email.trim().toLowerCase();
 
@@ -120,7 +112,9 @@ const Signup = () => {
   };
 
   return (
+    <>
     <BodyContainer>
+      <FlexWrapper>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -128,42 +122,51 @@ const Signup = () => {
       >
         {props => (
           <Form onSubmit={props.handleSubmit}>
-            <Heading title='Sign up' subtitle='Promote your music!' />
-            <Spacing />
+            <Heading>Sign Up</Heading>
             <InputSection
               {...props}
               name='email'
               type='email'
-              placeholder='Email'
+              label="What’s your email?"
+              secondary="You’ll need to confirm this email later."
             />
-            <InputSection
+            {/* <InputSection
               {...props}
               name='email2'
               type='email'
-              placeholder='Verify Email'
-            />
+            /> */}
             <InputSection
               {...props}
               name='phone'
-              type='phone'
-              placeholder='Phone'
+              //type='phone'
+              label="Your phone number?"
+              secondary="Used if you can’t access your account."
             />
             <InputSection
               {...props}
               name='password'
               type='password'
-              placeholder='Password'
+              label="Pick a password"
+              secondary="At least 8 characters, 1 capital, and 1 number."
             />
+            <TermsAndConditions>
+              By creating an account you agree to Genie's <BoldLink to='/terms-of-service'>Terms of Service</BoldLink> and <BoldLink to='/privacy-policy'>Privacy Policy.</BoldLink></TermsAndConditions>
             <ButtonWraper>
               <Button disabled={props.isSubmitting} type='submit'>
                 {props.isSubmitting ? 'Submitting...' : 'Sign Up'}
               </Button>
+              <Extra>and recieve 1000 free presaves</Extra>
             </ButtonWraper>
-            <StyledLink to='/login'>Already have an account?</StyledLink>
           </Form>
         )}
       </Formik>
+      <SmokeContainer>
+      <Smoke src='/assets/purple-smoke.png'/>
+      </SmokeContainer>
+      </FlexWrapper>
     </BodyContainer>
+    <Footer />
+    </>
   );
 };
 

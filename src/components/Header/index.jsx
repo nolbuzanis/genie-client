@@ -15,56 +15,49 @@ const HeaderContainer = styled.div`
   top: 0;
   background: ${props => (props.landing ? 'transparent' : 'white')};
   margin: 0;
-  padding: 0 calc(5px + 5.4vw);
+  padding: 0 calc(5px + 10vw);
 `;
 
 export const Logo = styled(Link)`
   float: left;
   height: 100%;
-  font-weight: 900;
-  font-size: 30px;
+  font-weight: 700;
+  font-size: 36px;
   line-height: 80px;
-  color: ${props => (props.landing ? '#ffffff' : '#8872FF')};
+  color: ${props => (props.landing ? '#ffffff' : '#656ded')};
   &:hover {
-    color: ${props => (props.landing ? '#ffffff' : '#8872FF')};
+    color: ${props => (props.landing ? '#ffffff' : '#656ded')};
   }
 `;
 
 const StyledLink = styled(Link)`
   display: inline-block;
-  line-height: 20px;
-  font-size: 20px;
-  padding: 5px;
-  color: ${props => (props.landing ? '#ffffff' : '#8872ff')};
-  &:hover {
-    color: ${props => (props.landing ? '#ffffff' : '#8872ff')};
-  }
-`;
-const SignupLink = styled(Link)`
-  display: inline-block;
   line-height: 44px;
   font-size: 20px;
-  width: 100px;
+  border:  ${props => (props.landing || 'solid 1px #656ded')};
+  width: 120px;
   height: 44px;
+  font-weight: 600;
   border-radius: 22px;
-  margin-left: 20px;
   text-align: center;
-  color: ${props => (props.landing ? '#8872ff' : '#ffffff')};
-  background-color: ${props => (props.landing ? '#ffffff' : '#8872ff')}
+  color: ${props => (props.landing ? '#ffffff' : '#656ded')};
   &:hover {
-    color: ${props => (props.landing ? '#8872ff' : '#ffffff')};
+    color: ${props => (props.landing ? '#ffffff' : '#656ded')};
   }
+`;
+const SignupLink = styled(StyledLink)`
+  border:  ${props => (props.landing ? 'solid 1px #ffffff' : 'solid 1px #656ded')};
 `;
 
 const Nav = styled.nav`
   margin: 0;
   height: 100%;
   padding: 0;
-  margin-top: 15px;
+  //margin-top: 15px;
   align-items: center;
   display: flex;
   justify-content: flex-start;
-  margin-left: 40px;
+  //margin-left: 40px;
   flex-direction: row-reverse;
   @media screen and (max-width: 480px) {
     flex-wrap: wrap;
@@ -76,7 +69,8 @@ const DashboardLink = styled(SignupLink)`
 `;
 
 const Header = ({ history }) => {
-  const landing = history.location.pathname === '/' ? true : false;
+  const landing = history.location.pathname === '/';
+  const path = history.location.pathname;
   const { user } = useAuth();
   // const path = history.location.pathname.split('/')[1];
 
@@ -97,7 +91,7 @@ const Header = ({ history }) => {
         </Nav>
       ) : (
         <Nav>
-          <SignupLink
+          {path === '/signup' || path==='/forgot-password' || <SignupLink
             to='/signup'
             landing={landing ? 1 : 0}
             onClick={() => {
@@ -106,10 +100,10 @@ const Header = ({ history }) => {
             }}
           >
             Sign Up
-          </SignupLink>
-          <StyledLink to='/login' landing={landing ? 1 : 0}>
+          </SignupLink>}
+          {path === '/login' || <StyledLink to='/login' landing={landing ? 1 : 0}>
             Log In
-          </StyledLink>
+          </StyledLink>}
         </Nav>
       )}
     </HeaderContainer>

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import { Event, TrackPixelEvent } from '../../analytics';
-import { Link as ScrollLink } from 'react-scroll';
+import Footer from '../../components/Footer';
 
 const HeroImage = styled.div`
   position: relative;
@@ -173,47 +173,7 @@ const CallToAction = styled(Link)`
   text-align: center;
   box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
 `;
-const Footer = styled.div`
-  width: 100%;
-  min-height: 245px;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(136, 114, 255, 0.8),
-    #4568dc
-  );
-  color: white;
-  padding: 50px calc(20px + 5.4vw);
-`;
-const FooterLogo = styled.h1`
-  font-size: 36px;
-  font-weight: 700;
-  margin-right: 140px;
-`;
-const FooterHeader = styled.h2`
-  font-size: 20px;
-  font-weight: 600;
-  color: white;
-  padding-bottom: 5px;
-  padding-top: 10px;
-`;
-const FooterLink = styled(Link)`
-  display: block;
-  padding-top: 5px;
-  font-size: 18px;
-  font-weight: 400;
-`;
-const FlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  flex-direction: row-reverse;
-  @media only screen and (max-width: 500px) {
-    justify-content: flex-end;
-  }
-`;
-const FooterSection = styled.div`
-  margin-bottom: 50px;
-`;
+
 
 const howItWorksContent = [
   {
@@ -354,25 +314,7 @@ const Landing = () => {
           Sign me up!
         </CallToAction>
       </BodyContainer>
-      <Footer>
-        <FlexContainer>
-          <FooterSection>
-            <FooterHeader>Support</FooterHeader>
-            <FooterLink
-              as={ScrollLink}
-              to='faqs'
-              smooth={true}
-              duration={500}
-              offset={-50}
-            >
-              FAQs
-            </FooterLink>
-            <FooterLink to='/terms-of-service'>Terms of Service</FooterLink>
-            <FooterLink to='/privacy-policy'>Privacy Policy</FooterLink>
-          </FooterSection>
-          <FooterLogo>Genie</FooterLogo>
-        </FlexContainer>
-      </Footer>
+      <Footer />
     </>
   );
 };
