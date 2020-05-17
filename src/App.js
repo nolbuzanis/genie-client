@@ -9,7 +9,7 @@ import { TrackPixelPageView } from './analytics';
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
 import Signup from './views/SignUp';
-import Landing from './views/Landing';
+//import Landing from './views/Landing';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
@@ -30,6 +30,7 @@ import SubMenu from './components/SubMenu';
 import PlanAndBilling from './views/PlanAndBilling';
 import UpdatePayment from './views/UpdatePayment';
 import Help from './views/Help';
+import LandingTwo from './views/Landing/index2';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
@@ -59,7 +60,8 @@ const App = () => {
       <ToastProvider autoDismiss autoDismissTimeout={5000}>
         <ScrollToTop />
         <Switch>
-          <Route path='/' exact render={() => <Landing />} />
+          <Route path='/' exact render={() => <LandingTwo />} />
+          {/* <Route path='/landing' exact render={() => <LandingTwo />} /> */}
           <Route path='/artist/:id' exact render={() => <Artist />} />
           <Route
             path='/privacy-policy'

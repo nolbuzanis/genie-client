@@ -15,12 +15,12 @@ const HeaderContainer = styled.div`
   top: 0;
   background: ${props => (props.landing ? 'transparent' : 'white')};
   margin: 0;
-  padding: 0 calc(5px + 10vw);
+  padding: 20px calc(5px + 8vw);
 `;
 
 export const Logo = styled(Link)`
-  float: left;
-  height: 100%;
+  //float: left;
+  //height: 100%;
   font-weight: 700;
   font-size: 36px;
   line-height: 80px;
@@ -34,7 +34,7 @@ const StyledLink = styled(Link)`
   display: inline-block;
   line-height: 44px;
   font-size: 20px;
-  border:  ${props => (props.landing || 'solid 1px #656ded')};
+  border: ${props => props.landing || 'solid 1px #656ded'};
   width: 120px;
   height: 44px;
   font-weight: 600;
@@ -46,7 +46,8 @@ const StyledLink = styled(Link)`
   }
 `;
 const SignupLink = styled(StyledLink)`
-  border:  ${props => (props.landing ? 'solid 1px #ffffff' : 'solid 1px #656ded')};
+  border: ${props =>
+    props.landing ? 'solid 1px #ffffff' : 'solid 1px #656ded'};
 `;
 
 const Nav = styled.nav`
@@ -69,7 +70,9 @@ const DashboardLink = styled(SignupLink)`
 `;
 
 const Header = ({ history }) => {
-  const landing = history.location.pathname === '/';
+  const landing =
+    history.location.pathname === '/' ||
+    history.location.pathname === '/landing';
   const path = history.location.pathname;
   const { user } = useAuth();
   // const path = history.location.pathname.split('/')[1];
@@ -91,19 +94,30 @@ const Header = ({ history }) => {
         </Nav>
       ) : (
         <Nav>
-          {path === '/signup' || path==='/forgot-password' || <SignupLink
-            to='/signup'
-            landing={landing ? 1 : 0}
-            onClick={() => {
-              Event('ENGAGEMENTS', 'Sign up', 'HEADER');
-              TrackPixelEvent('Sign up (Header)', { v: 1 });
-            }}
-          >
-            Sign Up
-          </SignupLink>}
-          {path === '/login' || <StyledLink to='/login' landing={landing ? 1 : 0}>
-            Log In
-          </StyledLink>}
+          {path === '/signup' || path === '/forgot-password' || (
+            <SignupLink
+              to='/signup'
+              landing={landing ? 1 : 0}
+              onClick={() => {
+                Event('ENGAGEMENTS', 'Sign up', 'HEADER');
+                TrackPixelEvent('Sign up (Header)', { v: 1 });
+              }}
+            >
+              Sign Up
+            </SignupLink>
+          )}
+          {path === '/login' || (
+            <StyledLink
+              to='/login'
+              landing={landing ? 1 : 0}
+              onClick={() => {
+                Event('ENGAGEMENTS', 'Log In', 'HEADER');
+                TrackPixelEvent('Log In (Header)', { v: 1 });
+              }}
+            >
+              Log In
+            </StyledLink>
+          )}
         </Nav>
       )}
     </HeaderContainer>

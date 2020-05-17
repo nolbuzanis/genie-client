@@ -202,11 +202,11 @@ const howItWorksContent = [
   }
 ];
 
-const FAQs = [
+export const FAQs = [
   {
     question: 'How much does it cost?',
     answer:
-      'Genie is absolutely free to set up an account and build a following, for the first 500 saves. No credit card required. For unlimited presaves and advanced features, Genie Premium is available for $9.99 CAD/month.'
+      'Genie is absolutely free to set up an account and get started. For more information, check out our plans.'
   },
   {
     question: 'What is a presave?',
@@ -226,7 +226,7 @@ const FAQs = [
   {
     question: 'I have another question',
     answer:
-      "Please reach out to us at purplegenieapp@gmail.com. We're happy to answer any questions you have."
+      "Please reach out to us at purplegenieapp@gmail.com. We're happy to answer any questions you have!"
   }
 ];
 
