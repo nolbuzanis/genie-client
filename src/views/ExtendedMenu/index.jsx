@@ -89,6 +89,7 @@ const MenuItemContainer = styled.div`
 const menuItems = [
   // { image: 'notification', title: 'Notifications', route: '/notifications' },
   { image: "settings", title: "Account Settings", route: '/settings' },
+  { image: "article", title: "Guides", route: "/guides" },
   { image: "policy", title: 'Legal & Privacy', route: '/legal' },
   { image: "help", title: "Contact Us", route: "/help" },
   // { image: "update", title: "Latest Changes", route: "/help" }

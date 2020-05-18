@@ -1,3 +1,3 @@
 export const freeUser = {
-  maxSaves: 500
+  maxSaves: 1000
 };

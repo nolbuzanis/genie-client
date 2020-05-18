@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-//export let SERVER_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/indepdent-8833f/us-central1/api' : 'https://purplegenie.ca/api';
-export let SERVER_URL = 'https://purplegenie.ca/api';
+export let SERVER_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
+    : 'https://purplegenie.ca/api';
+//export let SERVER_URL = 'https://purplegenie.ca/api';
 
 const axiosConfig = {
   withCredentials: true,
@@ -317,7 +320,7 @@ export const updatePaymentInfo = async paymentMethod => {
   }
 };
 
-export const sendHelpMessage = async ({subject, description}) => {
+export const sendHelpMessage = async ({ subject, description }) => {
   const bodyData = JSON.stringify({
     subject,
     description
@@ -326,6 +329,29 @@ export const sendHelpMessage = async ({subject, description}) => {
     const { data } = await axios.post(
       `${SERVER_URL}/user/help`,
       bodyData,
+      axiosConfig
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const fetchAllArticles = async () => {
+  try {
+    const { data } = await axios.get(`${SERVER_URL}/articles`, axiosConfig);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const fetchArticle = async id => {
+  try {
+    const { data } = await axios.get(
+      `${SERVER_URL}/articles/${id}`,
       axiosConfig
     );
     return data;

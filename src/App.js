@@ -31,6 +31,8 @@ import PlanAndBilling from './views/PlanAndBilling';
 import UpdatePayment from './views/UpdatePayment';
 import Help from './views/Help';
 import LandingTwo from './views/Landing/index2';
+import Guides from './views/Guides';
+import Article from './views/Article';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
@@ -63,6 +65,8 @@ const App = () => {
           <Route path='/' exact render={() => <LandingTwo />} />
           {/* <Route path='/landing' exact render={() => <LandingTwo />} /> */}
           <Route path='/artist/:id' exact render={() => <Artist />} />
+          <Route path='/guides' exact component={Guides} />
+          <Route path='/article/:id' exact component={Article} />
           <Route
             path='/privacy-policy'
             exact

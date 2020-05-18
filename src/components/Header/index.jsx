@@ -70,10 +70,13 @@ const DashboardLink = styled(SignupLink)`
 `;
 
 const Header = ({ history }) => {
-  const landing =
-    history.location.pathname === '/' ||
-    history.location.pathname === '/landing';
   const path = history.location.pathname;
+  const landing =
+    path === '/' ||
+    path === '/landing' ||
+    path === '/guides' ||
+    path.includes('article');
+
   const { user } = useAuth();
   // const path = history.location.pathname.split('/')[1];
 
@@ -86,40 +89,50 @@ const Header = ({ history }) => {
       <Logo to='/' landing={landing ? 1 : 0}>
         Genie
       </Logo>
-      {user && !user.error ? (
-        <Nav>
+      <Nav>
+        {user && !user.error ? (
           <DashboardLink to='/home' landing={landing ? 1 : 0}>
             Go to dashboard
           </DashboardLink>
-        </Nav>
-      ) : (
-        <Nav>
-          {path === '/signup' || path === '/forgot-password' || (
-            <SignupLink
-              to='/signup'
-              landing={landing ? 1 : 0}
-              onClick={() => {
-                Event('ENGAGEMENTS', 'Sign up', 'HEADER');
-                TrackPixelEvent('Sign up (Header)', { v: 1 });
-              }}
-            >
-              Sign Up
-            </SignupLink>
-          )}
-          {path === '/login' || (
+        ) : (
+          <>
+            {path === '/signup' || path === '/forgot-password' || (
+              <SignupLink
+                to='/signup'
+                landing={landing ? 1 : 0}
+                onClick={() => {
+                  Event('ENGAGEMENTS', 'Sign up', 'HEADER');
+                  TrackPixelEvent('Sign up (Header)', { v: 1 });
+                }}
+              >
+                Sign Up
+              </SignupLink>
+            )}
+            {path === '/login' || (
+              <StyledLink
+                to='/login'
+                landing={landing ? 1 : 0}
+                onClick={() => {
+                  Event('ENGAGEMENTS', 'Log In', 'HEADER');
+                  TrackPixelEvent('Log In (Header)', { v: 1 });
+                }}
+              >
+                Log In
+              </StyledLink>
+            )}
             <StyledLink
-              to='/login'
-              landing={landing ? 1 : 0}
+              to='/guides'
+              landing={1}
               onClick={() => {
-                Event('ENGAGEMENTS', 'Log In', 'HEADER');
-                TrackPixelEvent('Log In (Header)', { v: 1 });
+                Event('ENGAGEMENTS', 'Guides', 'HEADER');
+                TrackPixelEvent('Guides (Header)', { v: 1 });
               }}
             >
-              Log In
+              Guides
             </StyledLink>
-          )}
-        </Nav>
-      )}
+          </>
+        )}
+      </Nav>
     </HeaderContainer>
   );
 };
