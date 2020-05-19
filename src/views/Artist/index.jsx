@@ -1,10 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
-import {
-  getArtistByURI
-  //SERVER_URL
-} from '../../api';
+import {getArtistByURI} from '../../api';
 //import { useAlert } from 'react-alert';
 import { useAuth } from '../../Context/authContext';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -293,6 +290,7 @@ const SocialMediaIcon = styled.img`
 //   </SpotifyIconContainer>
 // );
 
+
 const Artist = () => {
   const { id } = useParams();
   const [artist, setArtist] = React.useState(undefined);
@@ -306,10 +304,12 @@ const Artist = () => {
   let previewMode = view === 'preview' && user && user.uri;
 
   React.useEffect(() => {
+
     if (!follower) {
-      getCurrentFollower().then(response =>
-        setAuth({ user, follower: response })
-      );
+      getCurrentFollower().then(response =>{
+        console.log(response);
+        setAuth({ user, follower: response });
+    });
     }
     // eslint-disable-next-line
   }, []);

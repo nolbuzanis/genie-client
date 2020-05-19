@@ -53,11 +53,11 @@
 }
 
 .react-toggle--checked .react-toggle-track {
-  background-color: #8772ffda;
+  background-color: #656eedd5;
 }
 
 .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
-  background-color: #8772ff;
+  background-color: #656ded;
 }
 
 .react-toggle-track-check {

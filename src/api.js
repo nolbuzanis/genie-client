@@ -168,8 +168,8 @@ export const followerLogin = async () => {
   }
 };
 
-export const followArtist = async artist => {
-  const data = JSON.stringify({ artist });
+export const followArtist = async (artist, mailingList) => {
+  const data = JSON.stringify({ artist, mailingList });
   try {
     const response = await axios.post(
       `${SERVER_URL}/follower/follow`,

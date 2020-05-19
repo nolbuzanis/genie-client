@@ -6,6 +6,7 @@ import { useAuth } from '../../Context/authContext';
 import { followArtist, SERVER_URL } from '../../api';
 import Toggle from 'react-toggle';
 import './toggle.css';
+import { useToasts } from 'react-toast-notifications';
 
 const modalStyles = {
   overlay: {
@@ -37,7 +38,7 @@ const ModalContainer = styled.div`
 const Logo = styled.h1`
   font-size: 40px;
   font-weight: bold;
-  color: #8872ff;
+  color: #656ded;
 `;
 const SpotifyImg = styled.img`
   width: 20px;
@@ -58,11 +59,11 @@ const AppleButton = styled(Button)`
   font-weight: 600;
   background: black;
   margin-top: 15px;
-  opacity: 0.5;
+  //opacity: 0.5;
 `;
 const ToggleContainer = styled.label`
   display: flex;
-  padding-top: 24px;
+  margin-top: 24px;
   color: #818181;
   font-size: 12px;
   font-weight: 500;
@@ -86,34 +87,79 @@ const BoldText = styled.a`
   pointer-events: ${props => props.previewMode && 'none'};
 `;
 
+const deezerUrl = `${SERVER_URL}/follower/deezer-login`,
+spotifyUrl = `${SERVER_URL}/follower/login`;
+
+let popup;
+
 const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
 
   // const [submitting, setSubmitting] = useState(false);
-  const { follower, setAuth, user } = useAuth();
+  const { follower, setAuth } = useAuth();
   const [checked, setChecked] = useState(true);
+  const { addToast } = useToasts();
+  console.log('follower', follower);
 
-  const handleFollow = async () => {
-    if (previewMode) return;
-    // setSubmitting(true);
+  const handleFollow = async (follower) => {
 
-    if (!follower || follower.error) {
-      // No one logged in.. redirect to spotify oauth and will also handle following in this case
-      window.location.href = `${SERVER_URL}/follower/login/${artist.uri}/follow`;
-      follower.following ? follower.following.push(artist.uri) : follower.follower = [artist.uri];
-      setAuth({ user, follower });
-      return;
-    }
-    // If already following then unfollow (in future), for now return
-
-    const response = await followArtist(artist);
+      //follow artist
+      const response = await followArtist(artist, checked);
     // setSubmitting(false);
     if (response.error) {
-      return alert.show('Error following artist!');
+      return addToast(
+        'Error following artist: ' + response.error.message,
+        {
+          appearance: 'error'
+        }
+      );
     }
 
-    follower.following ? follower.following.push(artist.uri) : follower.follower = [artist.uri];
-    setAuth({ user, follower });
-    return alert.show('Successfully followed!', { type: 'success' });
+    follower.following ? follower.following.push(artist.uri) : follower.following = [artist.uri];
+
+    addToast('Artist followed!', {
+      appearance: 'success'
+    });
+    setAuth({ follower });
+    onClose();
+  };
+
+  React.useEffect(() => {
+
+    const onlyHandleOAuth = async (e) => {
+      if(e.data && (e.data.deezerId || e.data.spotifyId)){
+        //close popup
+        popup && await popup.close();
+
+        handleFollow(e.data);
+      }
+    };
+
+    window.addEventListener('message', onlyHandleOAuth);
+    return () => {
+      window.removeEventListener('message', onlyHandleOAuth);
+    };
+    // eslint-disable-next-line
+  }, []);
+  
+  const handleDeezerLogin = () => {
+    if (previewMode) return;
+    console.log('deezer oauth flow');
+  if(follower && !follower.error){
+    handleFollow(follower);
+  } else {
+    popup = window.open(deezerUrl,"mywindow", "width=500,height=400");
+  }
+   };
+
+  const handleSpotifyLogin = async () => {
+    if (previewMode) return;
+    console.log('spotify oauth flow');
+
+    if(follower && !follower.error){
+      handleFollow(follower);
+    } else {
+      popup = window.open(spotifyUrl,"mywindow", "width=500,height=400");
+    }
   };
 
   return <Modal
@@ -123,12 +169,12 @@ const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
   >
     <ModalContainer>
       <Logo>Genie</Logo>
-      <SpotifyButton onClick={handleFollow}>
+      <SpotifyButton onClick={handleSpotifyLogin}>
         Log in with Spotify
         <SpotifyImg src='/assets/spotify-logo-white.png' alt='' />
       </SpotifyButton>
-      <AppleButton disabled>
-        Log in with Apple Music
+      <AppleButton onClick={handleDeezerLogin}>
+        Log in with Deezer
       </AppleButton>
       <ToggleContainer>
         <Toggle
