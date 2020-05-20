@@ -22,7 +22,7 @@ const modalStyles = {
     justifyContent: 'center',
     padding: '10px',
     border: 'none',
-    background: 'none',
+    background: 'none'
   }
 };
 Modal.setAppElement('body');
@@ -88,33 +88,30 @@ const BoldText = styled.a`
 `;
 
 const deezerUrl = `${SERVER_URL}/follower/deezer-login`,
-spotifyUrl = `${SERVER_URL}/follower/login`;
+  spotifyUrl = `${SERVER_URL}/follower/login`;
 
 let popup;
 
 const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
-
   // const [submitting, setSubmitting] = useState(false);
   const { follower, setAuth } = useAuth();
   const [checked, setChecked] = useState(true);
   const { addToast } = useToasts();
-  console.log('follower', follower);
+  console.log('artist', artist);
 
-  const handleFollow = async (follower) => {
-
-      //follow artist
-      const response = await followArtist(artist, checked);
+  const handleFollow = async follower => {
+    //follow artist
+    const response = await followArtist(artist, checked);
     // setSubmitting(false);
     if (response.error) {
-      return addToast(
-        'Error following artist: ' + response.error.message,
-        {
-          appearance: 'error'
-        }
-      );
+      return addToast('Error following artist: ' + response.error.message, {
+        appearance: 'error'
+      });
     }
 
-    follower.following ? follower.following.push(artist.uri) : follower.following = [artist.uri];
+    follower.following
+      ? follower.following.push(artist.id)
+      : (follower.following = [artist.id]);
 
     addToast('Artist followed!', {
       appearance: 'success'
@@ -124,11 +121,10 @@ const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
   };
 
   React.useEffect(() => {
-
-    const onlyHandleOAuth = async (e) => {
-      if(e.data && (e.data.deezerId || e.data.spotifyId)){
+    const onlyHandleOAuth = async e => {
+      if (e.data && (e.data.deezerId || e.data.spotifyId)) {
         //close popup
-        popup && await popup.close();
+        popup && (await popup.close());
 
         handleFollow(e.data);
       }
@@ -140,57 +136,77 @@ const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
     };
     // eslint-disable-next-line
   }, []);
-  
+
   const handleDeezerLogin = () => {
     if (previewMode) return;
     console.log('deezer oauth flow');
-  if(follower && !follower.error){
-    handleFollow(follower);
-  } else {
-    popup = window.open(deezerUrl,"mywindow", "width=500,height=400");
-  }
-   };
+    if (follower && !follower.error) {
+      handleFollow(follower);
+    } else {
+      popup = window.open(deezerUrl, 'mywindow', 'width=500,height=400');
+    }
+  };
 
   const handleSpotifyLogin = async () => {
     if (previewMode) return;
     console.log('spotify oauth flow');
 
-    if(follower && !follower.error){
+    if (follower && !follower.error) {
       handleFollow(follower);
     } else {
-      popup = window.open(spotifyUrl,"mywindow", "width=500,height=400");
+      popup = window.open(spotifyUrl, 'mywindow', 'width=500,height=400');
     }
   };
 
-  return <Modal
-    style={modalStyles}
-    isOpen={isOpen}
-    onRequestClose={onClose}
-  >
-    <ModalContainer>
-      <Logo>Genie</Logo>
-      <SpotifyButton onClick={handleSpotifyLogin}>
-        Log in with Spotify
-        <SpotifyImg src='/assets/spotify-logo-white.png' alt='' />
-      </SpotifyButton>
-      <AppleButton onClick={handleDeezerLogin}>
-        Log in with Deezer
-      </AppleButton>
-      <ToggleContainer>
-        <Toggle
-          defaultChecked={checked}
-          icons={false}
-          onChange={() => setChecked(!checked)} />
-        <ToggleText>Opt in to {artist.name}'s email updates</ToggleText>
-      </ToggleContainer>
-      <Disclaimer>
-        * By following you agree to pre-save {artist.name}'s future releases. You can opt out anytime.
+  return (
+    <Modal style={modalStyles} isOpen={isOpen} onRequestClose={onClose}>
+      <ModalContainer>
+        <Logo>Genie</Logo>
+        {artist.uri && (
+          <SpotifyButton onClick={handleSpotifyLogin}>
+            Log in with Spotify
+            <SpotifyImg src='/assets/spotify-logo-white.png' alt='' />
+          </SpotifyButton>
+        )}
+        {artist.deezerId && (
+          <AppleButton onClick={handleDeezerLogin}>
+            Log in with Deezer
+          </AppleButton>
+        )}
+        <ToggleContainer>
+          <Toggle
+            defaultChecked={checked}
+            icons={false}
+            onChange={() => setChecked(!checked)}
+          />
+          <ToggleText>Opt in to {artist.name}'s email updates</ToggleText>
+        </ToggleContainer>
+        <Disclaimer>
+          * By following you agree to pre-save {artist.name}'s future releases.
+          You can opt out anytime.
         </Disclaimer>
-      <Disclaimer>
-        By following you agree to Genie’s <BoldText target="_blank" href='/privacy-policy' previewMode={previewMode}>Privacy Policy</BoldText> and <BoldText target="_blank" href='/terms-of-service' previewMode={previewMode}>Terms of Service</BoldText>.
-      </Disclaimer>
-    </ModalContainer>
-  </Modal>
+        <Disclaimer>
+          By following you agree to Genie’s{' '}
+          <BoldText
+            target='_blank'
+            href='/privacy-policy'
+            previewMode={previewMode}
+          >
+            Privacy Policy
+          </BoldText>{' '}
+          and{' '}
+          <BoldText
+            target='_blank'
+            href='/terms-of-service'
+            previewMode={previewMode}
+          >
+            Terms of Service
+          </BoldText>
+          .
+        </Disclaimer>
+      </ModalContainer>
+    </Modal>
+  );
 };
 
 export default FollowModal;

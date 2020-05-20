@@ -294,7 +294,7 @@ const Home = () => {
             <EditButton to='/accounts'>View</EditButton>
           </EditBox>
         </EditContainer>
-        <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>
+        <PublicArtistPage to={'/artist/' + user.id + '?view=preview'}>
           <GlobeIcon src='/assets/globe-icon-white.png' />
           My artist page
         </PublicArtistPage>
