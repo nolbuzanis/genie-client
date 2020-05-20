@@ -14,11 +14,12 @@ import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
 import Artist from './views/Artist';
 import Releases from './views/Releases';
-import Introduction from './views/Introduction';
+//import Introduction from './views/Introduction';
 import ResetPassword from './views/ResetPassword';
 import NewRelease from './views/NewRelease';
 import GetStarted from './views/GetStarted';
 import ArtistURIExplained from './views/ArtistURIExplained';
+import DeezerExplained from './views/DeezerExplained';
 import ExtendedMenu from './views/ExtendedMenu';
 import Home from './views/Home';
 import ScrollToTop from './components/ScrollToTop';
@@ -91,11 +92,16 @@ const App = () => {
           <PrivateRoute path='/releases' exact component={Releases} />
           <PrivateRoute path='/releases/new' exact component={NewRelease} />
           <PrivateRoute path='/profile' exact component={Profile} />
-          <PrivateRoute path='/introduction' exact component={Introduction} />
+          {/* <PrivateRoute path='/introduction' exact component={Introduction} /> */}
           <PrivateRoute
             path='/find-artist-uri'
             exact
             component={ArtistURIExplained}
+          />
+          <PrivateRoute
+            path='/find-deezer-link'
+            exact
+            component={DeezerExplained}
           />
           <PrivateRoute path='/menu' exact component={ExtendedMenu} />
           <PrivateRoute path='/pricing' exact component={Pricing} />

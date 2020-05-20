@@ -43,6 +43,34 @@ export const getSpotifyArtistDetails = async id => {
   }
 };
 
+export const submitDeezerArtist = async artist => {
+  const data = JSON.stringify({ artist });
+  try {
+    const res = await axios.post(
+      `${SERVER_URL}/user/deezer-id`,
+      data,
+      axiosConfig
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const getDeezerArtistDetails = async id => {
+  try {
+    const res = await axios.get(
+      `${SERVER_URL}/user/deezer-id/${id}`,
+      axiosConfig
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
 export const logUserOut = async () => {
   try {
     const res = await axios.get(`${SERVER_URL}/user/logout`, axiosConfig);

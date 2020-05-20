@@ -287,7 +287,7 @@ const Home = () => {
           <EditBox>
             <div>
               <CircularNumber colorOne='#483833' colorTwo='#666666'>
-                {user.uri ? 1 : 0}/1
+                {user.uri ? 1 : 0}/2
               </CircularNumber>
               <EditBoxText>Accounts Connected</EditBoxText>
             </div>
