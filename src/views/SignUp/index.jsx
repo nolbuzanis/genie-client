@@ -25,6 +25,7 @@ const ButtonWraper = styled.div`
 const initialValues = {
   email: '',
   phone: '',
+  name: '',
   password: ''
 };
 
@@ -43,13 +44,13 @@ const TermsAndConditions = styled.p`
 const BoldLink = styled(Link)`
   font-weight: 600;
   color: #444444;
-  &:hover{
+  &:hover {
     color: #444444;
   }
 `;
 const Smoke = styled.img`
-width: 100%;
-margin-bottom: -100px;
+  width: 100%;
+  margin-bottom: -100px;
 `;
 const SmokeContainer = styled.div`
   position: relative;
@@ -65,12 +66,14 @@ const FlexWrapper = styled.div`
   justify-content: space-between;
 `;
 const Extra = styled.p`
-font-weight: 600;
-color: #656ded;
-text-align: center;
-padding-top: 13px;
+  font-weight: 600;
+  color: #656ded;
+  text-align: center;
+  padding-top: 13px;
 `;
 
+//const phoneRegEx = /^(\+\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+const phoneRegEx = /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/;
 const validationSchema = Yup.object({
   email: Yup.string()
     .trim()
@@ -82,11 +85,11 @@ const validationSchema = Yup.object({
   //   .required('Please enter a valid email.'),
   phone: Yup.string()
     .trim()
-    .matches(
-      /^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/,
-      'Please enter a valid phone number.'
-    )
+    .matches(phoneRegEx, 'Please enter a valid phone number.')
     .required('Please enter a valid phone number.'),
+  name: Yup.string()
+    .trim()
+    .required('Please enter a valid name.'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters long.')
     .required('Password is required.')
@@ -113,59 +116,68 @@ const Signup = () => {
 
   return (
     <>
-    <BodyContainer>
-      <FlexWrapper>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
-        {props => (
-          <Form onSubmit={props.handleSubmit}>
-            <Heading>Sign Up</Heading>
-            <InputSection
-              {...props}
-              name='email'
-              type='email'
-              label="What’s your email?"
-              secondary="You’ll need to confirm this email later."
-            />
-            {/* <InputSection
+      <BodyContainer>
+        <FlexWrapper>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            {props => (
+              <Form onSubmit={props.handleSubmit}>
+                <Heading>Sign Up</Heading>
+                <InputSection
+                  {...props}
+                  name='email'
+                  type='email'
+                  label='What’s your email?'
+                  secondary='You’ll need to confirm this email later.'
+                />
+                {/* <InputSection
               {...props}
               name='email2'
               type='email'
             /> */}
-            <InputSection
-              {...props}
-              name='phone'
-              //type='phone'
-              label="Your phone number?"
-              secondary="Used if you can’t access your account."
-            />
-            <InputSection
-              {...props}
-              name='password'
-              type='password'
-              label="Pick a password"
-              secondary="At least 8 characters, 1 capital, and 1 number."
-            />
-            <TermsAndConditions>
-              By creating an account you agree to Genie's <BoldLink to='/terms-of-service'>Terms of Service</BoldLink> and <BoldLink to='/privacy-policy'>Privacy Policy.</BoldLink></TermsAndConditions>
-            <ButtonWraper>
-              <Button disabled={props.isSubmitting} type='submit'>
-                {props.isSubmitting ? 'Submitting...' : 'Sign Up'}
-              </Button>
-              <Extra>and recieve 1000 free presaves</Extra>
-            </ButtonWraper>
-          </Form>
-        )}
-      </Formik>
-      <SmokeContainer>
-      <Smoke src='/assets/purple-smoke.png'/>
-      </SmokeContainer>
-      </FlexWrapper>
-    </BodyContainer>
-    <Footer />
+                <InputSection
+                  {...props}
+                  name='phone'
+                  //type='phone'
+                  label='Your phone number?'
+                  secondary='Used if you can’t access your account.'
+                />
+                <InputSection
+                  {...props}
+                  name='name'
+                  label='What do your fans call you?'
+                  secondary='Your band or artist name.'
+                />
+                <InputSection
+                  {...props}
+                  name='password'
+                  type='password'
+                  label='Pick a password'
+                  secondary='At least 8 characters, 1 capital, and 1 number.'
+                />
+                <TermsAndConditions>
+                  By creating an account you agree to Genie's{' '}
+                  <BoldLink to='/terms-of-service'>Terms of Service</BoldLink>{' '}
+                  and <BoldLink to='/privacy-policy'>Privacy Policy.</BoldLink>
+                </TermsAndConditions>
+                <ButtonWraper>
+                  <Button disabled={props.isSubmitting} type='submit'>
+                    {props.isSubmitting ? 'Submitting...' : 'Sign Up'}
+                  </Button>
+                  <Extra>and recieve 1000 free presaves</Extra>
+                </ButtonWraper>
+              </Form>
+            )}
+          </Formik>
+          <SmokeContainer>
+            <Smoke src='/assets/purple-smoke.png' />
+          </SmokeContainer>
+        </FlexWrapper>
+      </BodyContainer>
+      <Footer />
     </>
   );
 };
