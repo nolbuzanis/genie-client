@@ -152,7 +152,7 @@ const Profile = () => {
       >
         {props => (
           <Form onSubmit={props.handleSubmit}>
-            <ArtistPhoto src={user.img} />
+            <ArtistPhoto src={user.img || '/default-user-256.png'} />
             <FileInput
               onChange={e => handlePhotoSubmit(e)}
               className='artist-file-input'

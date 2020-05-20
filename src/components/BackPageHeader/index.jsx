@@ -6,7 +6,7 @@ const Header = styled.h1`
   font-size: 26px;
   font-weight: 600;
   color: #444444;
-  border-bottom: solid 1px rgba(129, 129, 129, 0.25);
+  //border-bottom: solid 1px rgba(129, 129, 129, 0.25);
   text-align: center;
   padding: 40px 10px 35px;
   margin: 0 20px;

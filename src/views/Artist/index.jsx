@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
-import {getArtistByURI} from '../../api';
+import { getArtistByURI } from '../../api';
 //import { useAlert } from 'react-alert';
 import { useAuth } from '../../Context/authContext';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -50,7 +50,7 @@ const Mask = styled.div`
 `;
 const FollowButton = styled.button`
   display: block;
-  background-color: ${props => (props.disabled ? '#333333' : '#8872FF')};
+  background-color: ${props => (props.disabled ? '#212121' : '#656ded')};
   width: 180px;
   height: 40px;
   border-radius: 20px;
@@ -83,6 +83,7 @@ const ArtistContent = styled.div`
   padding: 0 25px;
   font-size: 20px;
   //height: 100%;
+  width: 100%;
   background: #f2f2f2;
 `;
 const ContentHeader = styled.h3`
@@ -290,7 +291,6 @@ const SocialMediaIcon = styled.img`
 //   </SpotifyIconContainer>
 // );
 
-
 const Artist = () => {
   const { id } = useParams();
   const [artist, setArtist] = React.useState(undefined);
@@ -304,12 +304,11 @@ const Artist = () => {
   let previewMode = view === 'preview' && user && user.uri;
 
   React.useEffect(() => {
-
     if (!follower) {
-      getCurrentFollower().then(response =>{
+      getCurrentFollower().then(response => {
         console.log(response);
         setAuth({ user, follower: response });
-    });
+      });
     }
     // eslint-disable-next-line
   }, []);

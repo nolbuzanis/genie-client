@@ -398,7 +398,11 @@ const Releases = () => {
   const checkIfAllowed = e => {
     if (hasNoSavesRemaining(user)) {
       e.preventDefault();
-      setPopup(true);
+      setPopup('upgrade');
+    }
+    if (!user.uri) {
+      e.preventDefault();
+      setPopup('link_accounts');
     }
   };
 
@@ -461,7 +465,7 @@ const Releases = () => {
   return (
     <>
       <ReleaseEditModal />
-      <Popup open={popup} setOpen={setPopup} />
+      <Popup open={popup ? true : false} setOpen={setPopup} type={popup} />
       <Header>
         Releases
         {/* <CreateSongButton to='/releases/new'>

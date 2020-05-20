@@ -49,12 +49,12 @@ const PrivateRoute = ({ component: Component, render, ...rest }) => {
     return <Redirect to='/login' />
   }
 
-  if (!user.uri && !lockedRoutes.includes(window.location.pathname)) {
-    return <Redirect to='/introduction' />
-  }
-  if (user.uri && window.location.pathname === '/introduction') {
-    return <Redirect to='/dashboard' />
-  }
+  // if (!user.uri && !lockedRoutes.includes(window.location.pathname)) {
+  //   return <Redirect to='/introduction' />
+  // }
+  // if (user.uri && window.location.pathname === '/introduction') {
+  //   return <Redirect to='/dashboard' />
+  // }
 
   return ((Component)
     ? <Route {...rest} render={(props) => (

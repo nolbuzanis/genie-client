@@ -7,7 +7,7 @@ const Header = styled.h1`
   font-size: 26px;
   padding: 40px 40px 0;
   font-weight: 600;
-  color: #4568dc;
+  color: #656ded;
 `;
 
 export default ({ children }) => <Header>{children}</Header>;

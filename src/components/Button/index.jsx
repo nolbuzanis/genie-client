@@ -26,7 +26,7 @@ const Button = styled.button`
   font-size: ${props => (props.small ? '13px' : '18px')};
   border-radius: 22px;
   font-weight: 600;
-  box-shadow: ${props => !props.alternate && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
+  box-shadow: ${props => !props.alternate && !props.disabled && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
 `;
 
 export default props => <Button {...props}>{props.children}</Button>;

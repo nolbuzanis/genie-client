@@ -101,7 +101,7 @@ const CloseButton = styled.button`
   border: none;
 `;
 
-const Popup = ({ open, setOpen }) => {
+const Popup = ({ open, setOpen, type }) => {
   const { user } = useAuth();
   const history = useHistory();
 
@@ -109,6 +109,39 @@ const Popup = ({ open, setOpen }) => {
     setOpen(false);
     history.push('/billing');
   };
+  const handleAccountClick = () => {
+    setOpen(false);
+    history.push('/accounts');
+  };
+
+  const LinkAccountsPopup = () => (
+    <>
+      <MainOffering>
+        You need to connect at least one music account before you can create a
+        release.
+      </MainOffering>
+      <StyledButton alternate onClick={handleAccountClick}>
+        Connect Now
+      </StyledButton>
+      <CloseButton onClick={() => setOpen(false)}>Not now</CloseButton>
+    </>
+  );
+
+  const UpgradePopup = () => (
+    <>
+      <FadedText>
+        {savesRemaining < 0 ? 0 : savesRemaining} / {freeUser.maxSaves} presaves
+        remaining
+      </FadedText>
+      <MainOffering>
+        Unlock unlimited presaves and advanced features.
+      </MainOffering>
+      <StyledButton alternate onClick={handleClick}>
+        View Plans
+      </StyledButton>
+      <CloseButton onClick={() => setOpen(false)}>Not now</CloseButton>
+    </>
+  );
 
   const savesRemaining = freeUser.maxSaves - user.saves;
   return (
@@ -118,17 +151,7 @@ const Popup = ({ open, setOpen }) => {
       onRequestClose={() => setOpen(false)}
     >
       <ModalBackground>
-        <FadedText>
-          {savesRemaining < 0 ? 0 : savesRemaining} / {freeUser.maxSaves}{' '}
-          presaves remaining
-        </FadedText>
-        <MainOffering>
-          Unlock unlimited presaves and advanced features.
-        </MainOffering>
-        <StyledButton alternate onClick={handleClick}>
-          View Plans
-        </StyledButton>
-        <CloseButton onClick={() => setOpen(false)}>Not now</CloseButton>
+        {type === 'link_accounts' ? <LinkAccountsPopup /> : <UpgradePopup />}
       </ModalBackground>
     </Modal>
   );

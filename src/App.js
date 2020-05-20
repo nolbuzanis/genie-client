@@ -33,9 +33,11 @@ import Help from './views/Help';
 import LandingTwo from './views/Landing/index2';
 import Guides from './views/Guides';
 import Article from './views/Article';
+import LinkAccounts from './views/LinkAccounts';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
+  { title: 'Link Accounts', route: '/accounts' },
   { title: 'Plans & Billing', route: '/billing' }
   //{ title: "Change Password", route: '/settings' }
 ];
@@ -58,8 +60,8 @@ const App = () => {
   });
 
   return (
-    <authContext.Provider value={{ ...auth, setAuth }}>
-      <ToastProvider autoDismiss autoDismissTimeout={5000}>
+    <ToastProvider autoDismiss autoDismissTimeout={5000}>
+      <authContext.Provider value={{ ...auth, setAuth }}>
         <ScrollToTop />
         <Switch>
           <Route path='/' exact render={() => <LandingTwo />} />
@@ -118,11 +120,12 @@ const App = () => {
             component={UpdatePayment}
           />
           <PrivateRoute path='/help' exact component={Help} />
+          <PrivateRoute path='/accounts' exact component={LinkAccounts} />
           {/* <PrivateRoute path='/follower' exact component={Followers} /> */}
           <Route render={() => <Redirect to='/home' />} />
         </Switch>
-      </ToastProvider>
-    </authContext.Provider>
+      </authContext.Provider>
+    </ToastProvider>
   );
 };
 

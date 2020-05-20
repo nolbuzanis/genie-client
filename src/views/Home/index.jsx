@@ -283,6 +283,16 @@ const Home = () => {
             </div>
             <EditButton to='/billing'>View</EditButton>
           </EditBox>
+          <Divider />
+          <EditBox>
+            <div>
+              <CircularNumber colorOne='#483833' colorTwo='#666666'>
+                {user.uri ? 1 : 0}/1
+              </CircularNumber>
+              <EditBoxText>Accounts Connected</EditBoxText>
+            </div>
+            <EditButton to='/accounts'>View</EditButton>
+          </EditBox>
         </EditContainer>
         <PublicArtistPage to={'/artist/' + user.uri + '?view=preview'}>
           <GlobeIcon src='/assets/globe-icon-white.png' />
