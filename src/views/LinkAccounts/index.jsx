@@ -192,7 +192,7 @@ const LinkAccounts = () => {
       return setSubmitting(false);
     }
     if (artist.error) {
-      addToast(artist.error.message, { appearace: 'error' });
+      addToast(artist.error.message, { appearance: 'error' });
       return setSubmitting(false);
     }
     setSubmitting(false);
@@ -211,7 +211,6 @@ const LinkAccounts = () => {
       return setDeezerArtist(undefined);
     }
     if (response.error) {
-      alert.show('Error submitting deezer id!');
       addToast(response.error.message, { appearance: 'error' });
       return setDeezerArtist(undefined);
     }
@@ -240,7 +239,8 @@ const LinkAccounts = () => {
       return setSubmitting(false);
     }
     if (artist.error) {
-      addToast(artist.error.message, { appearace: 'error' });
+      console.log(artist.error, artist.error.message);
+      addToast(artist.error.message, { appearance: 'error' });
       return setSubmitting(false);
     }
     setSubmitting(false);
@@ -259,7 +259,6 @@ const LinkAccounts = () => {
       return artist(undefined);
     }
     if (response.error) {
-      alert.show('Error submitting URI!');
       addToast(response.error.message, { appearance: 'error' });
       return artist(undefined);
     }

@@ -8,6 +8,8 @@ import moment from 'moment';
 import Popup from '../../components/Popup';
 import { freeUser } from '../../config';
 import { isPremium } from '../../auth/index';
+//import ChoroplethMap from '../../components/ChoroplethMap';
+//import ReactTooltip from 'react-tooltip';
 
 const Background = styled.div`
   position: absolute;
@@ -189,6 +191,7 @@ const getLastWeek = (startDate = moment().format('YYYY-MM-DD')) => {
 const Home = () => {
   const { user } = useAuth();
   const [followerData, setFollowerData] = React.useState([[], []]);
+  //const [tooltipContent, setTooltipContent] = React.useState('PLaceHODLER');
   const isUserPremium = isPremium(user);
 
   React.useEffect(() => {
@@ -233,6 +236,9 @@ const Home = () => {
     }
   ];
 
+  let accountsConnected = 0;
+  if (user.uri) accountsConnected += 1;
+  if (user.deezerId) accountsConnected += 1;
   return (
     <>
       <Background />
@@ -240,8 +246,10 @@ const Home = () => {
       <Content>
         <Title>Genie Dashboard</Title>
         <Graph>
+          {/* <ChoroplethMap setTooltipContent={setTooltipContent} /> */}
           <GraphTitle>Followers per day</GraphTitle>
           <FollowersGraph data={followersData} />
+          {/* <ReactTooltip>{tooltipContent}</ReactTooltip> */}
         </Graph>
         <StatsContainer>
           <StatBox colorOne='#ff9b9b' colorTwo='#f7db65'>
@@ -287,7 +295,7 @@ const Home = () => {
           <EditBox>
             <div>
               <CircularNumber colorOne='#483833' colorTwo='#666666'>
-                {user.uri ? 1 : 0}/2
+                {accountsConnected}/2
               </CircularNumber>
               <EditBoxText>Accounts Connected</EditBoxText>
             </div>

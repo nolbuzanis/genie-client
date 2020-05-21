@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams, Redirect, useHistory } from 'react-router-dom';
-import { getArtistByURI } from '../../api';
+import { getArtistById } from '../../api';
 //import { useAlert } from 'react-alert';
 import { useAuth } from '../../Context/authContext';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -66,7 +66,7 @@ const FollowButton = styled.button`
   transition: all ease 0.3s;
   cursor: ${props => (props.disabled ? 'auto' : 'pointer')};
   &:hover {
-    background-color: ${props => (props.disabled ? '#333333' : '#9986FF')};
+    background-color: ${props => (props.disabled ? '#333333' : '#656ded')};
   }
 `;
 const FollowerCount = styled.div`
@@ -330,13 +330,13 @@ const Artist = () => {
   // }
 
   if (!artist) {
-    getArtistByURI(id).then(setArtist);
+    getArtistById(id).then(setArtist);
     return (
       <BeatLoader
         css={loadingStyles}
         size={20}
         //size={"150px"} this also works
-        color='#4568DC'
+        color='#656ded'
         loading={true}
       />
     );

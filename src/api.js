@@ -18,7 +18,7 @@ export const submitSpotifyURI = async artist => {
   const data = JSON.stringify({ artist });
   try {
     const res = await axios.post(
-      `${SERVER_URL}/user/spotify-uri`,
+      `${SERVER_URL}/artist/spotify-uri`,
       data,
       axiosConfig
     );
@@ -33,7 +33,7 @@ export const getSpotifyArtistDetails = async id => {
   //const data = JSON.stringify({ artistId });
   try {
     const res = await axios.get(
-      `${SERVER_URL}/user/spotify-uri/${id}`,
+      `${SERVER_URL}/artist/spotify-uri/${id}`,
       axiosConfig
     );
     return res.data;
@@ -47,7 +47,7 @@ export const submitDeezerArtist = async artist => {
   const data = JSON.stringify({ artist });
   try {
     const res = await axios.post(
-      `${SERVER_URL}/user/deezer-id`,
+      `${SERVER_URL}/artist/deezer-id`,
       data,
       axiosConfig
     );
@@ -61,7 +61,7 @@ export const submitDeezerArtist = async artist => {
 export const getDeezerArtistDetails = async id => {
   try {
     const res = await axios.get(
-      `${SERVER_URL}/user/deezer-id/${id}`,
+      `${SERVER_URL}/artist/deezer-id/${id}`,
       axiosConfig
     );
     return res.data;
@@ -152,7 +152,11 @@ export const uploadUserPhoto = async file => {
         'Content-Type': 'multipart/form-data'
       }
     };
-    const response = await axios.post(`${SERVER_URL}/user/photo`, data, config);
+    const response = await axios.post(
+      `${SERVER_URL}/artist/photo`,
+      data,
+      config
+    );
     console.log(response);
     return response.data;
   } catch (error) {
@@ -164,7 +168,7 @@ export const uploadUserPhoto = async file => {
 export const updateUserProfile = async formValues => {
   try {
     const res = await axios.post(
-      `${SERVER_URL}/user/update`,
+      `${SERVER_URL}/artist/update`,
       JSON.stringify(formValues),
       axiosConfig
     );
@@ -176,9 +180,9 @@ export const updateUserProfile = async formValues => {
   }
 };
 
-export const getArtistByURI = async uri => {
+export const getArtistById = async id => {
   try {
-    const res = await axios.get(`${SERVER_URL}/user/${uri}`);
+    const res = await axios.get(`${SERVER_URL}/artist/${id}`);
 
     return res.data;
   } catch (error) {
@@ -260,7 +264,7 @@ export const createNewSong = async (uri, songName, releaseDate) => {
 export const fetchFollowerCountData = async () => {
   try {
     const { data } = await axios.get(
-      `${SERVER_URL}/user/followers/count`,
+      `${SERVER_URL}/artist/followers/count`,
       axiosConfig
     );
     return data;
@@ -277,7 +281,7 @@ export const createPremiumSubscription = async (paymentMethod, planType) => {
   });
   try {
     const { data } = await axios.post(
-      `${SERVER_URL}/user/premium-subscription/create`,
+      `${SERVER_URL}/artist/premium-subscription/create`,
       bodyData,
       axiosConfig
     );
@@ -291,7 +295,7 @@ export const createPremiumSubscription = async (paymentMethod, planType) => {
 export const cancelPremiumSubscription = async () => {
   try {
     const { data } = await axios.post(
-      `${SERVER_URL}/user/premium-subscription/cancel`,
+      `${SERVER_URL}/artist/premium-subscription/cancel`,
       {},
       axiosConfig
     );
@@ -306,7 +310,7 @@ export const cancelPremiumSubscription = async () => {
 export const resumePremiumSubscription = async () => {
   try {
     const { data } = await axios.post(
-      `${SERVER_URL}/user/premium-subscription/resume`,
+      `${SERVER_URL}/artist/premium-subscription/resume`,
       {},
       axiosConfig
     );
@@ -321,7 +325,7 @@ export const resumePremiumSubscription = async () => {
 export const fetchPaymentInfo = async () => {
   try {
     const { data } = await axios.get(
-      `${SERVER_URL}/user/payment-information`,
+      `${SERVER_URL}/artist/payment-information`,
       axiosConfig
     );
     return data;
@@ -337,7 +341,7 @@ export const updatePaymentInfo = async paymentMethod => {
   });
   try {
     const { data } = await axios.post(
-      `${SERVER_URL}/user/payment-information/update`,
+      `${SERVER_URL}/artist/payment-information/update`,
       bodyData,
       axiosConfig
     );
@@ -355,7 +359,7 @@ export const sendHelpMessage = async ({ subject, description }) => {
   });
   try {
     const { data } = await axios.post(
-      `${SERVER_URL}/user/help`,
+      `${SERVER_URL}/artist/help`,
       bodyData,
       axiosConfig
     );
