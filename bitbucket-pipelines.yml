@@ -14,7 +14,7 @@ pipelines:
         script:
           - npm install
           - npm test
-          
+
     - step:
         name: Build
         caches:
@@ -24,9 +24,10 @@ pipelines:
           - npm run build
         artifacts:
           - build/**
-          
+
     - step:
         name: Deploy to Firebase
+        trigger: manual
         deployment: production
         script:
           - pipe: atlassian/firebase-deploy:0.2.1

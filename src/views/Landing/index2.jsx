@@ -466,7 +466,8 @@ const Landing = () => {
           <HeroTitle>Make a big splash using pre-saves</HeroTitle>
           <HeroText>
             Genie is the optimal way for musicians to become featured on curated
-            playlists and discovered on Spotify & Apple Music platforms.
+            playlists and discovered on Spotify, Deezer, & other music
+            platforms.
           </HeroText>
           <ButtonWrapper>
             <LandingButton
