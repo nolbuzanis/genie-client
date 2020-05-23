@@ -6,6 +6,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { initGA, initFBPixel } from './analytics';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import { hotjar } from 'react-hotjar';
+
+hotjar.initialize('1824836', 'v1');
 
 //Google analytics
 initGA();
