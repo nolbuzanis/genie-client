@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../Context/authContext';
-import { logUserOut, createNewArtist, switchArtist } from '../../api';
+import { createNewArtist, switchArtist } from '../../api';
 import { withRouter } from 'react-router-dom';
 import * as menuIcons from './menuIcons';
 import Modal from 'react-modal';
@@ -201,6 +201,7 @@ const ProfileDropdown = ({ user, onClose, setCreateModal }) => {
     return () => {
       window.removeEventListener('mousedown', handleDropdownClick);
     };
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -345,15 +346,15 @@ const SideMenu = ({ lockedRoutes }) => {
     return null;
   }
 
-  const handleLogout = async () => {
-    const response = await logUserOut();
-    if (response.error) {
-      console.log(response.error);
-      return;
-    }
-    //props.setOpen(false);
-    window.location.replace('/');
-  };
+  // const handleLogout = async () => {
+  //   const response = await logUserOut();
+  //   if (response.error) {
+  //     console.log(response.error);
+  //     return;
+  //   }
+  //   //props.setOpen(false);
+  //   window.location.replace('/');
+  // };
 
   const path = location.pathname;
   if (window.innerWidth < 1024 || lockedRoutes.includes(path)) return null;
