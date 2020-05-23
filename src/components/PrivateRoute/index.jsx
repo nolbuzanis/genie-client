@@ -15,12 +15,12 @@ const FlexContainer = styled.div`
 `;
 const ContentContainer = styled.div`
   width: 100%;
-  @media (min-width: 920px) {
-    flex-grow: 1;
-    width: inherit;
-    position: relative;
-    overflow-x: hidden;
-  }
+  // @media (min-width: 920px) {
+  //   flex-grow: 1;
+  //   width: inherit;
+  //   position: relative;
+  //   overflow-x: hidden;
+  // }
 `;
 const loadingStyles = css`
   position: relative;

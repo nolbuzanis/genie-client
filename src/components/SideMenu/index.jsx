@@ -1,9 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import authContext from '../../Context/authContext';
-import { logUserOut } from '../../api';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../Context/authContext';
+import { logUserOut, createNewArtist, switchArtist } from '../../api';
 import { withRouter } from 'react-router-dom';
+import * as menuIcons from './menuIcons';
+import Modal from 'react-modal';
+import InputSection from '../../components/InputSection';
+import Button from '../../components/Button';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { useToasts } from 'react-toast-notifications';
+
+const initialValues = {
+  name: ''
+};
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .trim()
+    .required('Please enter a valid name.')
+});
+
+const modalStyles = {
+  overlay: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: '100',
+    background: 'rgba(0, 0, 0, 0.1)'
+  },
+  content: {
+    position: 'static',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '10px',
+    border: 'none',
+    background: 'none'
+  }
+};
+Modal.setAppElement('body');
+
+const ModalContainer = styled.div`
+  background: white;
+  width: 450px;
+  padding: 25px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+`;
 
 const MenuContainer = styled.div`
   display: flex;
@@ -12,125 +56,294 @@ const MenuContainer = styled.div`
   z-index: 10;
   position: fixed;
   top: 0;
-  left: ${props => (props.open ? '0' : '-270px')};
+  //left: ${props => (props.open ? '0' : '-270px')};
+  left: 0;
   bottom: 0;
   height: 100%;
   width: 270px;
   min-width: 270px;
-  background: linear-gradient(#8872ff, #4568dc);
+  background-color: #e3e6ee;
   transition: all 0.3s ease;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-  @media (min-width: 920px) {
-    left: 0;
-    position: relative;
-    bottom: 0;
-  }
+  padding: 15px;
 `;
+const MenuPlaceholder = styled.div`
+  height: 100%;
+  width: 270px;
+  min-width: 270px;
+  display: inline-block;
+`;
+
 const ProfileSection = styled.div`
-  border-bottom: 1px solid #404854;
   display: flex;
-  padding: 20px;
+  padding: 10px 20px;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
 `;
 const ProfilePic = styled.div`
   background: url(${props => props.img}) center center no-repeat;
   background-size: cover;
-  width: 50px;
-  height: 50px;
+  background-color: white;
+  width: 40px;
+  height: 40px;
   border-radius: 25px;
   margin-right: 10px;
-`;
-const MenuHeader = styled.div`
-  border-bottom: 1px solid #404854;
-  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 `;
 const ArtistName = styled.p`
+  display: inline-block;
   margin: 0;
-  font-size: 18px;
-  color: white;
-  width: 170px;
+  font-size: 16px;
+  color: #444444;
+  max-width: 170px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-const UserDate = styled.p`
-  margin: 0;
-  padding: 0;
-  font-weight: 300;
-  padding-top: 2px;
-  font-size: 14px;
-  color: #e1e1e1;
+const DownArrow = styled.img`
+  width: 13px;
+  height: 7.7px;
+  margin-left: 10px;
+`;
+const AccountDropdown = styled.div`
+  background: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  > {
+    &:hover {
+      background-color: #656ded;
+      > p {
+        color: white;
+      }
+    }
+  }
+`;
+const AddButton = styled.img`
+  width: 30px;
+  height: 30px;
+  margin: 5px 15px 5px 5px;
+`;
+const MenuItem = styled(Link)`
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: ${({ active }) => (active ? '600' : '500')};
+  color: ${({ active }) => (active ? '#656ded' : '#444444')};
+  padding: 10px 10px 10px 0;
 `;
 const MenuContent = styled.div`
   display: flex;
   flex-grow: 1;
-  justify-content: space-between;
+  //justify-content: space-between;
   flex-direction: column;
+  padding: 20px 30px 0;
 `;
-const StyledLink = styled(Link)`
+const PicOutline = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 25px;
+  background: white;
+  margin-right: 10px;
+`;
+const MenuItemChild = styled(Link)`
   display: block;
-  font-size: 20px;
-  height: 45px;
-  line-height: 45px;
-  color: #e1e1e1;
-  padding-left: 30px;
-  &:hover,
-  &:active {
-    background: rgba(255, 255, 255, 0.2);
-    color: #e1e1e1;
-  }
-  > img {
-    height: 20px;
-    margin-right: 20px;
-    margin-top: 13px;
-    margin-bottom: -3px;
-  }
+  padding: 5px 0 5px 40px;
+  font-size: 14px;
+  font-weight: ${({ active }) => (active ? '500' : '400')};
+  color: ${({ active }) => (active ? '#656ded' : '#444444')};
 `;
-const Logo = styled(Link)`
-  display: block;
-  font-weight: 700;
-  color: #9fc7ff;
-  font-size: 24px;
-  padding-left: 25px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #404854;
-  &:hover {
-    color: #9fc7ff;
-  }
+const ChildContainer = styled.ul`
+  margin: 0;
+  padding: 0;
+  max-height: ${({ showChildren }) => (showChildren ? '300px' : '0')};
+  transition: ${({ showChildren }) =>
+    showChildren
+      ? 'all 0.3s cubic-bezier(1,0,1,0)'
+      : 'all 0.3s cubic-bezier(0,1,0,1)'};
+  overflow: hidden;
 `;
-const HomeLink = styled(Link)`
-  display: block;
-  padding: 20px 25px;
-  font-size: 24px;
-  > img {
-    height: 24px;
-    margin-right: 9px;
-  }
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-`;
-const LogoSpan = styled.span`
-  color: white;
-  font-weight: 600;
-  padding-left: 10px;
+const Spacing = styled.div`
+  height: 15px;
 `;
 
-const SideMenu = ({ open, setOpen, lockedRoutes }) => {
-  const { user } = React.useContext(authContext);
+const ProfileDropdown = ({ user, onClose, setCreateModal }) => {
+  const menuRef = useRef();
+  const { addToast } = useToasts();
+
+  const handleDropdownClick = e => {
+    // if (!e.composedPath().includes(menuRef.current)) {
+    //   // outside click
+    //   return onClose();
+    // }
+    setTimeout(onClose, 10);
+  };
+
+  const handleAccountChange = async id => {
+    const response = await switchArtist(id);
+
+    if (response.error) {
+      return addToast(response.error.message, { appearance: 'error' });
+    }
+    // else assume success and reload
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    // add when mounted
+    window.addEventListener('mousedown', handleDropdownClick);
+    // return function to be called when unmounted
+    return () => {
+      window.removeEventListener('mousedown', handleDropdownClick);
+    };
+  }, []);
+
+  return (
+    <AccountDropdown ref={menuRef}>
+      <ProfileSection>
+        <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
+        <ArtistName>{user.name}</ArtistName>
+      </ProfileSection>
+      {user.accounts.map((account, i) => (
+        <ProfileSection key={i} onClick={() => handleAccountChange(account.id)}>
+          <ProfilePic
+            img={account.img ? account.img : '/default-user-256.png'}
+          />
+          <ArtistName>{account.name}</ArtistName>
+        </ProfileSection>
+      ))}
+      <ProfileSection onClick={() => setCreateModal(true)}>
+        <PicOutline>
+          <AddButton src='/assets/add-darkgrey-round.png' />
+        </PicOutline>
+        <ArtistName>New Artist</ArtistName>
+      </ProfileSection>
+    </AccountDropdown>
+  );
+};
+
+const menu = [
+  {
+    name: 'Home',
+    route: '/home',
+    icon: menuIcons.HomeIcon
+  },
+  {
+    name: 'Profile',
+    route: '/profile',
+    icon: menuIcons.ProfileIcon
+  },
+  {
+    name: 'Releases',
+    route: '/releases',
+    icon: menuIcons.ReleaseIcon
+  },
+  // {
+  //   name: 'Followers',
+  //   route: '/followers',
+  //   icon: menuIcons.FollowerIcon
+  // },
+  {
+    name: 'Guides',
+    route: '/guides',
+    icon: menuIcons.GuidesIcon
+  },
+  // {
+  //   name: 'Roadmap',
+  //   route: '/roadmap',
+  //   icon: menuIcons.RoadmapIcon
+  // },
+  {
+    name: 'Legal & Privacy',
+    route: '/legal',
+    icon: menuIcons.PolicyIcon,
+    children: [
+      {
+        name: 'Terms of Service',
+        route: '/terms-of-service'
+      },
+      {
+        name: 'Privacy Policy',
+        route: '/privacy-policy'
+      }
+    ]
+  },
+  {
+    name: 'Contact Us',
+    route: '/help',
+    icon: menuIcons.HelpIcon
+  },
+  {
+    name: 'Settings',
+    route: '/settings',
+    icon: menuIcons.SettingsIcon,
+    children: [
+      {
+        name: 'Link Accounts',
+        route: '/accounts'
+      },
+      {
+        name: 'Plans & Billing',
+        route: '/billing'
+      }
+    ]
+  }
+];
+
+const MenuItemComponent = ({ route, name, icon, children }) => {
+  const [showChildren, setShowChildren] = useState(false);
+  const location = useLocation();
+
+  let active = location.pathname === route;
+  let childActive = false;
+  if (children) {
+    children.forEach(child => {
+      if (child.route === location.pathname) {
+        childActive = child.route;
+        showChildren || setShowChildren(true);
+      }
+    });
+  }
+
+  const handleClick = e => {
+    e.preventDefault();
+    setShowChildren(!showChildren);
+  };
+
+  return (
+    <div>
+      <MenuItem to={route} active={active} onClick={children && handleClick}>
+        {icon({ active })}
+        {name}
+      </MenuItem>
+      {children && (
+        <ChildContainer showChildren={showChildren}>
+          {children.map(({ route, name }, j) => (
+            <MenuItemChild key={j} to={route} active={childActive === route}>
+              {name}
+            </MenuItemChild>
+          ))}
+        </ChildContainer>
+      )}
+    </div>
+  );
+};
+
+const SideMenu = ({ lockedRoutes }) => {
+  const { user } = useAuth();
+  const [dropdown, setDropdown] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
+  const location = useLocation();
+  const { addToast } = useToasts();
 
   if (!user || user.error) {
     return null;
   }
-
-  const fetchUserDate = () => {
-    const createdAt = new Date(user.createdAt);
-    const month = createdAt.toLocaleString('default', {
-      month: 'short'
-    });
-    const year = createdAt.toLocaleString('default', { year: 'numeric' });
-    return month + '. ' + year;
-  };
 
   const handleLogout = async () => {
     const response = await logUserOut();
@@ -142,24 +355,96 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
     window.location.replace('/');
   };
 
-  const path = window.location.pathname;
+  const path = location.pathname;
   if (window.innerWidth < 1024 || lockedRoutes.includes(path)) return null;
 
+  const ModalTitle = styled.h1`
+    font-size: 24px;
+    font-weight: 600;
+    color: #444444;
+  `;
+
+  const handleSubmit = async ({ name }, { setSubmitting }) => {
+    setSubmitting(true);
+
+    const parsed = name.trim();
+
+    const artist = await createNewArtist(parsed);
+    if (artist.error) {
+      addToast(artist.error.message, { appearance: 'error' });
+      return setSubmitting(false);
+    }
+    console.log(artist);
+    //success, reload page with new cookie
+    window.location.reload();
+  };
+
+  const CreateArtistModal = ({ isOpen, onClose }) => (
+    <Modal style={modalStyles} isOpen={isOpen} onRequestClose={onClose}>
+      <ModalContainer>
+        <ModalTitle>Create New Artist</ModalTitle>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
+          {props => (
+            <form onSubmit={props.handleSubmit}>
+              <InputSection
+                {...props}
+                name='name'
+                label='What do your fans call you?'
+              />
+              <Spacing />
+              <Spacing />
+              <Button disabled={props.isSubmitting} type='submit' square>
+                {props.isSubmitting ? 'Creating...' : 'Create'}
+              </Button>
+              <Spacing />
+              <Button type='button' alternate square onClick={() => onClose()}>
+                Cancel
+              </Button>
+            </form>
+          )}
+        </Formik>
+      </ModalContainer>
+    </Modal>
+  );
+  console.log(user.accounts);
+
   return (
-    <MenuContainer open={open}>
-      <MenuHeader>
+    <>
+      <CreateArtistModal
+        isOpen={createModal}
+        onClose={() => setCreateModal(false)}
+      />
+      <MenuPlaceholder />
+      <MenuContainer>
+        <ProfileSection
+          onClick={() => {
+            setDropdown(true);
+          }}
+        >
+          {dropdown && (
+            <ProfileDropdown
+              user={user}
+              onClose={() => setDropdown(false)}
+              setCreateModal={setCreateModal}
+            />
+          )}
+          <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
+          <ArtistName>{user.name ? user.name : ''}</ArtistName>
+          <DownArrow src='/assets/down-arrow-grey.png' />
+        </ProfileSection>
+        <MenuContent>
+          {menu.map((props, i) => (
+            <MenuItemComponent {...props} key={i} />
+          ))}
+        </MenuContent>
+        {/* <MenuHeader>
         <Logo to='/'>
           <LogoSpan>Genie</LogoSpan>
         </Logo>
-        <ProfileSection>
-          <ProfilePic img={user.img ? user.img : '/default-user-256.png'} />
-          <div>
-            <ArtistName>{user.name ? user.name : ''}</ArtistName>
-            <UserDate>
-              {user.createdAt ? `Artist since ${fetchUserDate()}` : ''}
-            </UserDate>
-          </div>
-        </ProfileSection>
         <HomeLink to='/home'>
           <img src='/dashboard-icon.png' alt='' />
           Dashboard
@@ -167,9 +452,9 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
       </MenuHeader>
       <MenuContent>
         <div>
-          {/* <StyledLink to='/dashboard' onClick={() => props.setOpen()}>
+          <StyledLink to='/dashboard' onClick={() => props.setOpen()}>
             Dashboard
-          </StyledLink> */}
+          </StyledLink>
           <StyledLink to='/profile'>
             <img src='/profile-icon.png' alt='' />
             Profile
@@ -186,9 +471,9 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
             <img src='/assets/help-icon-grey.png' alt='' />
             Contact Us
           </StyledLink>
-          {/* <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
+          <StyledLink to='/myfollowers' onClick={() => props.setOpen()}>
             Followers
-          </StyledLink> */}
+          </StyledLink>
         </div>
         <div
           style={{
@@ -198,13 +483,14 @@ const SideMenu = ({ open, setOpen, lockedRoutes }) => {
         >
           {/* <StyledLink to='/account' onClick={() => props.setOpen()}>
             Account Settings
-          </StyledLink> */}
+          </StyledLink>
           <HomeLink to='#' onClick={handleLogout}>
             Log Out
           </HomeLink>
         </div>
-      </MenuContent>
-    </MenuContainer>
+      </MenuContent> */}
+      </MenuContainer>
+    </>
   );
 };
 

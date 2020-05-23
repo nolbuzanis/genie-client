@@ -53,9 +53,6 @@ const validationSchema = Yup.object().shape({
   bio: Yup.string()
     .trim()
     .required('Bio is required.'),
-  uri: Yup.string()
-    .trim()
-    .required('URI is required.'),
   instagram: Yup.string()
     .trim()
     .matches(urlRegex, 'Must be a valid URL.'),
@@ -121,7 +118,6 @@ const Profile = () => {
   const initialValues = {
     name: user.name,
     bio: user.bio,
-    uri: user.uri,
     instagram: user.instagram,
     facebook: user.facebook,
     twitter: user.twitter,
@@ -159,7 +155,7 @@ const Profile = () => {
               type='file'
               name='img'
               id='img'
-            ></FileInput>
+            />
             <ChangePhotoButton
               as='label'
               htmlFor='img'
@@ -168,44 +164,33 @@ const Profile = () => {
             >
               {uploading ? 'Uploading...' : 'Change Photo'}
             </ChangePhotoButton>
-            <InputSection {...props} name='name' label='Name'></InputSection>
-            <InputSection
-              {...props}
-              name='bio'
-              label='Bio'
-              type='textarea'
-            ></InputSection>
-            <InputSection
-              {...props}
-              name='uri'
-              label='Spotify URI'
-            ></InputSection>
-            {/* <ChangeUriLink to='#'>Need to change your spotify URI?</ChangeUriLink> */}
+            <InputSection {...props} name='name' label='Name' />
+            <InputSection {...props} name='bio' label='Bio' type='textarea' />
             <SubHeader>Social Media</SubHeader>
             <InputSection
               {...props}
               name='instagram'
               label='Instagram'
               placeholder='Optional'
-            ></InputSection>
+            />
             <InputSection
               {...props}
               name='facebook'
               label='Facebook'
               placeholder='Optional'
-            ></InputSection>
+            />
             <InputSection
               {...props}
               name='twitter'
               label='Twitter'
               placeholder='Optional'
-            ></InputSection>
+            />
             <InputSection
               {...props}
               name='website'
               label='Website'
               placeholder='Optional'
-            ></InputSection>
+            />
             <ButtonWrapper>
               <Button type='submit' disabled={!(props.isValid && props.dirty)}>
                 {props.isSubmitting ? 'Saving...' : 'Save'}

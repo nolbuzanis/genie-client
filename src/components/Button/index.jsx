@@ -24,9 +24,10 @@ const Button = styled.button`
     props.small ? (props.alternate ? '28px' : '30px') : '44px'};
   text-align: center;
   font-size: ${props => (props.small ? '13px' : '18px')};
-  border-radius: 22px;
+  border-radius: ${props => (props.square ? '10px' : '22px')};
   font-weight: 600;
-  box-shadow: ${props => !props.alternate && !props.disabled && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
+  box-shadow: ${props =>
+    !props.alternate && !props.disabled && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
 `;
 
 export default props => <Button {...props}>{props.children}</Button>;

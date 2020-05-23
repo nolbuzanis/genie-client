@@ -392,3 +392,33 @@ export const fetchArticle = async id => {
     return { error };
   }
 };
+
+export const createNewArtist = async name => {
+  const bodyData = JSON.stringify({ name });
+  try {
+    const { data } = await axios.post(
+      `${SERVER_URL}/user/artist/create`,
+      bodyData,
+      axiosConfig
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
+
+export const switchArtist = async id => {
+  const bodyData = JSON.stringify({ artistId: id });
+  try {
+    const { data } = await axios.post(
+      `${SERVER_URL}/user/artist`,
+      bodyData,
+      axiosConfig
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error };
+  }
+};
