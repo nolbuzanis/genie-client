@@ -14,7 +14,7 @@ const modalStyles = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: '100',
-    background: 'rgba(255, 255, 255, 0.7)'
+    background: 'rgba(255, 255, 255, 0.7)',
   },
   content: {
     position: 'static',
@@ -22,45 +22,55 @@ const modalStyles = {
     justifyContent: 'center',
     padding: '10px',
     border: 'none',
-    background: 'none'
-  }
+    background: 'none',
+  },
 };
 Modal.setAppElement('body');
 
 const ModalContainer = styled.div`
   background: white;
   width: 340px;
-  padding: 25px 15px;
-  border-radius: 30px;
+  padding: 30px 15px;
+  border-radius: 10px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   text-align: center;
 `;
 const Logo = styled.h1`
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 600;
   color: #656ded;
 `;
 const SpotifyImg = styled.img`
   width: 20px;
   height: 20px;
-  margin-left: 5px;
+  margin-left: 10px;
 `;
 const SpotifyButton = styled(Button)`
   background: #1db954;
   font-weight: 600;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 22px;
-`;
-const AppleButton = styled(Button)`
-  font-size: 16px;
-  font-weight: 600;
-  background: black;
   margin-top: 15px;
-  //opacity: 0.5;
 `;
+const DeezerButton = styled(SpotifyButton)`
+  color: black;
+  background: #ffffff;
+`;
+const DeezerImg = styled.img`
+  width: 32.5px;
+  height: 18.1px;
+  margin-left: 10px;
+`;
+// const AppleButton = styled(Button)`
+//   font-size: 16px;
+//   font-weight: 600;
+//   background: black;
+//   margin-top: 15px;
+//   //opacity: 0.5;
+// `;
 const ToggleContainer = styled.label`
   display: flex;
   margin-top: 24px;
@@ -84,7 +94,7 @@ const BoldText = styled.a`
   font-weight: 700;
   cursor: pointer;
   color: inherit;
-  pointer-events: ${props => props.previewMode && 'none'};
+  pointer-events: ${(props) => props.previewMode && 'none'};
 `;
 
 const deezerUrl = `${SERVER_URL}/follower/deezer-login`,
@@ -99,13 +109,13 @@ const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
   const { addToast } = useToasts();
   console.log('artist', artist);
 
-  const handleFollow = async follower => {
+  const handleFollow = async (follower) => {
     //follow artist
     const response = await followArtist(artist, checked);
     // setSubmitting(false);
     if (response.error) {
       return addToast('Error following artist: ' + response.error.message, {
-        appearance: 'error'
+        appearance: 'error',
       });
     }
 
@@ -114,18 +124,18 @@ const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
       : (follower.following = [artist.id]);
 
     addToast('Artist followed!', {
-      appearance: 'success'
+      appearance: 'success',
     });
     setAuth({ follower });
     onClose();
   };
 
   React.useEffect(() => {
-    const onlyHandleOAuth = async e => {
+    const onlyHandleOAuth = async (e) => {
+      console.log(e.data);
       if (e.data && (e.data.deezerId || e.data.spotifyId)) {
         //close popup
         popup && (await popup.close());
-
         handleFollow(e.data);
       }
     };
@@ -161,17 +171,18 @@ const FollowModal = ({ isOpen, onClose, previewMode, artist }) => {
   return (
     <Modal style={modalStyles} isOpen={isOpen} onRequestClose={onClose}>
       <ModalContainer>
-        <Logo>Genie</Logo>
+        <Logo>Connect with</Logo>
         {artist.uri && (
           <SpotifyButton onClick={handleSpotifyLogin}>
-            Log in with Spotify
-            <SpotifyImg src='/assets/spotify-logo-white.png' alt='' />
+            Spotify
+            <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
           </SpotifyButton>
         )}
         {artist.deezerId && (
-          <AppleButton onClick={handleDeezerLogin}>
-            Log in with Deezer
-          </AppleButton>
+          <DeezerButton onClick={handleDeezerLogin}>
+            Deezer
+            <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
+          </DeezerButton>
         )}
         <ToggleContainer>
           <Toggle

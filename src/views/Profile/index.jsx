@@ -47,24 +47,12 @@ const SubHeader = styled(Header)`
 
 const urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/;
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .trim()
-    .required('Name is required.'),
-  bio: Yup.string()
-    .trim()
-    .required('Bio is required.'),
-  instagram: Yup.string()
-    .trim()
-    .matches(urlRegex, 'Must be a valid URL.'),
-  facebook: Yup.string()
-    .trim()
-    .matches(urlRegex, 'Must be a valid URL.'),
-  twitter: Yup.string()
-    .trim()
-    .matches(urlRegex, 'Must be a valid URL.'),
-  website: Yup.string()
-    .trim()
-    .matches(urlRegex, 'Must be a valid URL.')
+  name: Yup.string().trim().required('Name is required.'),
+  bio: Yup.string().trim().required('Bio is required.'),
+  instagram: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
+  facebook: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
+  twitter: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
+  website: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
 });
 
 // const ChangeUriLink = styled(Link)`
@@ -94,7 +82,7 @@ const Profile = () => {
   const [uploading, setUploading] = React.useState(false);
   const { addToast } = useToasts();
 
-  const handlePhotoSubmit = async e => {
+  const handlePhotoSubmit = async (e) => {
     const photo = e.target.files[0];
     setUploading(true);
     console.log(photo);
@@ -121,7 +109,7 @@ const Profile = () => {
     instagram: user.instagram,
     facebook: user.facebook,
     twitter: user.twitter,
-    website: user.website
+    website: user.website,
   };
 
   const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -146,11 +134,11 @@ const Profile = () => {
         validationSchema={validationSchema}
         onSubmit={handleFormSubmit}
       >
-        {props => (
+        {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <ArtistPhoto src={user.img || '/default-user-256.png'} />
             <FileInput
-              onChange={e => handlePhotoSubmit(e)}
+              onChange={(e) => handlePhotoSubmit(e)}
               className='artist-file-input'
               type='file'
               name='img'
@@ -192,8 +180,12 @@ const Profile = () => {
               placeholder='Optional'
             />
             <ButtonWrapper>
-              <Button type='submit' disabled={!(props.isValid && props.dirty)}>
-                {props.isSubmitting ? 'Saving...' : 'Save'}
+              <Button
+                type='submit'
+                disabled={!(props.isValid && props.dirty)}
+                isLoading={props.isSubmitting}
+              >
+                {props.isSubmitting ? 'Saving' : 'Save'}
               </Button>
             </ButtonWrapper>
           </Form>

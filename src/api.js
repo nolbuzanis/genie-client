@@ -1,20 +1,20 @@
 import axios from 'axios';
 
-export let SERVER_URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
-    : 'https://purplegenie.ca/api';
-//export let SERVER_URL = 'https://purplegenie.ca/api';
+// export let SERVER_URL =
+//   process.env.NODE_ENV === 'development'
+//     ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
+//     : 'https://purplegenie.ca/api';
+export let SERVER_URL = 'https://purplegenie.ca/api';
 
 const axiosConfig = {
   withCredentials: true,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 };
 
-export const submitSpotifyURI = async artist => {
+export const submitSpotifyURI = async (artist) => {
   const data = JSON.stringify({ artist });
   try {
     const res = await axios.post(
@@ -29,7 +29,7 @@ export const submitSpotifyURI = async artist => {
   }
 };
 
-export const getSpotifyArtistDetails = async id => {
+export const getSpotifyArtistDetails = async (id) => {
   //const data = JSON.stringify({ artistId });
   try {
     const res = await axios.get(
@@ -43,7 +43,7 @@ export const getSpotifyArtistDetails = async id => {
   }
 };
 
-export const submitDeezerArtist = async artist => {
+export const submitDeezerArtist = async (artist) => {
   const data = JSON.stringify({ artist });
   try {
     const res = await axios.post(
@@ -58,7 +58,7 @@ export const submitDeezerArtist = async artist => {
   }
 };
 
-export const getDeezerArtistDetails = async id => {
+export const getDeezerArtistDetails = async (id) => {
   try {
     const res = await axios.get(
       `${SERVER_URL}/artist/deezer-id/${id}`,
@@ -92,7 +92,7 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const userLogin = async formValues => {
+export const userLogin = async (formValues) => {
   try {
     const res = await axios.post(
       `${SERVER_URL}/user/login`,
@@ -107,7 +107,7 @@ export const userLogin = async formValues => {
   }
 };
 
-export const userSignup = async formValues => {
+export const userSignup = async (formValues) => {
   try {
     const res = await axios.post(
       `${SERVER_URL}/user/signup`,
@@ -122,7 +122,7 @@ export const userSignup = async formValues => {
   }
 };
 
-export const resetPassword = async email => {
+export const resetPassword = async (email) => {
   const data = JSON.stringify({ email });
 
   // Call reset password api route
@@ -140,7 +140,7 @@ export const resetPassword = async email => {
   }
 };
 
-export const uploadUserPhoto = async file => {
+export const uploadUserPhoto = async (file) => {
   console.log(file);
   try {
     let data = new FormData();
@@ -149,8 +149,8 @@ export const uploadUserPhoto = async file => {
       withCredentials: true,
       headers: {
         accept: 'application/json',
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     };
     const response = await axios.post(
       `${SERVER_URL}/artist/photo`,
@@ -165,7 +165,7 @@ export const uploadUserPhoto = async file => {
   }
 };
 
-export const updateUserProfile = async formValues => {
+export const updateUserProfile = async (formValues) => {
   try {
     const res = await axios.post(
       `${SERVER_URL}/artist/update`,
@@ -180,7 +180,7 @@ export const updateUserProfile = async formValues => {
   }
 };
 
-export const getArtistById = async id => {
+export const getArtistById = async (id) => {
   try {
     const res = await axios.get(`${SERVER_URL}/artist/${id}`);
 
@@ -277,7 +277,7 @@ export const fetchFollowerCountData = async () => {
 export const createPremiumSubscription = async (paymentMethod, planType) => {
   const bodyData = JSON.stringify({
     payment_method: paymentMethod.id,
-    planType
+    planType,
   });
   try {
     const { data } = await axios.post(
@@ -335,9 +335,9 @@ export const fetchPaymentInfo = async () => {
   }
 };
 
-export const updatePaymentInfo = async paymentMethod => {
+export const updatePaymentInfo = async (paymentMethod) => {
   const bodyData = JSON.stringify({
-    payment_method: paymentMethod.id
+    payment_method: paymentMethod.id,
   });
   try {
     const { data } = await axios.post(
@@ -355,7 +355,7 @@ export const updatePaymentInfo = async paymentMethod => {
 export const sendHelpMessage = async ({ subject, description }) => {
   const bodyData = JSON.stringify({
     subject,
-    description
+    description,
   });
   try {
     const { data } = await axios.post(
@@ -380,7 +380,7 @@ export const fetchAllArticles = async () => {
   }
 };
 
-export const fetchArticle = async id => {
+export const fetchArticle = async (id) => {
   try {
     const { data } = await axios.get(
       `${SERVER_URL}/articles/${id}`,
@@ -393,7 +393,7 @@ export const fetchArticle = async id => {
   }
 };
 
-export const createNewArtist = async name => {
+export const createNewArtist = async (name) => {
   const bodyData = JSON.stringify({ name });
   try {
     const { data } = await axios.post(
@@ -408,7 +408,7 @@ export const createNewArtist = async name => {
   }
 };
 
-export const switchArtist = async id => {
+export const switchArtist = async (id) => {
   const bodyData = JSON.stringify({ artistId: id });
   try {
     const { data } = await axios.post(

@@ -13,7 +13,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   top: 0;
-  background: ${props => (props.landing ? 'transparent' : 'white')};
+  background: ${(props) => (props.landing ? 'transparent' : 'white')};
   margin: 0;
   padding: 20px calc(5px + 8vw);
 `;
@@ -24,9 +24,9 @@ export const Logo = styled(Link)`
   font-weight: 700;
   font-size: 36px;
   line-height: 80px;
-  color: ${props => (props.landing ? '#ffffff' : '#656ded')};
+  color: ${(props) => (props.landing ? '#ffffff' : '#656ded')};
   &:hover {
-    color: ${props => (props.landing ? '#ffffff' : '#656ded')};
+    color: ${(props) => (props.landing ? '#ffffff' : '#656ded')};
   }
 `;
 
@@ -34,19 +34,19 @@ const StyledLink = styled(Link)`
   display: inline-block;
   line-height: 44px;
   font-size: 20px;
-  border: ${props => props.landing || 'solid 1px #656ded'};
+  border: ${(props) => props.landing || 'solid 1px #656ded'};
   width: 120px;
   height: 44px;
   font-weight: 600;
   border-radius: 22px;
   text-align: center;
-  color: ${props => (props.landing ? '#ffffff' : '#656ded')};
+  color: ${(props) => (props.landing ? '#ffffff' : '#656ded')};
   &:hover {
-    color: ${props => (props.landing ? '#ffffff' : '#656ded')};
+    color: ${(props) => (props.landing ? '#ffffff' : '#656ded')};
   }
 `;
 const SignupLink = styled(StyledLink)`
-  border: ${props =>
+  border: ${(props) =>
     props.landing ? 'solid 1px #ffffff' : 'solid 1px #656ded'};
 `;
 

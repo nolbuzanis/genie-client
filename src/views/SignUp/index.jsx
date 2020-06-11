@@ -26,7 +26,7 @@ const initialValues = {
   email: '',
   phone: '',
   name: '',
-  password: ''
+  password: '',
 };
 
 const BodyContainer = styled.div`
@@ -87,12 +87,10 @@ const validationSchema = Yup.object({
     .trim()
     .matches(phoneRegEx, 'Please enter a valid phone number.')
     .required('Please enter a valid phone number.'),
-  name: Yup.string()
-    .trim()
-    .required('Please enter a valid name.'),
+  name: Yup.string().trim().required('Please enter a valid name.'),
   password: Yup.string()
     .min(8, 'Password must be at least 8 characters long.')
-    .required('Password is required.')
+    .required('Password is required.'),
 });
 
 const Signup = () => {
@@ -123,7 +121,7 @@ const Signup = () => {
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
-            {props => (
+            {(props) => (
               <Form onSubmit={props.handleSubmit}>
                 <Heading>Sign Up</Heading>
                 <InputSection
@@ -164,8 +162,12 @@ const Signup = () => {
                   and <BoldLink to='/privacy-policy'>Privacy Policy.</BoldLink>
                 </TermsAndConditions>
                 <ButtonWraper>
-                  <Button disabled={props.isSubmitting} type='submit'>
-                    {props.isSubmitting ? 'Submitting...' : 'Sign Up'}
+                  <Button
+                    disabled={props.isSubmitting}
+                    type='submit'
+                    isLoading={props.isSubmitting}
+                  >
+                    {props.isSubmitting ? 'Submitting' : 'Sign Up'}
                   </Button>
                   <Extra>and recieve 1000 free presaves</Extra>
                 </ButtonWraper>
