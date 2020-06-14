@@ -488,7 +488,6 @@ const PublicLink = () => {
     const [checked, setChecked] = useState(true);
     const { addToast } = useToasts();
     const [isSubscribing, setSubscribing] = useState(false);
-    const [subscribed, setSubscribed] = useState(false);
 
     const handleFollow = async (follower) => {
       //follow artist
@@ -570,8 +569,6 @@ const PublicLink = () => {
       addToast('Sucessfully subscribed!', {
         appearance: 'success',
       });
-      console.log('setSubscribed');
-      setSubscribed(true);
       return setAuth({ follower });
     };
 
