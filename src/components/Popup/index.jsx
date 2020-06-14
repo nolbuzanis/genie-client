@@ -12,7 +12,7 @@ const modalStyles = {
     alignItems: 'flex-end',
     justifyContent: 'center',
     zIndex: '100',
-    background: 'rgba(255, 255, 255, 0)'
+    background: 'rgba(255, 255, 255, 0)',
   },
   content: {
     position: 'static',
@@ -22,8 +22,8 @@ const modalStyles = {
     border: 'none',
     background: 'none',
     width: '100%',
-    maxWidth: '400px'
-  }
+    maxWidth: '400px',
+  },
 };
 Modal.setAppElement('body');
 
@@ -85,7 +85,7 @@ const FadedText = styled.p`
   color: white;
 `;
 const StyledButton = styled(Button)`
-  width: 130px;
+  width: 160px;
   margin: 0 auto;
   border: none;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
@@ -118,10 +118,10 @@ const Popup = ({ open, setOpen, type }) => {
     <>
       <MainOffering>
         You need to connect at least one music account before you can create a
-        release.
+        presave.
       </MainOffering>
       <StyledButton alternate onClick={handleAccountClick}>
-        Connect Now
+        Connect
       </StyledButton>
       <CloseButton onClick={() => setOpen(false)}>Not now</CloseButton>
     </>

@@ -12,18 +12,18 @@ import Signup from './views/SignUp';
 //import Landing from './views/Landing';
 import PrivateRoute from './components/PrivateRoute';
 import AuthRoute from './components/AuthRoute';
-import Artist from './views/Artist';
+//import Artist from './views/Artist';
 import Releases from './views/Releases';
 //import Introduction from './views/Introduction';
 import ResetPassword from './views/ResetPassword';
-import NewRelease from './views/NewRelease';
+//import NewRelease from './views/NewRelease';
 import GetStarted from './views/GetStarted';
 import ArtistURIExplained from './views/ArtistURIExplained';
 import DeezerExplained from './views/DeezerExplained';
 import ExtendedMenu from './views/ExtendedMenu';
 import Home from './views/Home';
 import ScrollToTop from './components/ScrollToTop';
-import Profile from './views/Profile';
+//import Profile from './views/Profile';
 import PrivacyPolicy from './views/PrivacyPolicy';
 import TermsOfService from './views/TermsOfService';
 import Pricing from './views/Pricing';
@@ -35,26 +35,29 @@ import LandingTwo from './views/Landing/index2';
 import Guides from './views/Guides';
 import Article from './views/Article';
 import LinkAccounts from './views/LinkAccounts';
+import Link from './views/Link';
+import EditLink from './views/EditLink';
+import CreatePresave from './views/CreatePresave';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
   { title: 'Link Accounts', route: '/accounts' },
-  { title: 'Plans & Billing', route: '/billing' }
+  { title: 'Plans & Billing', route: '/billing' },
   //{ title: "Change Password", route: '/settings' }
 ];
 const legalMenuItems = [
   { title: 'Terms of Service', route: '/terms-of-service' },
-  { title: 'Privacy Policy', route: '/privacy-policy' }
+  { title: 'Privacy Policy', route: '/privacy-policy' },
 ];
 
 const App = () => {
   const [auth, setAuth] = React.useState({
     user: undefined,
-    follower: undefined
+    follower: undefined,
   });
   const history = useHistory();
 
-  history.listen(location => {
+  history.listen((location) => {
     TrackPixelPageView();
     ReactGA.set({ page: location.pathname }); // Update the user's current page
     ReactGA.pageview(location.pathname); // Record a pageview for the given page
@@ -67,7 +70,7 @@ const App = () => {
         <Switch>
           <Route path='/' exact render={() => <LandingTwo />} />
           {/* <Route path='/landing' exact render={() => <LandingTwo />} /> */}
-          <Route path='/artist/:id' exact render={() => <Artist />} />
+          <Route path='/artist/:id' exact render={() => <Link />} />
           <Route path='/guides' exact component={Guides} />
           <Route path='/article/:id' exact component={Article} />
           <Route
@@ -90,8 +93,8 @@ const App = () => {
           />
           <PrivateRoute path='/home' exact component={Home} />
           <PrivateRoute path='/releases' exact component={Releases} />
-          <PrivateRoute path='/releases/new' exact component={NewRelease} />
-          <PrivateRoute path='/profile' exact component={Profile} />
+          <PrivateRoute path='/releases/new' exact component={CreatePresave} />
+          <PrivateRoute path='/profile' exact component={EditLink} />
           {/* <PrivateRoute path='/introduction' exact component={Introduction} /> */}
           <PrivateRoute
             path='/find-artist-uri'

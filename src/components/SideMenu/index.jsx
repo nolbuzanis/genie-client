@@ -5,7 +5,7 @@ import { useAuth } from '../../Context/authContext';
 import { createNewArtist, switchArtist } from '../../api';
 import { withRouter } from 'react-router-dom';
 import * as menuIcons from './menuIcons';
-import Modal from 'react-modal';
+import Modal from '../Modal';
 import InputSection from '../../components/InputSection';
 import Button from '../../components/Button';
 import { Formik } from 'formik';
@@ -13,41 +13,12 @@ import * as Yup from 'yup';
 import { useToasts } from 'react-toast-notifications';
 
 const initialValues = {
-  name: ''
+  name: '',
 };
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .trim()
-    .required('Please enter a valid name.')
+  name: Yup.string().trim().required('Please enter a valid name.'),
 });
-
-const modalStyles = {
-  overlay: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: '100',
-    background: 'rgba(0, 0, 0, 0.1)'
-  },
-  content: {
-    position: 'static',
-    display: 'flex',
-    justifyContent: 'center',
-    padding: '10px',
-    border: 'none',
-    background: 'none'
-  }
-};
-Modal.setAppElement('body');
-
-const ModalContainer = styled.div`
-  background: white;
-  width: 450px;
-  padding: 25px;
-  border-radius: 5px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-`;
 
 const MenuContainer = styled.div`
   display: flex;
@@ -56,7 +27,7 @@ const MenuContainer = styled.div`
   z-index: 10;
   position: fixed;
   top: 0;
-  //left: ${props => (props.open ? '0' : '-270px')};
+  //left: ${(props) => (props.open ? '0' : '-270px')};
   left: 0;
   bottom: 0;
   height: 100%;
@@ -82,7 +53,7 @@ const ProfileSection = styled.div`
   position: relative;
 `;
 const ProfilePic = styled.div`
-  background: url(${props => props.img}) center center no-repeat;
+  background: url(${(props) => props.img}) center center no-repeat;
   background-size: cover;
   background-color: white;
   width: 40px;
@@ -176,7 +147,7 @@ const ProfileDropdown = ({ user, onClose, setCreateModal }) => {
   const menuRef = useRef();
   const { addToast } = useToasts();
 
-  const handleDropdownClick = e => {
+  const handleDropdownClick = (e) => {
     // if (!e.composedPath().includes(menuRef.current)) {
     //   // outside click
     //   return onClose();
@@ -184,7 +155,7 @@ const ProfileDropdown = ({ user, onClose, setCreateModal }) => {
     setTimeout(onClose, 10);
   };
 
-  const handleAccountChange = async id => {
+  const handleAccountChange = async (id) => {
     const response = await switchArtist(id);
 
     if (response.error) {
@@ -232,17 +203,17 @@ const menu = [
   {
     name: 'Home',
     route: '/home',
-    icon: menuIcons.HomeIcon
+    icon: menuIcons.HomeIcon,
   },
   {
-    name: 'Profile',
+    name: 'Your Link',
     route: '/profile',
-    icon: menuIcons.ProfileIcon
+    icon: menuIcons.ProfileIcon,
   },
   {
     name: 'Releases',
     route: '/releases',
-    icon: menuIcons.ReleaseIcon
+    icon: menuIcons.ReleaseIcon,
   },
   // {
   //   name: 'Followers',
@@ -252,7 +223,7 @@ const menu = [
   {
     name: 'Guides',
     route: '/guides',
-    icon: menuIcons.GuidesIcon
+    icon: menuIcons.GuidesIcon,
   },
   // {
   //   name: 'Roadmap',
@@ -266,18 +237,18 @@ const menu = [
     children: [
       {
         name: 'Terms of Service',
-        route: '/terms-of-service'
+        route: '/terms-of-service',
       },
       {
         name: 'Privacy Policy',
-        route: '/privacy-policy'
-      }
-    ]
+        route: '/privacy-policy',
+      },
+    ],
   },
   {
     name: 'Contact Us',
     route: '/help',
-    icon: menuIcons.HelpIcon
+    icon: menuIcons.HelpIcon,
   },
   {
     name: 'Settings',
@@ -285,15 +256,15 @@ const menu = [
     icon: menuIcons.SettingsIcon,
     children: [
       {
-        name: 'Link Accounts',
-        route: '/accounts'
+        name: 'Accounts',
+        route: '/accounts',
       },
       {
         name: 'Plans & Billing',
-        route: '/billing'
-      }
-    ]
-  }
+        route: '/billing',
+      },
+    ],
+  },
 ];
 
 const MenuItemComponent = ({ route, name, icon, children }) => {
@@ -303,7 +274,7 @@ const MenuItemComponent = ({ route, name, icon, children }) => {
   let active = location.pathname === route;
   let childActive = false;
   if (children) {
-    children.forEach(child => {
+    children.forEach((child) => {
       if (child.route === location.pathname) {
         childActive = child.route;
         showChildren || setShowChildren(true);
@@ -311,7 +282,7 @@ const MenuItemComponent = ({ route, name, icon, children }) => {
     });
   }
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     e.preventDefault();
     setShowChildren(!showChildren);
   };
@@ -359,12 +330,6 @@ const SideMenu = ({ lockedRoutes }) => {
   const path = location.pathname;
   if (window.innerWidth < 1024 || lockedRoutes.includes(path)) return null;
 
-  const ModalTitle = styled.h1`
-    font-size: 24px;
-    font-weight: 600;
-    color: #444444;
-  `;
-
   const handleSubmit = async ({ name }, { setSubmitting }) => {
     setSubmitting(true);
 
@@ -381,37 +346,33 @@ const SideMenu = ({ lockedRoutes }) => {
   };
 
   const CreateArtistModal = ({ isOpen, onClose }) => (
-    <Modal style={modalStyles} isOpen={isOpen} onRequestClose={onClose}>
-      <ModalContainer>
-        <ModalTitle>Create New Artist</ModalTitle>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          {props => (
-            <form onSubmit={props.handleSubmit}>
-              <InputSection
-                {...props}
-                name='name'
-                label='What do your fans call you?'
-              />
-              <Spacing />
-              <Spacing />
-              <Button disabled={props.isSubmitting} type='submit' square>
-                {props.isSubmitting ? 'Creating...' : 'Create'}
-              </Button>
-              <Spacing />
-              <Button type='button' alternate square onClick={() => onClose()}>
-                Cancel
-              </Button>
-            </form>
-          )}
-        </Formik>
-      </ModalContainer>
+    <Modal isOpen={isOpen} onClose={onClose} title='Create New Artist'>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        {(props) => (
+          <form onSubmit={props.handleSubmit}>
+            <InputSection
+              {...props}
+              name='name'
+              label='What do your fans call you?'
+            />
+            <Spacing />
+            <Spacing />
+            <Button disabled={props.isSubmitting} type='submit' square>
+              {props.isSubmitting ? 'Creating...' : 'Create'}
+            </Button>
+            <Spacing />
+            <Button type='button' alternate square onClick={() => onClose()}>
+              Cancel
+            </Button>
+          </form>
+        )}
+      </Formik>
     </Modal>
   );
-  console.log(user.accounts);
 
   return (
     <>

@@ -12,7 +12,7 @@ import {
   submitSpotifyURI,
   getSpotifyArtistDetails,
   getDeezerArtistDetails,
-  submitDeezerArtist
+  submitDeezerArtist,
 } from '../../api';
 import { useToasts } from 'react-toast-notifications';
 
@@ -61,7 +61,7 @@ const Input = styled.input`
   display: block;
   text-align: center;
   width: 100%;
-  border: 1px solid ${props => (props.error ? '#bd3200' : '#979797')};
+  border: 1px solid ${(props) => (props.error ? '#bd3200' : '#979797')};
   height: 40px
   padding: 5px 10px;
   font-size: 16px;
@@ -112,7 +112,7 @@ const modalStyles = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: '100',
-    background: 'rgba(255, 255, 255, 0.7)'
+    background: 'rgba(255, 255, 255, 0.7)',
   },
   content: {
     position: 'static',
@@ -120,8 +120,8 @@ const modalStyles = {
     justifyContent: 'center',
     padding: '10px',
     border: 'none',
-    background: 'none'
-  }
+    background: 'none',
+  },
 };
 Modal.setAppElement('body');
 
@@ -145,20 +145,16 @@ const Spacing = styled.div`
 `;
 
 const initialValues = {
-  uri: ''
+  uri: '',
 };
 const initialDeezerValues = {
-  deezer: ''
+  deezer: '',
 };
 const deezerValidationSchema = Yup.object().shape({
-  deezer: Yup.string()
-    .trim()
-    .required('Please enter a valid link.')
+  deezer: Yup.string().trim().required('Please enter a valid link.'),
 });
 const validationSchema = Yup.object().shape({
-  uri: Yup.string()
-    .trim()
-    .required('Please enter a valid URI.')
+  uri: Yup.string().trim().required('Please enter a valid URI.'),
 });
 
 const LinkAccounts = () => {
@@ -176,10 +172,7 @@ const LinkAccounts = () => {
   ) => {
     setSubmitting(true);
 
-    const parsed = deezer
-      .trim()
-      .split('?')[0]
-      .split('/');
+    const parsed = deezer.trim().split('?')[0].split('/');
     const code = parsed[parsed.length - 1];
 
     const artist = await getDeezerArtistDetails(code);
@@ -277,7 +270,11 @@ const LinkAccounts = () => {
             <ModalText>Is this you?</ModalText>
             <Pic src={artist.images[0].url} alt='artist-profile-pic' />
             <Name>{artist.name}</Name>
-            <Button onClick={confirmArtist} disabled={confirming}>
+            <Button
+              onClick={confirmArtist}
+              disabled={confirming}
+              isLoading={confirming}
+            >
               {confirming ? 'Confirming' : 'Confirm'}
             </Button>
             <Spacing />
@@ -297,7 +294,7 @@ const LinkAccounts = () => {
               validationSchema={validationSchema}
               onSubmit={handleSpotifySubmit}
             >
-              {props => (
+              {(props) => (
                 <form onSubmit={props.handleSubmit}>
                   <Input
                     name='uri'
@@ -312,7 +309,11 @@ const LinkAccounts = () => {
                     <ErrorMsg>{props.errors['uri']}</ErrorMsg>
                   )}
                   <Spacing />
-                  <Button type='submit' disabled={props.isSubmitting}>
+                  <Button
+                    type='submit'
+                    disabled={props.isSubmitting}
+                    isLoading={props.isSubmitting}
+                  >
                     Continue
                   </Button>
                   <Spacing />
@@ -340,7 +341,11 @@ const LinkAccounts = () => {
               alt='artist-profile-pic'
             />
             <Name>{deezerArtist.name}</Name>
-            <Button onClick={confirmDeezerArtist} disabled={confirming}>
+            <Button
+              onClick={confirmDeezerArtist}
+              disabled={confirming}
+              isLoading={confirming}
+            >
               {confirming ? 'Confirming' : 'Confirm'}
             </Button>
             <Spacing />
@@ -360,7 +365,7 @@ const LinkAccounts = () => {
               validationSchema={deezerValidationSchema}
               onSubmit={handleDeezerSubmit}
             >
-              {props => (
+              {(props) => (
                 <form onSubmit={props.handleSubmit}>
                   <Input
                     name='deezer'
@@ -375,7 +380,11 @@ const LinkAccounts = () => {
                     <ErrorMsg>{props.errors['deezer']}</ErrorMsg>
                   )}
                   <Spacing />
-                  <Button type='submit' disabled={props.isSubmitting}>
+                  <Button
+                    type='submit'
+                    disabled={props.isSubmitting}
+                    isLoading={props.isSubmitting}
+                  >
                     Continue
                   </Button>
                   <Spacing />
@@ -398,7 +407,7 @@ const LinkAccounts = () => {
         onClose={() => setSpotifyModal(false)}
       />
       <DeezerModal isOpen={deezerModal} onClose={() => setDeezerModal(false)} />
-      <PageHeader>Link Accounts</PageHeader>
+      <PageHeader>Accounts</PageHeader>
       <Container>
         <AccountContainer>
           <CenteredDiv>

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// export let SERVER_URL =
-//   process.env.NODE_ENV === 'development'
-//     ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
-//     : 'https://purplegenie.ca/api';
-export let SERVER_URL = 'https://purplegenie.ca/api';
+export let SERVER_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
+    : 'https://purplegenie.ca/api';
+//export let SERVER_URL = 'https://purplegenie.ca/api';
 
 const axiosConfig = {
   withCredentials: true,
@@ -419,6 +419,98 @@ export const switchArtist = async (id) => {
     return data;
   } catch (error) {
     console.error(error);
+    return { error };
+  }
+};
+
+export const getSpotifySongDetails = async (id) => {
+  //const data = JSON.stringify({ artistId });
+  try {
+    const { data } = await axios.get(
+      `${SERVER_URL}/songs/spotify/${id}`,
+      axiosConfig
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const getDeezerSongDetails = async (id) => {
+  //const data = JSON.stringify({ artistId });
+  try {
+    const { data } = await axios.get(
+      `${SERVER_URL}/songs/deezer/${id}`,
+      axiosConfig
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const createPresave = async (
+  { name, spotify, deezer, releaseDate },
+  file
+) => {
+  try {
+    let data = new FormData();
+    data.append('img', file);
+    data.append('name', name);
+    if (spotify) data.append('spotify', spotify);
+    if (deezer) data.append('deezer', deezer);
+    data.append('releaseDate', releaseDate);
+    const config = {
+      withCredentials: true,
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const response = await axios.post(
+      `${SERVER_URL}/songs/presave/create`,
+      data,
+      config
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const presaveTrack = async (artist, mailingList) => {
+  console.log(mailingList);
+  const data = JSON.stringify({ artist, mailingList });
+  try {
+    const response = await axios.post(
+      `${SERVER_URL}/follower/presave`,
+      data,
+      axiosConfig
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const subscribeToArtist = async (artist) => {
+  const data = JSON.stringify({ artist });
+  try {
+    const response = await axios.post(
+      `${SERVER_URL}/follower/subscribe`,
+      data,
+      axiosConfig
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
     return { error };
   }
 };
