@@ -514,3 +514,39 @@ export const subscribeToArtist = async (artist) => {
     return { error };
   }
 };
+
+export const getPresave = async () => {
+  try {
+    const { data } = await axios.get(
+      `${SERVER_URL}/songs/presave`,
+      axiosConfig
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const updatePresave = async (updates) => {
+  try {
+    let formData = new FormData();
+    Object.keys(updates).forEach((key) => formData.append(key, updates[key]));
+    const config = {
+      withCredentials: true,
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const { data } = await axios.post(
+      `${SERVER_URL}/songs/presave/edit`,
+      formData,
+      config
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};

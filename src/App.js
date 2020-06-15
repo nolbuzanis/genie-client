@@ -38,6 +38,7 @@ import LinkAccounts from './views/LinkAccounts';
 import Link from './views/Link';
 import EditLink from './views/EditLink';
 import CreatePresave from './views/CreatePresave';
+import EditPresave from './views/EditPresave';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
@@ -128,6 +129,7 @@ const App = () => {
             exact
             component={UpdatePayment}
           />
+          <PrivateRoute path='/presave/edit' exact component={EditPresave} />
           <PrivateRoute path='/help' exact component={Help} />
           <PrivateRoute path='/accounts' exact component={LinkAccounts} />
           {/* <PrivateRoute path='/follower' exact component={Followers} /> */}

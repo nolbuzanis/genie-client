@@ -270,7 +270,11 @@ const EditLink = () => {
                       {parseDate(user.upcoming.releaseDate)}
                     </ReleaseDate>
                     <SmallButtonWrapper>
-                      <Button small type='button'>
+                      <Button
+                        small
+                        type='button'
+                        onClick={() => history.push('/presave/edit')}
+                      >
                         Edit
                       </Button>
                     </SmallButtonWrapper>
