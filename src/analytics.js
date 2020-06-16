@@ -5,7 +5,8 @@ const production = process.env.REACT_APP_ENV === 'production';
 
 export const initGA = () => {
   if (production) {
-    ReactGA.initialize('UA-104067820-3');
+    //.initialize('UA-104067820-3');
+    ReactGA.initialize('218385872');
   } else {
     ReactGA.initialize('UA-104067820-4');
   }
@@ -15,14 +16,13 @@ export const initFBPixel = () => {
   const facebookPixelID = '232351294764626';
   const FBPoptions = {
     autoConfig: true, // set pixel's autoConfig
-    debug: true // enable logs
+    debug: true, // enable logs
   };
 
   if (production) {
-  ReactPixel.init(facebookPixelID, {}, FBPoptions);
-  console.log('FB Pixel active.');
-}
-  
+    ReactPixel.init(facebookPixelID, {}, FBPoptions);
+    console.log('FB Pixel active.');
+  }
 };
 
 export const TrackPixelEvent = (eventName, data) => {
@@ -34,8 +34,8 @@ export const TrackPixelEvent = (eventName, data) => {
 
 export const TrackPixelPageView = () => {
   if (production) {
-  ReactPixel.pageView();
-  console.log('Pageview!');
+    ReactPixel.pageView();
+    console.log('Pageview!');
   }
 };
 
@@ -54,6 +54,6 @@ export const Event = (category, action, label) => {
   ReactGA.event({
     category: category,
     action: action,
-    label: label
+    label: label,
   });
 };
