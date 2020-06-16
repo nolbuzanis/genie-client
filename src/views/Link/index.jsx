@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Redirect, Link } from 'react-router-dom';
 import {
   getArtistById,
   presaveTrack,
@@ -25,7 +25,7 @@ const duration = 300;
 // };
 
 const defaultStyle = {
-  position: 'absolute',
+  position: 'relative',
   width: '100%',
   padding: '0 30px',
   transition: `all ${duration}ms ease-in-out`,
@@ -34,7 +34,7 @@ const defaultStyle = {
 };
 
 const fadeInoutLeftStyle = {
-  entering: { opacity: 0, left: '0%' },
+  entering: { opacity: 0, left: '-100%' },
   entered: { opacity: 1, left: '0%' },
   exiting: { opacity: 0, left: '-100%' },
   exited: { opacity: 0, left: '-100%' },
@@ -171,7 +171,7 @@ const Background = styled.div`
   //oveflow: hidden;
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: linear-gradient(90deg, #373b44 0%, #4286f4 100%);
   ${(props) =>
     props.img && `background: url(${props.img}) center center no-repeat;`}
@@ -203,6 +203,9 @@ const ArtistName = styled.h1`
   padding-top: 75px;
   font-weight: 600;
   color: white;
+`;
+const Placeholder = styled.div`
+  height: 350px;
 `;
 const Bio = styled.p`
   font-size: 18px;
@@ -297,7 +300,6 @@ const Subtitle = styled.h2`
   font-weight: 500;
   color: #444444;
 `;
-
 const SpotifyButton = styled(Button)`
   background: #1db954;
   font-weight: 600;
@@ -307,6 +309,14 @@ const SpotifyButton = styled(Button)`
   justify-content: center;
   align-items: center;
   margin-top: 15px;
+  height: 44px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+
+  &:hover,
+  &:active {
+    box-shadow: inset 0 0 0 99999px rgba(128, 128, 128, 0.2), 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    }
+  }
 `;
 const DeezerButton = styled(SpotifyButton)`
   color: black;
@@ -315,15 +325,44 @@ const DeezerButton = styled(SpotifyButton)`
 const DeezerImg = styled.img`
   width: 32.5px;
   height: 18.1px;
-  margin-left: 10px;
+  margin-right: 10px;
 `;
-// const AppleButton = styled(Button)`
-//   font-size: 16px;
-//   font-weight: 600;
-//   background: black;
-//   margin-top: 15px;
-//   //opacity: 0.5;
-// `;
+const AppleButton = styled(SpotifyButton)`
+  color: white;
+  background: black;
+`;
+const SoundcloudButton = styled(SpotifyButton)`
+  color: white;
+  background: #ff7700;
+`;
+const AmazonButton = styled(SpotifyButton)`
+  color: white;
+  background: #4300ff;
+`;
+const PandoraButton = styled(SpotifyButton)`
+  color: white;
+  background: #3668ff;
+`;
+const SoundcloudImg = styled.img`
+  width: 33.7px;
+  height: 18.9px;
+  margin-right: 10px;
+`;
+const YoutubeImg = styled.img`
+  width: 26.7px;
+  height: 20px;
+  margin-right: 10px;
+`;
+const TidalImg = styled.img`
+  width: 27px;
+  height: 18px;
+  margin-right: 10px;
+`;
+const GooglePlayImg = styled.img`
+  width: 30px;
+  height: 24.9px;
+  margin-right: 10px;
+`;
 const ToggleContainer = styled.label`
   display: flex;
   margin-top: 24px;
@@ -352,13 +391,23 @@ const BoldText = styled.a`
 const SpotifyImg = styled.img`
   width: 20px;
   height: 20px;
-  margin-left: 10px;
+  margin-right: 10px;
 `;
 const PresaveText = styled.p`
   line-height: 1.4;
   color: #444444;
   padding-top: 15px;
   padding-bottom: 20px;
+`;
+const PoweredBy = styled(Link)`
+  display: block;
+  position: relative;
+  padding: 100px 20px 30px;
+  margin: 0 auto;
+  font-size: 18px;
+  > strong {
+    font-size: 20px;
+  }
 `;
 
 const deezerUrl = `${SERVER_URL}/follower/deezer-login`,
@@ -385,27 +434,16 @@ const PublicLink = () => {
   const [artist, setArtist] = useState(undefined);
   const { user } = useAuth();
   const [presave, setPresave] = useState(false);
+  const [release, setRelease] = useState(false);
 
   const urlParams = new URLSearchParams(window.location.search);
   const view = urlParams.get('view');
   let previewMode = view === 'preview' && user && user.uri;
-  //const hasConnectedAccounts = artist && (artist.uri || artist.deezerId);
 
   if (previewMode && !artist) {
     // fetch artistdata from local
     setArtist(user);
   }
-
-  // const handleLogout = async () => {
-  //   if (previewMode) return;
-  //   const res = await logoutFollower();
-
-  //   if (res.error) {
-  //     return alert.show('Error logging out!');
-  //   }
-  //   setAuth({ user, follower: undefined });
-  //   return alert.show('Successfully Logged out!', { type: 'success' });
-  // }
 
   if (!artist) {
     getArtistById(id).then(setArtist);
@@ -413,7 +451,6 @@ const PublicLink = () => {
       <BeatLoader
         css={loadingStyles}
         size={20}
-        //size={"150px"} this also works
         color='#656ded'
         loading={true}
       />
@@ -436,7 +473,11 @@ const PublicLink = () => {
       {artist.latest ? (
         <>
           <Heading>Latest</Heading>
-          <SongCard>
+          <SongCard
+            onClick={() => {
+              setRelease(!release);
+            }}
+          >
             <SongContent>
               <AlbumCover src={artist.latest.img} />
               <div>
@@ -674,6 +715,71 @@ const PublicLink = () => {
     );
   };
 
+  const ReleaseView = () => {
+    return (
+      <WhiteContainer id='abs'>
+        <LargerAlbum src={artist.latest.img} />
+        <SongTitle>{artist.latest.name}</SongTitle>
+        <Subtitle>Listen on</Subtitle>
+        {artist.latest.links && (
+          <>
+            {artist.latest.links.spotify && (
+              <SpotifyButton as='a' href={artist.latest.links.spotify}>
+                <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
+                Spotify
+              </SpotifyButton>
+            )}
+            {artist.latest.links.deezer && (
+              <DeezerButton as='a' href={artist.latest.links.deezer}>
+                <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
+                Deezer
+              </DeezerButton>
+            )}
+            {artist.latest.links.apple && (
+              <AppleButton as='a' href={artist.latest.links.apple}>
+                Apple Music
+              </AppleButton>
+            )}
+            {artist.latest.links.soundcloud && (
+              <SoundcloudButton as='a' href={artist.latest.links.soundcloud}>
+                <SoundcloudImg src='/assets/soundcloud-logo-white.png' alt='' />
+                Soundcloud
+              </SoundcloudButton>
+            )}
+            {artist.latest.links.tidal && (
+              <AppleButton as='a' href={artist.latest.links.tidal}>
+                <TidalImg src='/assets/tidal-logo-white.png' alt='' />
+                Tidal
+              </AppleButton>
+            )}
+            {artist.latest.links.amazon && (
+              <AmazonButton as='a' href={artist.latest.links.amazon}>
+                Amazon Music
+              </AmazonButton>
+            )}
+            {artist.latest.links.google && (
+              <DeezerButton as='a' href={artist.latest.links.google}>
+                <GooglePlayImg src='/assets/google-play-logo.png' alt='' />
+                Google Play
+              </DeezerButton>
+            )}
+            {artist.latest.links.pandora && (
+              <PandoraButton as='a' href={artist.latest.links.pandora}>
+                Pandora
+              </PandoraButton>
+            )}
+            {artist.latest.links.youtube && (
+              <DeezerButton as='a' href={artist.latest.links.youtube}>
+                <YoutubeImg src='/assets/youtube-logo-red.png' alt='' />
+                Youtube
+              </DeezerButton>
+            )}
+          </>
+        )}
+      </WhiteContainer>
+    );
+  };
+
   return (
     <>
       <Background img={artist.img}>
@@ -688,16 +794,19 @@ const PublicLink = () => {
             </SocialMediaLinks>
           )}
           <ArtistName>
-            {presave && (
+            {(presave || release) && (
               <ArrowBack
                 src='/assets/arrow-backward-white.png'
-                onClick={() => setPresave(false)}
+                onClick={() => {
+                  setPresave(false);
+                  setRelease(false);
+                }}
               />
             )}
             {artist.name}
           </ArtistName>
           <Transition
-            in={!presave}
+            in={!(presave || release)}
             timeout={duration}
             appear
             enter
@@ -705,14 +814,18 @@ const PublicLink = () => {
             mountOnEnter
           >
             {(state) => (
-              <div
-                style={{
-                  ...defaultStyle,
-                  ...fadeInoutLeftStyle[state],
-                }}
-              >
-                <SelectView />
-              </div>
+              <>
+                <div
+                  style={{
+                    ...defaultStyle,
+                    ...fadeInoutLeftStyle[state],
+                    position: 'absolute',
+                  }}
+                >
+                  <SelectView />
+                </div>
+                <Placeholder />
+              </>
             )}
           </Transition>
           {artist.upcoming && (
@@ -736,7 +849,31 @@ const PublicLink = () => {
               )}
             </Transition>
           )}
+          {artist.latest && (
+            <Transition
+              in={release}
+              timeout={duration}
+              appear
+              enter
+              unmountOnExit
+              mountOnEnter
+            >
+              {(state) => (
+                <div
+                  style={{
+                    ...defaultStyle,
+                    ...inRightOutRightStyle[state],
+                  }}
+                >
+                  <ReleaseView />
+                </div>
+              )}
+            </Transition>
+          )}
         </Content>
+        <PoweredBy to='/'>
+          powered by <strong>Genie</strong>
+        </PoweredBy>
       </Background>
     </>
   );

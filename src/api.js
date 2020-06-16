@@ -246,15 +246,23 @@ export const getMySongs = async () => {
   }
 };
 
-export const createNewSong = async (uri, songName, releaseDate) => {
-  const nextDay = new Date(releaseDate).getTime() + 1000 * 60 * 60 * 24;
+export const createNewSong = async (values) => {
   try {
-    const res = await axios.post(
+    let formData = new FormData();
+    Object.keys(values).forEach((key) => formData.append(key, values[key]));
+    const config = {
+      withCredentials: true,
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const { data } = await axios.post(
       `${SERVER_URL}/songs/create`,
-      JSON.stringify({ uri, songName, releaseDate: nextDay }),
-      axiosConfig
+      formData,
+      config
     );
-    return res.data;
+    return data;
   } catch (error) {
     console.log(error);
     return { error };
@@ -544,6 +552,20 @@ export const updatePresave = async (updates) => {
       formData,
       config
     );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};
+
+export const getReleases = async () => {
+  try {
+    const { data } = await axios.get(
+      `${SERVER_URL}/songs/releases`,
+      axiosConfig
+    );
+
     return data;
   } catch (error) {
     console.log(error);

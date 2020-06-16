@@ -58,13 +58,16 @@ const StyledCalendar = styled(ReactCalendar)`
   }
 `;
 
-const Calendar = ({ onChange, value }) => {
+const Calendar = ({ onChange, value, minDate, maxDate }) => {
   return (
     <StyledCalendar
       onChange={onChange}
       value={value}
-      minDate={new Date()}
-      maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
+      minDate={minDate || new Date()}
+      maxDate={
+        maxDate ||
+        new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+      }
       formatShortWeekday={(_locate, date) => days[date.getDay()]}
     />
   );

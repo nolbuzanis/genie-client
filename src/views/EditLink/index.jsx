@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 //import { useHistory, Link } from 'react-router-dom';
 import { useAuth } from '../../Context/authContext';
 import Button from '../../components/Button';
 import Header from '../../components/PageHeader';
-import { uploadUserPhoto, updateUserProfile } from '../../api';
+import { uploadUserPhoto, updateUserProfile, getReleases } from '../../api';
 import { useToasts } from 'react-toast-notifications';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputSection from '../../components/InternalInput';
 import { useHistory, Link } from 'react-router-dom';
 import Popup from '../../components/Popup';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { css } from '@emotion/core';
+
+const override = css`
+  display: inline-block;
+  margin-left: 15px;
+`;
 
 const Background = styled.div`
   position: relative;
@@ -41,7 +48,6 @@ const FileInput = styled.input`
 const Content = styled.div`
   position: relative;
   z-index: 1;
-  padding: 0 30px;
 `;
 // const ArtistName = styled.h1`
 //   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
@@ -66,6 +72,7 @@ const Heading = styled.h2`
 `;
 const SongCard = styled.div`
   width: 100%;
+  position: relative;
   max-width: 400px;
   background: white;
   border-radius: 10px;
@@ -105,8 +112,9 @@ const validationSchema = Yup.object().shape({
   website: Yup.string().trim().matches(urlRegex, 'Must be a valid URL.'),
 });
 const Form = styled.form`
-  max-width: 500px;
+  max-width: 560px;
   margin: 0 auto;
+  padding: 0 30px;
 `;
 const Spacing = styled.div`
   height: 20px;
@@ -128,6 +136,44 @@ const ViewArrow = styled.img`
   height: 16.1px;
   margin-left: 6px;
 `;
+const DropdownContainer = styled.div`
+  background: white;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  padding: 20px;
+`;
+const DropdownHeader = styled.h2`
+  color: #444444;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  padding-bottom: 25px;
+`;
+const SongContent = styled.div`
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  text-align: left;
+`;
+// const ReleaseList = styled.ul`
+//   padding:
+// `;
+//const Message = styled.p``;
+
+const DropdownAlbumCover = styled.img`
+  margin-right: 15px;
+  margin-left: 0;
+  width: 60px;
+  height: 60px;
+`;
 
 const parseDate = (timestamp) => {
   if (!timestamp) return '';
@@ -143,12 +189,111 @@ const parseDate = (timestamp) => {
   return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
 };
 
+const ReleasesDropdown = ({ user, setAuth, onClose }) => {
+  const menuRef = useRef();
+  const [songs, setSongs] = useState();
+  const { addToast } = useToasts();
+  const history = useHistory();
+
+  useEffect(() => {
+    const fetchReleases = async () => {
+      const response = await getReleases();
+
+      if (response.error) {
+        console.log(response.error);
+        addToast('Error fetching releases!', { appearance: 'error' });
+      }
+
+      //console.log(response);
+      setSongs(response);
+    };
+    fetchReleases();
+  }, [addToast]);
+
+  const handleDropdownClick = (e) => {
+    setTimeout(onClose, 10);
+  };
+
+  useEffect(() => {
+    // add when mounted
+    window.addEventListener('mousedown', handleDropdownClick);
+    // return function to be called when unmounted
+    return () => {
+      window.removeEventListener('mousedown', handleDropdownClick);
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  const handleReleaseClick = async ({ name, releaseDate, img, id, links }) => {
+    if (user.latest && user.latest.songId === id) return;
+    const newLatest = {
+      name,
+      releaseDate,
+      img,
+      songId: id,
+      links,
+    };
+
+    const response = await updateUserProfile({ latest: newLatest });
+
+    if (response.error) {
+      return addToast('Error switching latest release', {
+        appearance: 'error',
+      });
+    }
+
+    //success, update user
+    setAuth((prevState) => ({
+      user: { ...prevState.user, latest: newLatest },
+    }));
+  };
+
+  return (
+    <DropdownContainer ref={menuRef}>
+      <DropdownHeader>
+        Select Latest
+        {!songs && (
+          <ClipLoader css={override} size={20} color='#444444' loading={true} />
+        )}
+      </DropdownHeader>
+      {songs && songs.error && (
+        <p>
+          Oops! There was an error. Please send us a message and we'll sort it
+          out!
+        </p>
+      )}
+      {songs &&
+        !songs.error &&
+        (songs.length > 0 ? (
+          songs.map((song, i) => {
+            return (
+              <SongContent onClick={() => handleReleaseClick(song)} key={i}>
+                <DropdownAlbumCover src={song.img} />
+                <div>
+                  <SongName>{song.name}</SongName>
+                  <ReleaseDate>{parseDate(song.releaseDate)}</ReleaseDate>
+                </div>
+              </SongContent>
+            );
+          })
+        ) : (
+          <p>No releases found. Create your first one below! </p>
+        ))}
+      <Spacing />
+      <Button type='button' onClick={() => history.push('/releases/new')}>
+        Add Release
+      </Button>
+    </DropdownContainer>
+  );
+};
+
 const EditLink = () => {
   const { user, setAuth } = useAuth();
   const [uploading, setUploading] = useState(false);
   const { addToast } = useToasts();
   const [popup, setPopup] = useState(false);
   const history = useHistory();
+  const [dropdown, setDropdown] = useState(false);
 
   const handlePhotoSubmit = async (e) => {
     const photo = e.target.files[0];
@@ -196,7 +341,7 @@ const EditLink = () => {
 
   const handleAddPresave = () => {
     if (!user.uri && !user.deezerId) return setPopup('link_accounts');
-    history.push('/releases/new');
+    history.push('/presave/new');
   };
 
   return (
@@ -245,21 +390,30 @@ const EditLink = () => {
               >
                 {uploading ? 'Uploading' : 'Change Background'}
               </Button>
-              {/* <Heading>Latest</Heading>
+              <Heading>Latest</Heading>
               <SongCard>
                 {user.latest && (
                   <>
                     <AlbumCover src={user.latest.img} />
                     <SongName>{user.latest.name}</SongName>
-                    <ReleaseDate>{user.latest.releaseDate}</ReleaseDate>
+                    <ReleaseDate>
+                      {parseDate(user.latest.releaseDate)}
+                    </ReleaseDate>
                   </>
                 )}
+                {dropdown && (
+                  <ReleasesDropdown
+                    onClose={() => setDropdown(false)}
+                    user={user}
+                    setAuth={setAuth}
+                  />
+                )}
                 <SmallButtonWrapper>
-                  <Button small type='button'>
+                  <Button small type='button' onClick={() => setDropdown(true)}>
                     Select
                   </Button>
                 </SmallButtonWrapper>
-              </SongCard> */}
+              </SongCard>
               <Heading>Upcoming</Heading>
               <SongCard>
                 {user.upcoming ? (

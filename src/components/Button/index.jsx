@@ -4,6 +4,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { css } from '@emotion/core';
 
 const Button = styled.button`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,6 +33,18 @@ const Button = styled.button`
   font-weight: 600;
   box-shadow: ${(props) =>
     !props.alternate && !props.disabled && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
+
+  &:hover,
+  &:active {
+    box-shadow: ${(props) => {
+      if (props.disabled) return 'none';
+      return props.alternate
+        ? 'inset 0 0 0 99999px rgba(128, 128, 128, 0.2)'
+        : 'inset 0 0 0 99999px rgba(128, 128, 128, 0.2), 0 3px 6px 0 rgba(0, 0, 0, 0.16)';
+    }}
+    }
+      
+  }
 `;
 
 const override = css`

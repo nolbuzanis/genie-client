@@ -5,7 +5,7 @@ import Header from '../../components/PageHeader';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputSection from '../../components/InputSection';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, Redirect } from 'react-router-dom';
 import Modal from '../../components/Modal';
 import { useAuth } from '../../Context/authContext';
 import {
@@ -179,6 +179,8 @@ const CreatePresave = () => {
   const [releaseDate, setReleaseDate] = React.useState(new Date());
   const history = useHistory();
   const { user, setAuth } = useAuth();
+
+  if (user.upcoming) return <Redirect to='/home' />;
 
   const handleFormSubmit = async (formValues, { setSubmitting }) => {
     setSubmitting(true);
