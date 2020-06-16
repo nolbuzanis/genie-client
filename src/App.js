@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import ReactGA from 'react-ga';
+//import ReactGA from 'react-ga';
 import './App.css';
 import { ToastProvider } from 'react-toast-notifications';
 import { TrackPixelPageView } from './analytics';
@@ -61,8 +61,8 @@ const App = () => {
 
   history.listen((location) => {
     TrackPixelPageView();
-    ReactGA.set({ page: location.pathname }); // Update the user's current page
-    ReactGA.pageview(location.pathname); // Record a pageview for the given page
+    // ReactGA.set({ page: location.pathname }); // Update the user's current page
+    // ReactGA.pageview(location.pathname); // Record a pageview for the given page
   });
 
   return (

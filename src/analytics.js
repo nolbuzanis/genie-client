@@ -1,15 +1,22 @@
 import ReactGA from 'react-ga';
 import ReactPixel from 'react-facebook-pixel';
+import TagManager from 'react-gtm-module';
+
+const tagManagerArgs = {
+  gtmId: 'GTM-M89W9ZJ',
+};
 
 const production = process.env.REACT_APP_ENV === 'production';
 
 export const initGA = () => {
   if (production) {
     //.initialize('UA-104067820-3');
-    ReactGA.initialize('218385872');
-  } else {
-    ReactGA.initialize('UA-104067820-4');
+    TagManager.initialize(tagManagerArgs);
+    //ReactGA.initialize('218385872');
   }
+  // } else {
+  //   ReactGA.initialize('UA-104067820-4');
+  // }
 };
 
 export const initFBPixel = () => {
