@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { userLogin, getCurrentUser } from '../../api';
 import authContext from '../../Context/authContext';
 import Footer from '../../components/Footer';
+import { reportEvent } from '../../analytics';
 
 const Form = styled.form`
   //margin: 0 auto;
@@ -88,6 +89,7 @@ const Login = () => {
       return setSubmitting(false);
     }
     const newUser = await getCurrentUser();
+    reportEvent('login', newUser);
     setAuth({ user: newUser });
   };
 

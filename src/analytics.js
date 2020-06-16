@@ -18,6 +18,15 @@ export const initGA = () => {
   // }
 };
 
+export const reportEvent = (eventName, data = {}) => {
+  const args = {
+    dataLayer: data,
+    dataLayerName: eventName,
+  };
+
+  TagManager.dataLayer(args);
+};
+
 export const initFBPixel = () => {
   const facebookPixelID = '232351294764626';
   const FBPoptions = {
