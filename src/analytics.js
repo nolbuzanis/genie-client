@@ -10,9 +10,8 @@ const production = process.env.REACT_APP_ENV === 'production';
 
 export const initGA = () => {
   if (production) {
-    //.initialize('UA-104067820-3');
+    ReactGA.initialize('UA-104067820-3');
     TagManager.initialize(tagManagerArgs);
-    //ReactGA.initialize('218385872');
   }
   // } else {
   //   ReactGA.initialize('UA-104067820-4');
