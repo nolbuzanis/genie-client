@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../Context/authContext';
-import { createNewArtist, switchArtist } from '../../api';
+import { createNewArtist, switchArtist, logUserOut } from '../../api';
 import { withRouter } from 'react-router-dom';
 import * as menuIcons from './menuIcons';
 import Modal from '../Modal';
@@ -208,7 +208,7 @@ const menu = [
   {
     name: 'Your Link',
     route: '/profile',
-    icon: menuIcons.ProfileIcon,
+    icon: menuIcons.LinkIcon,
   },
   {
     name: 'Releases',
@@ -263,6 +263,11 @@ const menu = [
         name: 'Plans & Billing',
         route: '/billing',
       },
+      {
+        name: 'Log Out',
+        route: '#',
+        onClick: logUserOut,
+      },
     ],
   },
 ];
@@ -295,8 +300,13 @@ const MenuItemComponent = ({ route, name, icon, children }) => {
       </MenuItem>
       {children && (
         <ChildContainer showChildren={showChildren}>
-          {children.map(({ route, name }, j) => (
-            <MenuItemChild key={j} to={route} active={childActive === route}>
+          {children.map(({ route, name, onClick }, j) => (
+            <MenuItemChild
+              key={j}
+              to={route}
+              active={childActive === route}
+              onClick={onClick}
+            >
               {name}
             </MenuItemChild>
           ))}

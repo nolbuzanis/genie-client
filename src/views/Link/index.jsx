@@ -192,7 +192,7 @@ const Mask = styled.div`
 const Content = styled.div`
   position: relative;
   z-index: 1;
-  padding: 0 30px;
+  //padding: 0 30px;
 `;
 const ArtistName = styled.h1`
   display: flex;
@@ -200,7 +200,7 @@ const ArtistName = styled.h1`
   justify-content: center;
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 36px;
-  padding-top: 75px;
+  padding: 100px 30px 0;
   font-weight: 600;
   color: white;
 `;

@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { getMySongs } from '../../api';
 import { useToasts } from 'react-toast-notifications';
-import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
-import { Formik } from 'formik';
-import Button from '../../components/Button';
-import * as Yup from 'yup';
 import { useAuth } from '../../Context/authContext';
 import { hasNoSavesRemaining } from '../../auth';
 import Popup from '../../components/Popup';
@@ -64,8 +60,8 @@ const Pic = styled.div`
   width: 60px;
   height 60px;
   display: inline-block;
-  border-radius: 50%;
-  background: url('${props => props.src}') center center no-repeat;
+  //border-radius: 50%;
+  background: url('${(props) => props.src}') center center no-repeat;
   background-size: cover;
   box-shadow: 0px 3px 6px rgba(0,0,0,0.16);
   @media (max-width: 360px) {
@@ -82,7 +78,7 @@ const SongName = styled.p`
   white-space: nowrap;
   width: 100%;
   overflow: hidden;
-  //border-bottom: solid 3px ${props =>
+  //border-bottom: solid 3px ${(props) =>
     props.released ? '#b4b4b4' : '#4568dc'};
 `;
 const ReleasedOn = styled.p`
@@ -107,7 +103,7 @@ const Content = styled.div`
   overflow-x: hidden;
 `;
 const ReleaseIconContainer = styled.div`
-  cursor: ${props => props.edit && 'pointer'};
+  cursor: ${(props) => props.edit && 'pointer'};
   position: absolute;
   right: 0;
   width: 60px;
@@ -123,95 +119,6 @@ const Span = styled.span`
   font-weight: 500;
   font-size: 11px;
   letter-spacing: -0.31px;
-`;
-const AddURI = styled.button`
-  background: linear-gradient(90deg, #8872ff, #4568dc);
-  width: 60px;
-  height: 44px;
-  border-radius: 22px;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  color: white;
-  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
-  margin: 0 auto;
-`;
-const modalStyles = {
-  overlay: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: '100',
-    background: 'rgba(0, 0, 0, 0.5)'
-  },
-  content: {
-    position: 'static',
-    display: 'flex',
-    justifyContent: 'center',
-    padding: 'none',
-    border: 'none',
-    background: 'none'
-  }
-};
-const ModalContainer = styled.div`
-  background: white;
-  border-radius: 20px;
-  max-width: 300px;
-  padding: 20px;
-  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.16);
-`;
-const ModalHeader = styled.h3`
-  font-size: 20px;
-  padding-top: 10px;
-  font-weight: 500;
-  text-align: center;
-`;
-const ModalText = styled.p`
-  padding-top: 20px;
-  font-size: 14px;
-  font-weight: 300;
-`;
-const Input = styled.input`
-  display: block;
-  width: 100%;
-  border: 1px solid ${props => (props.error ? '#bd3200' : '#979797')};
-  background: ${props => props.error && 'rgb(250, 229, 236)'};
-  max-width: 420px;
-  height: 36px;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 16px;
-  margin: 20px auto 0;
-  box-sizing: border-box;
-`;
-const ErrorMsg = styled.label`
-  display: block;
-  font-size: 12px;
-  color: #bd3200;
-  text-align: left;
-  padding-top: 5px;
-  padding-left: 10px;
-  max-width: 420px;
-  margin: 0 auto;
-`;
-const ButtonContainer = styled.div`
-  width: 140px;
-  padding: 20px 0;
-  margin: 0 auto;
-`;
-const Spacing = styled.div`
-  height: 15px;
-`;
-const HelpLink = styled.a`
-  font-size: 12px;
-  color: #8872ff;
-  text-decoration: underline;
-  display: block;
-  margin-top: 5px;
-  margin-left: 5px;
-  &:hover {
-    color: #8872ff;
-  }
 `;
 // const EditIcon = styled.img`
 //   width: 25px;
@@ -252,25 +159,19 @@ const AddText = styled.p`
   padding-left: 20px;
 `;
 
-const validationSchema = Yup.object().shape({
-  uri: Yup.string()
-    .trim()
-    .required('Invalid URI.')
-});
-
-const parseDate = timestamp => {
+const parseDate = (timestamp) => {
   if (!timestamp) return '';
   const date = new Date(timestamp);
   const parsed = date
     .toLocaleString('default', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
     })
     .split(' ');
   return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
 };
-const timeUntilRelease = releaseDate => {
+const timeUntilRelease = (releaseDate) => {
   const now = new Date();
 
   const timeRemaining = Math.round(
@@ -297,15 +198,17 @@ const Release = ({ song, setURIModal, edit }) => {
   const [confirm, setConfirm] = useState(false);
 
   React.useEffect(() => {
-    if (song.status === 'scheduled' && song.spotifyUri) {
+    if (song.status === 'scheduled' && song.ids) {
       const interval = setInterval(() => {
         return setTime(timeUntilRelease(releaseDate));
       }, 1000);
 
       return () => clearInterval(interval);
     }
-  }, [releaseDate, song.spotifyUri, song.status]);
-  const released = now > releaseDate && song.status === 'released';
+  }, [releaseDate, song.ids, song.status]);
+  const released =
+    now > releaseDate &&
+    (song.status === 'released' || song.type === 'release');
 
   if (!edit && confirm) {
     setConfirm(false);
@@ -329,39 +232,43 @@ const Release = ({ song, setURIModal, edit }) => {
         </ReleasedOn>
       </Content>
       <ReleaseIconContainer edit={edit} onClick={handleDeleteClick}>
-        {edit ? (
-          <>
-            <ReleaseIcon
-              src={
-                confirm
-                  ? '/assets/confirm_delete_icon.png'
-                  : '/assets/delete_icon.png'
-              }
-            />
-            <Delete>{confirm ? 'are you sure?' : 'delete'}</Delete>
-          </>
-        ) : song.spotifyUri ? (
-          <>
-            <ReleaseIcon
-              released={released}
-              src={released ? '/assets/save-icon-blue.png' : '/clock-icon.png'}
-            />
-            <Span released={released}>
-              {released
-                ? song.saves + ' save' + (song.saves !== 1 ? 's' : '')
-                : time}
-            </Span>
-          </>
-        ) : (
-          <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>
-        )}
+        {
+          edit ? (
+            <>
+              <ReleaseIcon
+                src={
+                  confirm
+                    ? '/assets/confirm_delete_icon.png'
+                    : '/assets/delete_icon.png'
+                }
+              />
+              <Delete>{confirm ? 'are you sure?' : 'delete'}</Delete>
+            </>
+          ) : (
+            <>
+              <ReleaseIcon
+                released={released}
+                src={
+                  released ? '/assets/save-icon-blue.png' : '/clock-icon.png'
+                }
+              />
+              <Span released={released}>
+                {released
+                  ? song.saves || 0 + ' save' + (song.saves !== 1 ? 's' : '')
+                  : time}
+              </Span>
+            </>
+          )
+          // : (
+          //   <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>
+          // )}
+        }
       </ReleaseIconContainer>
     </ReleaseCard>
   );
 };
 
 const Releases = () => {
-  const [URIModal, setURIModal] = useState(false);
   const [songs, setSongs] = useState([]);
   const [edit, setEdit] = useState(true);
   const { addToast } = useToasts();
@@ -384,18 +291,11 @@ const Releases = () => {
 
   const renderSongs = () => {
     return songs.map((song, i) => {
-      return (
-        <Release key={i} song={song} setURIModal={setURIModal} edit={edit} />
-      );
+      return <Release key={i} song={song} edit={edit} />;
     });
   };
-  const handleAddUri = (values, { setSubmitting }) => {
-    setSubmitting(true);
-    console.log(values);
-  };
-  Modal.setAppElement('body');
 
-  const checkIfAllowed = e => {
+  const checkIfAllowed = (e) => {
     if (hasNoSavesRemaining(user)) {
       e.preventDefault();
       setPopup('upgrade');
@@ -406,65 +306,65 @@ const Releases = () => {
     }
   };
 
-  const ReleaseEditModal = () => (
-    <Modal
-      style={modalStyles}
-      isOpen={URIModal}
-      onRequestClose={() => setURIModal(false)}
-    >
-      <ModalContainer>
-        <ModalHeader>Add Spotify URI</ModalHeader>
-        <ModalText>
-          Please enter the spotify URI of the song before it can be released.
-        </ModalText>
-        <Formik
-          initialValues={{ uri: '' }}
-          onSubmit={handleAddUri}
-          validationSchema={validationSchema}
-        >
-          {props => (
-            <form onSubmit={props.handleSubmit}>
-              <Input
-                name='uri'
-                value={props.values['uri']}
-                type='text'
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-                error={props.errors['uri'] && props.touched['uri']}
-                placeholder='Spotify Song URI'
-              />
-              {props.errors['uri'] && props.touched['uri'] && (
-                <ErrorMsg>{props.errors['uri']}</ErrorMsg>
-              )}
-              <HelpLink
-                href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201'
-                target='_blank'
-              >
-                Where do I find this?
-              </HelpLink>
-              <ButtonContainer>
-                <Button type='submit' disabled={props.isSubmitting}>
-                  {props.isSubmitting ? 'Adding' : 'Add'}
-                </Button>
-                <Spacing />
-                <Button
-                  type='button'
-                  alternate
-                  onClick={() => setURIModal(false)}
-                >
-                  Cancel
-                </Button>
-              </ButtonContainer>
-            </form>
-          )}
-        </Formik>
-      </ModalContainer>
-    </Modal>
-  );
+  // const ReleaseEditModal = () => (
+  //   <Modal
+  //     style={modalStyles}
+  //     isOpen={URIModal}
+  //     onRequestClose={() => setURIModal(false)}
+  //   >
+  //     <ModalContainer>
+  //       <ModalHeader>Add Spotify URI</ModalHeader>
+  //       <ModalText>
+  //         Please enter the spotify URI of the song before it can be released.
+  //       </ModalText>
+  //       <Formik
+  //         initialValues={{ uri: '' }}
+  //         onSubmit={handleAddUri}
+  //         validationSchema={validationSchema}
+  //       >
+  //         {props => (
+  //           <form onSubmit={props.handleSubmit}>
+  //             <Input
+  //               name='uri'
+  //               value={props.values['uri']}
+  //               type='text'
+  //               onChange={props.handleChange}
+  //               onBlur={props.handleBlur}
+  //               error={props.errors['uri'] && props.touched['uri']}
+  //               placeholder='Spotify Song URI'
+  //             />
+  //             {props.errors['uri'] && props.touched['uri'] && (
+  //               <ErrorMsg>{props.errors['uri']}</ErrorMsg>
+  //             )}
+  //             <HelpLink
+  //               href='https://community.spotify.com/t5/Spotify-Answers/What-s-a-Spotify-URI/ta-p/919201'
+  //               target='_blank'
+  //             >
+  //               Where do I find this?
+  //             </HelpLink>
+  //             <ButtonContainer>
+  //               <Button type='submit' disabled={props.isSubmitting}>
+  //                 {props.isSubmitting ? 'Adding' : 'Add'}
+  //               </Button>
+  //               <Spacing />
+  //               <Button
+  //                 type='button'
+  //                 alternate
+  //                 onClick={() => setURIModal(false)}
+  //               >
+  //                 Cancel
+  //               </Button>
+  //             </ButtonContainer>
+  //           </form>
+  //         )}
+  //       </Formik>
+  //     </ModalContainer>
+  //   </Modal>
+  // );
 
   return (
     <>
-      <ReleaseEditModal />
+      {/* <ReleaseEditModal /> */}
       <Popup open={popup ? true : false} setOpen={setPopup} type={popup} />
       <Header>
         Releases
@@ -473,6 +373,14 @@ const Releases = () => {
         </CreateSongButton> */}
       </Header>
       <BlastList>
+        {!user.upcoming && (
+          <ReleaseCard as={Link} to='/presave/new' onClick={checkIfAllowed}>
+            <AddContainer>
+              <AddImg src='/add-icon.png' />
+            </AddContainer>
+            <AddText>Create Presave</AddText>
+          </ReleaseCard>
+        )}
         <ReleaseCard as={Link} to='/releases/new' onClick={checkIfAllowed}>
           <AddContainer>
             <AddImg src='/add-icon.png' />

@@ -246,3 +246,27 @@ export const ProfileIcon = ({ active }) => (
     </g>
   </MenuSvg>
 );
+
+export const LinkIcon = ({ active }) => (
+  <MenuSvg
+    xmlns='http://www.w3.org/2000/svg'
+    id='prefix__share-24px_2_'
+    width={24}
+    height={24}
+    data-name='share-24px (2)'
+    viewBox='0 0 24 24'
+  >
+    <path
+      id='prefix__Path_389'
+      fill='none'
+      d='M0 0h24v24H0z'
+      data-name='Path 389'
+    />
+    <path
+      id='prefix__Path_390'
+      style={{ fill: active ? '#656ded' : '#444444' }}
+      d='M18 16.08a2.912 2.912 0 0 0-1.96.77L8.91 12.7A3.274 3.274 0 0 0 9 12a3.274 3.274 0 0 0-.09-.7l7.05-4.11A2.993 2.993 0 1 0 15 5a3.274 3.274 0 0 0 .09.7L8.04 9.81a3 3 0 1 0 0 4.38l7.12 4.16a2.821 2.821 0 0 0-.08.65A2.92 2.92 0 1 0 18 16.08z'
+      data-name='Path 390'
+    />
+  </MenuSvg>
+);

@@ -34,7 +34,7 @@ const MenuSpacing = styled.div`
 `;
 const Text = styled.h2`
   width: 100%;
-  color: ${({ active }) => (active ? '#4568dc' : '#757575')};
+  color: ${({ active }) => (active ? '#4568dc' : '#818181')};
   font-size: 14px;
   //margin-top: -10px;
   //text-transform: uppercase;
@@ -44,7 +44,7 @@ const Text = styled.h2`
 //     width: 9px;
 //     height: 9px;
 //     border-radius: 50%;
-//     background: ${({ active }) => active ? '#1FB6FF' : '#757575'}
+//     background: ${({ active }) => active ? '#1FB6FF' : '#818181'}
 // `;
 // const CircleContainer = styled.div`
 //     display: flex;
@@ -55,12 +55,8 @@ const Text = styled.h2`
 //     align-items: center;
 // `;
 const HomeSvg = styled.svg`
-  width: 23px;
-  height: 23px;
-`;
-const ReferSvg = styled.svg`
-  width: 23px;
-  height: 23px;
+  width: 24px;
+  height: 24px;
 `;
 const ReleaseSvg = styled.svg`
   width: 26px;
@@ -68,95 +64,80 @@ const ReleaseSvg = styled.svg`
 `;
 
 const HomeIcon = ({ active }) => (
+  // <HomeSvg
+  //   xmlns='http://www.w3.org/2000/svg'
+  //   width='26.012'
+  //   height='26.012'
+  //   viewBox='0 0 26.012 26.012'
+  // >
+  //   <g
+  //     id='prefix__Group_59'
+  //     data-name='Group 59'
+  //     transform='translate(-122 -519)'
+  //   >
+  //     <path
+  //       id='prefix__basic_home'
+  //       d='M13.506 3L2 14.506h3.452v11.506h4.6v-6.137h6.136v6.136h4.6V14.506h4.219z'
+  //       transform='translate(121.5 517.5)'
+  //       style={{
+  //         fill: 'none',
+  //         stroke: active ? '#4568dc' : '#818181',
+  //         strokeLinejoin: 'round',
+  //         strokeMiterlimit: 10,
+  //         strokeWidth: '3px'
+  //       }}
+  //     />
+  //     <path
+  //       id='prefix__basic_home-2'
+  //       d='M13.506 3L2 14.506h3.452v11.506h4.6v-6.137h6.136v6.136h4.6V14.506h4.219z'
+  //       data-name='basic_home'
+  //       transform='translate(121.5 517.5)'
+  //       style={{ fill: '#fff' }}
+  //     />
+  //   </g>
+  // </HomeSvg>
   <HomeSvg
     xmlns='http://www.w3.org/2000/svg'
-    width='26.012'
-    height='26.012'
-    viewBox='0 0 26.012 26.012'
+    id='prefix__home-24px_4_'
+    data-name='home-24px (4)'
+    viewBox='0 0 24 24'
   >
-    <g
-      id='prefix__Group_59'
-      data-name='Group 59'
-      transform='translate(-122 -519)'
-    >
-      <path
-        id='prefix__basic_home'
-        d='M13.506 3L2 14.506h3.452v11.506h4.6v-6.137h6.136v6.136h4.6V14.506h4.219z'
-        transform='translate(121.5 517.5)'
-        style={{
-          fill: 'none',
-          stroke: active ? '#4568dc' : '#757575',
-          strokeLinejoin: 'round',
-          strokeMiterlimit: 10,
-          strokeWidth: '3px'
-        }}
-      />
-      <path
-        id='prefix__basic_home-2'
-        d='M13.506 3L2 14.506h3.452v11.506h4.6v-6.137h6.136v6.136h4.6V14.506h4.219z'
-        data-name='basic_home'
-        transform='translate(121.5 517.5)'
-        style={{ fill: '#fff' }}
-      />
-    </g>
+    <path
+      id='prefix__Path_396'
+      fill='none'
+      d='M0 0h24v24H0z'
+      data-name='Path 396'
+    />
+    <path
+      id='prefix__Path_397'
+      style={{ fill: active ? '#656ded' : '#818181' }}
+      d='M10 19v-5h4v5a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-7h1.7a.5.5 0 0 0 .33-.87L12.67 3.6a1.008 1.008 0 0 0-1.34 0l-8.36 7.53a.5.5 0 0 0 .33.87H5v7a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1z'
+      data-name='Path 397'
+    />
   </HomeSvg>
 );
-const ReferIcon = ({ active }) => (
-  <ReferSvg
+const LinkIcon = ({ active }) => (
+  <svg
     xmlns='http://www.w3.org/2000/svg'
-    width='22.857'
-    height='23.685'
-    viewBox='0 0 22.857 23.685'
+    id='prefix__share-24px_2_'
+    width={24}
+    height={24}
+    data-name='share-24px (2)'
+    viewBox='0 0 24 24'
   >
-    <g
-      id='prefix__Group_60'
-      data-name='Group 60'
-      transform='translate(-195.5 -395)'
-    >
-      <path
-        id='prefix__Path_214'
-        d='M20.2 17.274a1.621 1.621 0 0 0 1.655-1.655C21.857 13.964 20.2 9 11.929 9S2 13.964 2 15.619a1.621 1.621 0 0 0 1.655 1.655zM3.663 15.712zm16.5-.093'
-        data-name='Path 214'
-        transform='translate(195 399.911)'
-        style={{
-          fillRule: 'evenodd',
-          fill: 'none',
-          stroke: active ? '#4568dc' : '#757575',
-          strokeWidth: '3px'
-        }}
-      />
-      <path
-        id='prefix__Path_215'
-        d='M20.2 17.274a1.621 1.621 0 0 0 1.655-1.655C21.857 13.964 20.2 9 11.929 9S2 13.964 2 15.619a1.621 1.621 0 0 0 1.655 1.655zM3.663 15.712zm16.5-.093'
-        data-name='Path 215'
-        transform='translate(195 399.911)'
-        style={{ fill: '#fff', fillRule: 'evenodd' }}
-      />
-      <circle
-        id='prefix__Ellipse_38'
-        cx='4.137'
-        cy='4.137'
-        r='4.137'
-        data-name='Ellipse 38'
-        transform='translate(202.792 396.5)'
-        style={{
-          strokeLinejoin: 'round',
-          fill: 'none',
-          stroke: active ? '#4568dc' : '#757575',
-          strokeWidth: '3px'
-        }}
-      />
-      <circle
-        id='prefix__Ellipse_39'
-        cx='4.137'
-        cy='4.137'
-        r='4.137'
-        data-name='Ellipse 39'
-        transform='translate(202.792 396.5)'
-        style={{ fill: '#fff' }}
-      />
-    </g>
-  </ReferSvg>
+    <path
+      id='prefix__Path_389'
+      fill='none'
+      d='M0 0h24v24H0z'
+      data-name='Path 389'
+    />
+    <path
+      id='prefix__Path_390'
+      style={{ fill: active ? '#656ded' : '#818181' }}
+      d='M18 16.08a2.912 2.912 0 0 0-1.96.77L8.91 12.7A3.274 3.274 0 0 0 9 12a3.274 3.274 0 0 0-.09-.7l7.05-4.11A2.993 2.993 0 1 0 15 5a3.274 3.274 0 0 0 .09.7L8.04 9.81a3 3 0 1 0 0 4.38l7.12 4.16a2.821 2.821 0 0 0-.08.65A2.92 2.92 0 1 0 18 16.08z'
+      data-name='Path 390'
+    />
+  </svg>
 );
 
 const ReleasesIcon = ({ active }) => (
@@ -175,7 +156,7 @@ const ReleasesIcon = ({ active }) => (
       style={{ fill: 'none' }}
     />
     <path
-      style={{ fill: active ? '#4568dc' : '#757575' }}
+      style={{ fill: active ? '#4568dc' : '#818181' }}
       id='prefix__Path_217'
       d='M21.751 2H8.584a2.2 2.2 0 0 0-2.195 2.195v13.167a2.2 2.2 0 0 0 2.195 2.195h13.167a2.2 2.2 0 0 0 2.195-2.195V4.195A2.2 2.2 0 0 0 21.751 2zm.557 16.067H7.894V3.631h14.414zm-8.787-1.8a2.744 2.744 0 0 0 2.743-2.743V7.486h3.292V5.292h-4.388v6.046a2.685 2.685 0 0 0-1.646-.56 2.743 2.743 0 1 0 0 5.486zM3.293 6.389H2v15.362a2.2 2.2 0 0 0 2.195 2.195h15.362V22.76H3.293z'
       data-name='Path 217'
@@ -194,7 +175,7 @@ const MenuIcon = () => (
       <style
         dangerouslySetInnerHTML={{
           __html:
-            '\n            .prefix__cls-2{fill:none;stroke:#818181;stroke-linecap:round;stroke-width:2px}\n        '
+            '\n            .prefix__cls-2{fill:none;stroke:#818181;stroke-linecap:round;stroke-width:2px}\n        ',
         }}
       />
     </defs>
@@ -239,25 +220,25 @@ const MenuIcon = () => (
 
 const menuItems = [
   {
-    icon: props => <HomeIcon {...props} />,
+    icon: (props) => <HomeIcon {...props} />,
     path: '/home',
-    text: 'Home'
+    text: 'Home',
   },
   {
-    icon: props => <ReferIcon {...props} />,
+    icon: (props) => <LinkIcon {...props} />,
     path: '/profile',
-    text: 'Profile'
+    text: 'Link',
   },
   {
-    icon: props => <ReleasesIcon {...props} />,
+    icon: (props) => <ReleasesIcon {...props} />,
     path: '/releases',
-    text: 'Releases'
+    text: 'Releases',
   },
   {
-    icon: props => <MenuIcon {...props} />,
+    icon: (props) => <MenuIcon {...props} />,
     path: '/menu',
-    text: 'Menu'
-  }
+    text: 'Menu',
+  },
 ];
 
 const MobileNavigation = ({ lockedRoutes }) => {
@@ -269,7 +250,7 @@ const MobileNavigation = ({ lockedRoutes }) => {
     '/find-artist-uri',
     '/pricing',
     '/settings',
-    '/update-payment'
+    '/update-payment',
   ];
   if (window.innerWidth >= 1024 || hiddenRoutes.includes(path)) return null;
   return (
