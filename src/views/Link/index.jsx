@@ -321,8 +321,8 @@ const SpotifyButton = styled(Button)`
   }
 `;
 const DeezerButton = styled(SpotifyButton)`
-  color: black;
-  background: #ffffff;
+  color: white;
+  background: #1db954;
 `;
 const DeezerImg = styled.img`
   width: 32.5px;
@@ -636,14 +636,14 @@ const PublicLink = () => {
         ) : (
           <>
             <Subtitle>Presave with</Subtitle>
-            <SpotifyButton onClick={handleSpotifyLogin}>
-              Spotify
+            <DeezerButton onClick={handleSpotifyLogin}>
               <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
-            </SpotifyButton>
-            <DeezerButton onClick={handleDeezerLogin}>
-              Deezer
-              <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
+              Spotify
             </DeezerButton>
+            <SpotifyButton onClick={handleDeezerLogin}>
+              <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
+              Deezer
+            </SpotifyButton>
             <ToggleContainer>
               <Toggle
                 defaultChecked={checked}
