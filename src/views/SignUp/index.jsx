@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import { userSignup, getCurrentUser } from '../../api';
 import { useAuth } from '../../Context/authContext';
 import Footer from '../../components/Footer';
-import { reportEvent } from '../../analytics';
+import { reportEvent, TrackPixelEvent, Event } from '../../analytics';
 
 const Form = styled.form`
   //margin: 0 auto;
@@ -99,18 +99,25 @@ const Signup = () => {
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     console.log('Submitting!');
     setSubmitting(true);
+    Event('Login and Signup', 'Signup Attempt', 'Onsite');
     values.email = values.email.trim().toLowerCase();
 
     const response = await userSignup(values);
     if (response.error) {
       if (response.error.response.status === 409) {
         setFieldError('email', 'Email is already taken.');
+        Event('Login and Signup', 'Signup Fail', 'Onsite: Email taken');
+      } else {
+        Event('Login and Signup', 'Signup Fail', 'Onsite: Other');
       }
       return setSubmitting(false);
     }
 
     const newUser = await getCurrentUser();
     reportEvent('sign_up', newUser);
+    TrackPixelEvent('signup');
+    Event('Login and Signup', 'Signup Sucess', 'Onsite');
+
     setAuth({ user: newUser });
   };
 

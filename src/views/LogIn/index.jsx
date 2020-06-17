@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import { userLogin, getCurrentUser } from '../../api';
 import { useAuth } from '../../Context/authContext';
 import Footer from '../../components/Footer';
-import { reportEvent } from '../../analytics';
+import { reportEvent, TrackPixelEvent, Event } from '../../analytics';
 
 const Form = styled.form`
   //margin: 0 auto;
@@ -76,6 +76,7 @@ const Login = () => {
   const { setAuth } = useAuth();
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
+    Event('Login and Signup', 'Login Attempt', 'Onsite');
     values.email = values.email.trim().toLowerCase();
 
     const response = await userLogin(values);
@@ -86,10 +87,20 @@ const Login = () => {
         'email',
         'Email or password is incorrect. Please try again.'
       );
+      Event(
+        'Login and Signup',
+        'Login Fail',
+        'Onsite: Email/password incorrect'
+      );
       return setSubmitting(false);
     }
     const newUser = await getCurrentUser();
+
+    // analytics
     reportEvent('login', newUser);
+    TrackPixelEvent('login');
+    Event('Login and Signup', 'Login Sucess', 'Onsite');
+
     setAuth({ user: newUser });
   };
 

@@ -16,6 +16,7 @@ import './toggle.css';
 import Button from '../../components/Button';
 import { Transition } from 'react-transition-group';
 import { useToasts } from 'react-toast-notifications';
+import ReactGA from 'react-ga';
 
 const duration = 300;
 // const timeout = {
@@ -301,10 +302,11 @@ const Subtitle = styled.h2`
   color: #444444;
 `;
 const SpotifyButton = styled(Button)`
-  background: #1db954;
+  background: ${(props) => (props.background ? props.background : '#fff')};
   font-weight: 600;
   border-radius: 10px;
   font-size: 18px;
+  color: ${(props) => (props.textColor ? props.textColor : '#000')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -325,42 +327,6 @@ const DeezerButton = styled(SpotifyButton)`
 const DeezerImg = styled.img`
   width: 32.5px;
   height: 18.1px;
-  margin-right: 10px;
-`;
-const AppleButton = styled(SpotifyButton)`
-  color: white;
-  background: black;
-`;
-const SoundcloudButton = styled(SpotifyButton)`
-  color: white;
-  background: #ff7700;
-`;
-const AmazonButton = styled(SpotifyButton)`
-  color: white;
-  background: #4300ff;
-`;
-const PandoraButton = styled(SpotifyButton)`
-  color: white;
-  background: #3668ff;
-`;
-const SoundcloudImg = styled.img`
-  width: 33.7px;
-  height: 18.9px;
-  margin-right: 10px;
-`;
-const YoutubeImg = styled.img`
-  width: 26.7px;
-  height: 20px;
-  margin-right: 10px;
-`;
-const TidalImg = styled.img`
-  width: 27px;
-  height: 18px;
-  margin-right: 10px;
-`;
-const GooglePlayImg = styled.img`
-  width: 30px;
-  height: 24.9px;
   margin-right: 10px;
 `;
 const ToggleContainer = styled.label`
@@ -389,7 +355,7 @@ const BoldText = styled.a`
   pointer-events: ${(props) => props.previewMode && 'none'};
 `;
 const SpotifyImg = styled.img`
-  width: 20px;
+  //width: 20px;
   height: 20px;
   margin-right: 10px;
 `;
@@ -715,67 +681,92 @@ const PublicLink = () => {
     );
   };
 
+  const linkInfo = [
+    {
+      type: 'spotify',
+      background: '#1db954',
+      textColor: '#fff',
+      logo: '/assets/spotify-logo-white-sm.png',
+      text: 'Spotify',
+    },
+    {
+      type: 'deezer',
+      // background: '#fff',
+      // textColor: '#000',
+      logo: '/assets/deezer-logo-black-sm.png',
+      text: 'Deezer',
+    },
+    {
+      type: 'apple',
+      background: '#000',
+      textColor: '#fff',
+      text: 'Apple Music',
+    },
+    {
+      type: 'soundcloud',
+      background: '#ff7700',
+      textColor: '#fff',
+      logo: '/assets/soundcloud-logo-white.png',
+      text: 'Soundcloud',
+    },
+    {
+      type: 'tidal',
+      background: '#000',
+      textColor: '#fff',
+      logo: '/assets/tidal-logo-white.png',
+      text: 'Tidal',
+    },
+    {
+      type: 'amazon',
+      background: '#4300ff',
+      textColor: '#fff',
+      text: 'Amazon Music',
+    },
+    {
+      type: 'google',
+      logo: '/assets/google-play-logo.png',
+      text: 'Google Play',
+    },
+    {
+      type: 'pandora',
+      background: '#3668ff',
+      textColor: '#fff',
+      text: 'Pandora',
+    },
+    {
+      type: 'youtube',
+      logo: '/assets/youtube-logo-red.png',
+      text: 'Youtube',
+    },
+  ];
+
   const ReleaseView = () => {
     return (
       <WhiteContainer id='abs'>
         <LargerAlbum src={artist.latest.img} />
         <SongTitle>{artist.latest.name}</SongTitle>
         <Subtitle>Listen on</Subtitle>
-        {artist.latest.links && (
-          <>
-            {artist.latest.links.spotify && (
-              <SpotifyButton as='a' href={artist.latest.links.spotify}>
-                <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
-                Spotify
-              </SpotifyButton>
-            )}
-            {artist.latest.links.deezer && (
-              <DeezerButton as='a' href={artist.latest.links.deezer}>
-                <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
-                Deezer
-              </DeezerButton>
-            )}
-            {artist.latest.links.apple && (
-              <AppleButton as='a' href={artist.latest.links.apple}>
-                Apple Music
-              </AppleButton>
-            )}
-            {artist.latest.links.soundcloud && (
-              <SoundcloudButton as='a' href={artist.latest.links.soundcloud}>
-                <SoundcloudImg src='/assets/soundcloud-logo-white.png' alt='' />
-                Soundcloud
-              </SoundcloudButton>
-            )}
-            {artist.latest.links.tidal && (
-              <AppleButton as='a' href={artist.latest.links.tidal}>
-                <TidalImg src='/assets/tidal-logo-white.png' alt='' />
-                Tidal
-              </AppleButton>
-            )}
-            {artist.latest.links.amazon && (
-              <AmazonButton as='a' href={artist.latest.links.amazon}>
-                Amazon Music
-              </AmazonButton>
-            )}
-            {artist.latest.links.google && (
-              <DeezerButton as='a' href={artist.latest.links.google}>
-                <GooglePlayImg src='/assets/google-play-logo.png' alt='' />
-                Google Play
-              </DeezerButton>
-            )}
-            {artist.latest.links.pandora && (
-              <PandoraButton as='a' href={artist.latest.links.pandora}>
-                Pandora
-              </PandoraButton>
-            )}
-            {artist.latest.links.youtube && (
-              <DeezerButton as='a' href={artist.latest.links.youtube}>
-                <YoutubeImg src='/assets/youtube-logo-red.png' alt='' />
-                Youtube
-              </DeezerButton>
-            )}
-          </>
-        )}
+        {artist.latest.links &&
+          linkInfo.map((item) => {
+            const link = artist.latest.links[item.type];
+            return (
+              link && (
+                <ReactGA.OutboundLink
+                  to={link}
+                  eventLabel={link}
+                  target='_blank'
+                >
+                  <SpotifyButton
+                    background={item.background}
+                    textColor={item.textColor}
+                  >
+                    {item.logo && <SpotifyImg src={item.logo} alt='' />}
+                    {item.text}
+                  </SpotifyButton>
+                </ReactGA.OutboundLink>
+              )
+            );
+          })}
       </WhiteContainer>
     );
   };
