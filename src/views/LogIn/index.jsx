@@ -7,7 +7,7 @@ import InputSection from '../../components/InputSection';
 import Button from '../../components/Button';
 import * as Yup from 'yup';
 import { userLogin, getCurrentUser } from '../../api';
-import authContext from '../../Context/authContext';
+import { useAuth } from '../../Context/authContext';
 import Footer from '../../components/Footer';
 import { reportEvent } from '../../analytics';
 
@@ -73,7 +73,7 @@ const BodyContainer = styled.div`
 `;
 
 const Login = () => {
-  const { setAuth } = React.useContext(authContext);
+  const { setAuth } = useAuth();
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(true);
     values.email = values.email.trim().toLowerCase();

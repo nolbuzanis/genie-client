@@ -12,16 +12,19 @@ export const initGA = () => {
   if (production) {
     ReactGA.initialize('UA-104067820-3');
     TagManager.initialize(tagManagerArgs);
+  } else {
+    ReactGA.initialize('UA-104067820-4');
+    TagManager.initialize(tagManagerArgs);
   }
-  // } else {
-  //   ReactGA.initialize('UA-104067820-4');
-  // }
 };
 
 export const reportEvent = (eventName, data = {}) => {
   const args = {
-    dataLayer: data,
-    dataLayerName: eventName,
+    dataLayer: {
+      ...data,
+      event: eventName,
+    },
+    dataLayerName: 'PageDataLayer',
   };
 
   TagManager.dataLayer(args);

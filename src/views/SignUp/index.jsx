@@ -7,8 +7,9 @@ import Button from '../../components/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { userSignup, getCurrentUser } from '../../api';
-import authContext from '../../Context/authContext';
+import { useAuth } from '../../Context/authContext';
 import Footer from '../../components/Footer';
+import { reportEvent } from '../../analytics';
 
 const Form = styled.form`
   //margin: 0 auto;
@@ -94,7 +95,7 @@ const validationSchema = Yup.object({
 });
 
 const Signup = () => {
-  const { setAuth } = React.useContext(authContext);
+  const { setAuth } = useAuth();
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     console.log('Submitting!');
     setSubmitting(true);
@@ -109,6 +110,7 @@ const Signup = () => {
     }
 
     const newUser = await getCurrentUser();
+    reportEvent('sign_up', newUser);
     setAuth({ user: newUser });
   };
 
