@@ -1,19 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-// const PlatformIcon = styled.img`
-//   width: 50px;
-//   height: 50px;
-//   object-fit: contain;
-//   border-radius: 5px;
-//   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-//   background-color: #ffffff;
-// `;
 const PlatformList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 300px;
-  padding: 25px 0;
+  margin: 0 auto;
+  max-width: 400px;
+  width: 100%;
+  padding: 25px 0 0;
 `;
 
 const SpotifySvg = () => (
@@ -246,10 +240,10 @@ const NapsterSvg = () => (
 );
 
 const IconName = styled.p`
-  color: #444444;
+  color: ${props => props.color ? props.color : '#444444'};
   font-size: 12px;
   margin-top: -10px;
-  font-weight: 500;
+  font-weight: 400;
 `;
 const IconContainer = styled.div`
   text-align: center;
@@ -269,17 +263,16 @@ const list = {
   napster: { icon: <NapsterSvg />, label: 'Napster' }
 }
 
-const PlatformIcons = ({ links }) => {
+const PlatformIcons = ({ links, color, clickable }) => {
 
-  const parsedLinks = Object.keys(links);
-  console.log(parsedLinks);
+  const parsedLinks = Object.keys(links).sort();
 
   return (<PlatformList>
     {parsedLinks.map(key => (
       list[key] &&
-      <IconContainer key={key}>
+      <IconContainer key={key} as={clickable && 'a'} href={clickable && links[key]} target='_blank'>
         {list[key].icon}
-        <IconName>{list[key].label}</IconName>
+        <IconName color={color}>{list[key].label}</IconName>
       </IconContainer>
     ))}
   </PlatformList>);

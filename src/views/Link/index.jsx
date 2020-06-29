@@ -7,46 +7,16 @@ import {
   subscribeToArtist,
   SERVER_URL,
 } from '../../api';
-//import { useAlert } from 'react-alert';
 import { useAuth } from '../../Context/authContext';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { css } from '@emotion/core';
 import Toggle from 'react-toggle';
 import './toggle.css';
 import Button from '../../components/Button';
-import { Transition } from 'react-transition-group';
 import { useToasts } from 'react-toast-notifications';
-import ReactGA from 'react-ga';
-
-const duration = 300;
-// const timeout = {
-//   enter: 1000,
-//   appear: duration,
-//   exit: 0,
-// };
-
-const defaultStyle = {
-  position: 'relative',
-  width: '100%',
-  padding: '0 30px',
-  transition: `all ${duration}ms ease-in-out`,
-  opacity: 0,
-  left: '100%',
-};
-
-const fadeInoutLeftStyle = {
-  entering: { opacity: 0, left: '-100%' },
-  entered: { opacity: 1, left: '0%' },
-  exiting: { opacity: 0, left: '-100%' },
-  exited: { opacity: 0, left: '-100%' },
-};
-
-const inRightOutRightStyle = {
-  entering: { opacity: 0, left: '100%' },
-  entered: { opacity: 1, left: '0%' },
-  exiting: { opacity: 0, left: '100%' },
-  exited: { opacity: 0, left: '100%' },
-};
+//import ReactGA from 'react-ga';
+import SongCard from '../../components/SongCard';
+import PlatformIcons from '../../components/PlatformIcons';
 
 const loadingStyles = css`
   position: relative;
@@ -56,22 +26,27 @@ const loadingStyles = css`
   top: 40%;
 `;
 const SocialLink = styled.a`
-  margin-right: 15px;
+  margin: 10px;
   > svg path {
-    fill: rgba(255, 255, 255, 0.8);
+    fill: rgba(255, 255, 255, 1);
   }
   &:hover svg path {
-    fill: #656ded;
+    fill: rgba(255, 255, 255, 0.8);
+    //fill: #656ded;
   }
+`;
+const SocialLinks = styled.div`
+  margin: 0 auto;
+  padding: 20px;
 `;
 
 const FacebookIcon = ({ href }) => (
-  <SocialLink href={href}>
+  <SocialLink href={href} target='_blank'>
     <svg
       xmlns='http://www.w3.org/2000/svg'
       id='prefix__facebook-logo_copy'
-      width='10.666'
-      height='19.729'
+      width='12.666'
+      height='24'
       data-name='facebook-logo copy'
       viewBox='0 0 10.666 19.729'
     >
@@ -84,12 +59,12 @@ const FacebookIcon = ({ href }) => (
   </SocialLink>
 );
 const TwitterIcon = ({ href }) => (
-  <SocialLink href={href}>
+  <SocialLink href={href} target='_blank'>
     <svg
       xmlns='http://www.w3.org/2000/svg'
       id='prefix__twitter_copy'
-      width='24.615'
-      height={20}
+      width='26.615'
+      height={24}
       data-name='twitter copy'
       viewBox='0 0 24.615 20'
     >
@@ -102,57 +77,29 @@ const TwitterIcon = ({ href }) => (
   </SocialLink>
 );
 const InstagramIcon = ({ href }) => (
-  <SocialLink href={href}>
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      width={20}
-      height={20}
-      viewBox='0 0 20 20'
-    >
-      <defs>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: '\n        .prefix__cls-2{fill:#fff}\n        ',
-          }}
-        />
-      </defs>
-      <g
-        id='prefix__instagram_1_copy'
-        data-name='instagram (1) copy'
-        transform='translate(0 .475)'
-      >
-        <path
-          id='prefix__Shape'
-          fill='#818181'
-          d='M6.25 20A6.251 6.251 0 0 1 0 13.75v-7.5A6.251 6.251 0 0 1 6.25 0h7.5A6.251 6.251 0 0 1 20 6.25v7.5A6.25 6.25 0 0 1 13.75 20z'
-          transform='translate(0 -.475)'
-        />
-        <path
-          id='prefix__Shape-2'
-          d='M0 4.881a4.881 4.881 0 1 1 4.881 4.882A4.881 4.881 0 0 1 0 4.881z'
-          className='prefix__cls-2'
-          data-name='Shape'
-          transform='translate(4.881 4.881)'
-          style={{ fill: '#ffffff' }}
-        />
-        <circle
-          id='prefix__Oval'
-          cx='.65'
-          cy='.65'
-          r='.65'
-          className='prefix__cls-2'
-          transform='translate(14.359 3.865)'
-        />
+  <SocialLink href={href} target='_blank'>
+    {/*?xml version="1.0"?*/}
+    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }} xmlSpace="preserve" width="24px" height="24px" className><g><g>
+      <g>
+        <path d="M352,0H160C71.648,0,0,71.648,0,160v192c0,88.352,71.648,160,160,160h192c88.352,0,160-71.648,160-160V160    C512,71.648,440.352,0,352,0z M464,352c0,61.76-50.24,112-112,112H160c-61.76,0-112-50.24-112-112V160C48,98.24,98.24,48,160,48    h192c61.76,0,112,50.24,112,112V352z" data-original="#000000" className="active-path" data-old_color="#000000" fill="#FFFFFF" />
       </g>
-    </svg>
+    </g><g>
+        <g>
+          <path d="M256,128c-70.688,0-128,57.312-128,128s57.312,128,128,128s128-57.312,128-128S326.688,128,256,128z M256,336    c-44.096,0-80-35.904-80-80c0-44.128,35.904-80,80-80s80,35.872,80,80C336,300.096,300.096,336,256,336z" data-original="#000000" className="active-path" data-old_color="#000000" fill="#FFFFFF" />
+        </g>
+      </g><g>
+        <g>
+          <circle cx="393.6" cy="118.4" r="17.056" data-original="#000000" className="active-path" data-old_color="#000000" fill="#FFFFFF" />
+        </g>
+      </g></g> </svg>
   </SocialLink>
 );
 const WebsiteIcon = ({ href }) => (
-  <SocialLink href={href}>
+  <SocialLink href={href} target='_blank'>
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      width='20.068'
-      height='20.068'
+      width='24'
+      height='24'
       viewBox='0 0 20.068 20.068'
     >
       <g id='prefix__language-24px' transform='translate(49 -9.932)'>
@@ -193,6 +140,7 @@ const Mask = styled.div`
 `;
 const Content = styled.div`
   position: relative;
+  padding: 0 30px;
   z-index: 1;
   //padding: 0 30px;
 `;
@@ -202,74 +150,31 @@ const ArtistName = styled.h1`
   justify-content: center;
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 36px;
-  padding: 100px 30px 0;
-  font-weight: 600;
+  padding: 40px 0 0;
+  font-weight: 500;
   color: white;
 `;
-const Placeholder = styled.div`
-  height: 350px;
+const PoweredBy = styled(Link)`
+  display: block;
+  position: relative;
+  //padding: 100px 20px 30px;
+  margin: 0 auto;
+  font-size: 14px;
+  padding: 5px;
 `;
-const Bio = styled.p`
+// const About = styled.p`
+//   font-size: 14px;
+//   font-weight: 500;
+//   padding: 5px;
+//   margin: 10px 0 20px;
+//   color: white;
+//   cursor: pointer;
+// `;
+const Header = styled.h2`
   font-size: 18px;
   font-weight: 500;
-  opacity: 0.9;
   color: white;
-  padding-top: 25px;
-  padding-bottom: 10px;
-`;
-const Heading = styled.h2`
-  font-size: 20px;
-  font-weight: 500;
-  padding-top: 30px;
-  color: #efefef;
-`;
-const SongCard = styled.div`
-  width: 100%;
-  max-width: 400px;
-  background: white;
-  border-radius: 10px;
-  margin: 15px auto 0;
-  padding: 10px 15px;
-  display: flex;
-  text-align: left;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-`;
-const AlbumCover = styled.img`
-  display: inline-block;
-  width: 60px;
-  margin-right: 15px;
-  height: 60px;
-  background-color: grey;
-`;
-const SongName = styled.p`
-  color: #444444;
-  font-size: 20px;
-  font-weight: 500;
-`;
-const ReleaseDate = styled.p`
-  color: #444444;
-  font-size: 14px;
-`;
-const SongContent = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const ForwardArrow = styled.img`
-  width: 24px;
-  height: 24px;
-`;
-const SocialMediaLinks = styled.div`
-  position: absolute;
-  top: 25px;
-  right: 30px;
-`;
-const NoReleasesText = styled.p`
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 16px;
-  text-align: center;
-  padding-top: 20px;
+  padding-top: 35px;
 `;
 const ArrowBack = styled.img`
   width: 24px;
@@ -277,30 +182,8 @@ const ArrowBack = styled.img`
   margin-right: 25px;
   cursor: pointer;
 `;
-const WhiteContainer = styled.div`
-  border-radius: 10px;
-  max-width: 400px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: #ffffff;
-  padding: 25px 20px;
-  margin: 15px auto 0;
-`;
-const LargerAlbum = styled.img`
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-`;
-const SongTitle = styled.p`
-  color: #444444;
-  font-size: 20px;
-  padding-top: 15px;
-`;
-const Subtitle = styled.h2`
-  font-size: 20px;
-  padding-top: 30px;
-  font-weight: 500;
-  color: #444444;
+const Spacing = styled.div`
+  height: 25px;
 `;
 const SpotifyButton = styled(Button)`
   background: ${(props) => (props.background ? props.background : '#fff')};
@@ -311,7 +194,7 @@ const SpotifyButton = styled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 20px;
   height: 44px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 
@@ -343,11 +226,12 @@ const ToggleContainer = styled.label`
 const ToggleText = styled.span`
   padding-left: 5px;
   text-align: left;
+  color: white;
 `;
 const Disclaimer = styled.p`
+  padding-top: 30px;
   font-size: 11px;
-  font-weight: 500;
-  padding-top: 15px;
+  color: white;
 `;
 const BoldText = styled.a`
   font-weight: 700;
@@ -362,38 +246,216 @@ const SpotifyImg = styled.img`
 `;
 const PresaveText = styled.p`
   line-height: 1.4;
-  color: #444444;
+  color: white;
   padding-top: 15px;
   padding-bottom: 20px;
 `;
-const PoweredBy = styled(Link)`
-  display: block;
-  position: relative;
-  padding: 100px 20px 30px;
-  margin: 0 auto;
-  font-size: 18px;
-  > strong {
-    font-size: 20px;
-  }
-`;
-
 const deezerUrl = `${SERVER_URL}/follower/deezer-login`,
   spotifyUrl = `${SERVER_URL}/follower/login`;
 
 let popup;
 
-const parseDate = (timestamp) => {
-  if (!timestamp) return '';
-  if (timestamp._seconds) timestamp = timestamp._seconds * 1000;
-  const date = new Date(timestamp);
-  const parsed = date
-    .toLocaleString('default', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })
-    .split(' ');
-  return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
+const PresaveView = ({ artist, hasSocialMedia }) => {
+  const { follower, setAuth } = useAuth();
+  const [checked, setChecked] = useState(true);
+  const { addToast } = useToasts();
+  const [isSubscribing, setSubscribing] = useState(false);
+
+  const handleFollow = async (follower) => {
+    //follow artist
+    console.log('presaving..');
+    const response = await presaveTrack(artist, checked);
+    // setSubmitting(false);
+    if (response.error) {
+      return addToast('Error pre-saving track: ' + response.error.message, {
+        appearance: 'error',
+      });
+    }
+
+    const { id } = artist.upcoming;
+    follower.presaves
+      ? follower.presaves.push(id)
+      : (follower.presaves = [id]);
+
+    addToast('Sucessfully presaved!', {
+      appearance: 'success',
+    });
+
+    setAuth({ follower });
+  };
+
+  React.useEffect(() => {
+    const onlyHandleOAuth = async (e) => {
+      console.log(e.data);
+      if (e.data && (e.data.deezerId || e.data.spotifyId)) {
+        //close popup
+        popup && (await popup.close());
+        handleFollow(e.data);
+      }
+    };
+
+    window.addEventListener('message', onlyHandleOAuth);
+    return () => {
+      window.removeEventListener('message', onlyHandleOAuth);
+    };
+    // eslint-disable-next-line
+  }, [checked]);
+
+  const handleDeezerLogin = () => {
+    //if (previewMode) return;
+    console.log('deezer oauth flow');
+    if (follower && !follower.error) {
+      handleFollow(follower);
+    } else {
+      popup = window.open(deezerUrl, 'mywindow', 'width=500,height=400');
+    }
+  };
+
+  const handleSpotifyLogin = async () => {
+    //if (previewMode) return;
+    console.log('spotify oauth flow');
+
+    if (follower && !follower.error) {
+      handleFollow(follower);
+    } else {
+      popup = window.open(spotifyUrl, 'mywindow', 'width=500,height=400');
+    }
+  };
+
+  const handleSubscribe = async () => {
+    if (!follower) return;
+    setSubscribing(true);
+    const response = await subscribeToArtist(artist);
+    setSubscribing(false);
+    if (response.error) {
+      return addToast('Error subscribing: ' + response.error.message, {
+        appearance: 'error',
+      });
+    }
+
+    const { id } = artist;
+    follower.following
+      ? follower.following.push(id)
+      : (follower.following = [id]);
+
+    addToast('Sucessfully subscribed!', {
+      appearance: 'success',
+    });
+    return setAuth({ follower });
+  };
+
+  if (follower &&
+    follower.presaves &&
+    follower.presaves.includes(artist.upcoming.id)) {
+    return <>
+      <Spacing />
+      <Spacing />
+      <SongCard song={artist.upcoming} />
+      {follower && follower.following && follower.following.includes(artist.id) ? (
+        <>
+          <Header>Thanks for subscribing!</Header>
+          <PresaveText>
+            Check out {artist.name}’s other social links for more exciting
+            updates!
+        </PresaveText>
+          {hasSocialMedia && <>
+            <SocialLinks>
+              {artist.facebook && <FacebookIcon href={artist.facebook} />}
+              {artist.twitter && <TwitterIcon href={artist.twitter} />}
+              {artist.instagram && <InstagramIcon href={artist.instagram} />}
+              {artist.website && <WebsiteIcon href={artist.website} />}
+            </SocialLinks>
+          </>}
+          <Spacing />
+          <Spacing />
+        </>
+      ) : (
+          <>
+            <Header>Thanks for presaving!</Header>
+            <PresaveText>
+              Consider yourself a big fan? Presave all {artist.name}’s future
+              releases and stay up to date!
+              </PresaveText>
+            <Button
+              onClick={handleSubscribe}
+              isLoading={isSubscribing}
+              disabled={isSubscribing}
+            >
+              {isSubscribing ? 'Subscribing' : 'Subscribe'}
+            </Button>
+            <Disclaimer>
+              * By subscribing you agree to pre-save all {artist.name}'s
+              future releases. You can opt out anytime.
+              </Disclaimer>
+            <Disclaimer>
+              By subscribing you agree to Genie’s{' '}
+              <BoldText
+                target='_blank'
+                href='/privacy-policy'
+              //previewMode={previewMode}
+              >
+                Privacy Policy
+                </BoldText>{' '}
+              and{' '}
+              <BoldText
+                target='_blank'
+                href='/terms-of-service'
+              //previewMode={previewMode}
+              >
+                Terms of Service
+                </BoldText>
+              .
+              </Disclaimer>
+            <Spacing />
+            <Spacing />
+          </>
+        )}</>
+  }
+
+
+  return <>
+    <Spacing />
+    <Spacing />
+    <SongCard song={artist.upcoming} />
+    <Header>Presave with</Header>
+    <DeezerButton onClick={handleSpotifyLogin}>
+      <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
+      Spotify
+            </DeezerButton>
+    <SpotifyButton onClick={handleDeezerLogin}>
+      <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
+      Deezer
+            </SpotifyButton>
+    <ToggleContainer>
+      <Toggle
+        defaultChecked={checked}
+        icons={false}
+        onChange={() => setChecked(!checked)}
+      />
+      <ToggleText>Opt in to {artist.name}'s email updates</ToggleText>
+    </ToggleContainer>
+    <Disclaimer>
+      By pre-saving you agree to Genie’s{' '}
+      <BoldText
+        target='_blank'
+        href='/privacy-policy'
+      //previewMode={previewMode}
+      >
+        Privacy Policy
+              </BoldText>{' '}
+      and{' '}
+      <BoldText
+        target='_blank'
+        href='/terms-of-service'
+      //previewMode={previewMode}
+      >
+        Terms of Service
+              </BoldText>
+      .
+            </Disclaimer>
+    <Spacing />
+    <Spacing />
+  </>;
 };
 
 const PublicLink = () => {
@@ -401,7 +463,6 @@ const PublicLink = () => {
   const [artist, setArtist] = useState(undefined);
   const { user } = useAuth();
   const [presave, setPresave] = useState(false);
-  const [release, setRelease] = useState(false);
 
   const urlParams = new URLSearchParams(window.location.search);
   const view = urlParams.get('view');
@@ -434,438 +495,49 @@ const PublicLink = () => {
     (artist.website && artist.website.trim().length !== 0) ||
     (artist.facebook && artist.facebook.trim().length !== 0);
 
-  const SelectView = () => (
-    <>
-      <Bio>{artist.bio}</Bio>
-      {artist.latest ? (
-        <>
-          <Heading>Latest</Heading>
-          <SongCard
-            onClick={() => {
-              setRelease(!release);
-            }}
-          >
-            <SongContent>
-              <AlbumCover src={artist.latest.img} />
-              <div>
-                <SongName>{artist.latest.name}</SongName>
-                <ReleaseDate>
-                  {parseDate(artist.latest.releaseDate)}
-                </ReleaseDate>
-              </div>
-            </SongContent>
-            <ForwardArrow src='/assets/arrow-forward-primary.png' />
-          </SongCard>
-        </>
-      ) : (
-          !artist.upcoming && (
-            <>
-              <Heading>Latest</Heading>
-              <NoReleasesText>
-                This artist has not added any releases. Check back again later!
-            </NoReleasesText>
-            </>
-          )
-        )}
-      {artist.upcoming && (
-        <>
-          <Heading>Upcoming</Heading>
-          <SongCard
-            onClick={() => {
-              setPresave(!presave);
-            }}
-          >
-            <SongContent>
-              <AlbumCover src={artist.upcoming.img} />
-              <div>
-                <SongName>{artist.upcoming.name}</SongName>
-                <ReleaseDate>
-                  {parseDate(artist.upcoming.releaseDate)}
-                </ReleaseDate>
-              </div>
-            </SongContent>
-            <ForwardArrow src='/assets/arrow-forward-primary.png' />
-          </SongCard>
-        </>
-      )}
-    </>
-  );
-
-  const PresaveView = () => {
-    const { follower, setAuth } = useAuth();
-    const [checked, setChecked] = useState(true);
-    const { addToast } = useToasts();
-    const [isSubscribing, setSubscribing] = useState(false);
-
-    const handleFollow = async (follower) => {
-      //follow artist
-      console.log('presaving..');
-      const response = await presaveTrack(artist, checked);
-      // setSubmitting(false);
-      if (response.error) {
-        return addToast('Error pre-saving track: ' + response.error.message, {
-          appearance: 'error',
-        });
-      }
-
-      const { id } = artist.upcoming;
-      follower.presaves
-        ? follower.presaves.push(id)
-        : (follower.presaves = [id]);
-
-      addToast('Sucessfully presaved!', {
-        appearance: 'success',
-      });
-
-      setAuth({ follower });
-    };
-
-    React.useEffect(() => {
-      const onlyHandleOAuth = async (e) => {
-        console.log(e.data);
-        if (e.data && (e.data.deezerId || e.data.spotifyId)) {
-          //close popup
-          popup && (await popup.close());
-          handleFollow(e.data);
-        }
-      };
-
-      window.addEventListener('message', onlyHandleOAuth);
-      return () => {
-        window.removeEventListener('message', onlyHandleOAuth);
-      };
-      // eslint-disable-next-line
-    }, [checked]);
-
-    const handleDeezerLogin = () => {
-      if (previewMode) return;
-      console.log('deezer oauth flow');
-      if (follower && !follower.error) {
-        handleFollow(follower);
-      } else {
-        popup = window.open(deezerUrl, 'mywindow', 'width=500,height=400');
-      }
-    };
-
-    const handleSpotifyLogin = async () => {
-      if (previewMode) return;
-      console.log('spotify oauth flow');
-
-      if (follower && !follower.error) {
-        handleFollow(follower);
-      } else {
-        popup = window.open(spotifyUrl, 'mywindow', 'width=500,height=400');
-      }
-    };
-
-    const handleSubscribe = async () => {
-      if (!follower) return;
-      setSubscribing(true);
-      const response = await subscribeToArtist(artist);
-      setSubscribing(false);
-      if (response.error) {
-        return addToast('Error pre-saving track: ' + response.error.message, {
-          appearance: 'error',
-        });
-      }
-
-      const { id } = artist;
-      follower.following
-        ? follower.following.push(id)
-        : (follower.following = [id]);
-
-      addToast('Sucessfully subscribed!', {
-        appearance: 'success',
-      });
-      return setAuth({ follower });
-    };
-
-    return (
-      <WhiteContainer>
-        <LargerAlbum src={artist.upcoming.img} />
-        <SongTitle>{artist.upcoming.name}</SongTitle>
-        {follower &&
-          follower.presaves &&
-          follower.presaves.includes(artist.upcoming.id) ? (
-            follower.following && follower.following.includes(artist.id) ? (
-              <>
-                <Subtitle>Thanks for subscribing!</Subtitle>
-                <PresaveText>
-                  Check out {artist.name}’s other social links for more exciting
-                  updates!
-              </PresaveText>
-              </>
-            ) : (
-                <>
-                  <Subtitle>Thanks for presaving!</Subtitle>
-                  <PresaveText>
-                    Consider yourself a big fan? Presave all {artist.name}’s future
-                    releases and stay up to date!
-              </PresaveText>
-                  <Button
-                    onClick={handleSubscribe}
-                    isLoading={isSubscribing}
-                    disabled={isSubscribing}
-                  >
-                    {isSubscribing ? 'Subscribing' : 'Subscribe'}
-                  </Button>
-                  <Disclaimer>
-                    * By subscribing you agree to pre-save all {artist.name}'s
-                    future releases. You can opt out anytime.
-              </Disclaimer>
-                  <Disclaimer>
-                    By subscribing you agree to Genie’s{' '}
-                    <BoldText
-                      target='_blank'
-                      href='/privacy-policy'
-                      previewMode={previewMode}
-                    >
-                      Privacy Policy
-                </BoldText>{' '}
-                    and{' '}
-                    <BoldText
-                      target='_blank'
-                      href='/terms-of-service'
-                      previewMode={previewMode}
-                    >
-                      Terms of Service
-                </BoldText>
-                    .
-              </Disclaimer>
-                </>
-              )
-          ) : (
-            <>
-              <Subtitle>Presave with</Subtitle>
-              <DeezerButton onClick={handleSpotifyLogin}>
-                <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
-                Spotify
-            </DeezerButton>
-              <SpotifyButton onClick={handleDeezerLogin}>
-                <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
-                Deezer
-            </SpotifyButton>
-              <ToggleContainer>
-                <Toggle
-                  defaultChecked={checked}
-                  icons={false}
-                  onChange={() => setChecked(!checked)}
-                />
-                <ToggleText>Opt in to {artist.name}'s email updates</ToggleText>
-              </ToggleContainer>
-              {/* <Disclaimer>
-          * By following you agree to pre-save {artist.name}'s future releases.
-          You can opt out anytime.
-        </Disclaimer> */}
-              <Disclaimer>
-                By pre-saving you agree to Genie’s{' '}
-                <BoldText
-                  target='_blank'
-                  href='/privacy-policy'
-                  previewMode={previewMode}
-                >
-                  Privacy Policy
-              </BoldText>{' '}
-                and{' '}
-                <BoldText
-                  target='_blank'
-                  href='/terms-of-service'
-                  previewMode={previewMode}
-                >
-                  Terms of Service
-              </BoldText>
-                .
-            </Disclaimer>
-            </>
-          )}
-      </WhiteContainer>
-    );
-  };
-
-  const linkInfo = [
-    {
-      type: 'spotify',
-      background: '#1db954',
-      textColor: '#fff',
-      logo: '/assets/spotify-logo-white-sm.png',
-      text: 'Spotify',
-    },
-    {
-      type: 'deezer',
-      // background: '#fff',
-      // textColor: '#000',
-      logo: '/assets/deezer-logo-black-sm.png',
-      text: 'Deezer',
-    },
-    {
-      type: 'apple',
-      background: '#000',
-      textColor: '#fff',
-      text: 'Apple Music',
-    },
-    {
-      type: 'soundcloud',
-      background: '#ff7700',
-      textColor: '#fff',
-      logo: '/assets/soundcloud-logo-white.png',
-      text: 'Soundcloud',
-    },
-    {
-      type: 'tidal',
-      background: '#000',
-      textColor: '#fff',
-      logo: '/assets/tidal-logo-white.png',
-      text: 'Tidal',
-    },
-    {
-      type: 'amazon',
-      background: '#4300ff',
-      textColor: '#fff',
-      text: 'Amazon Music',
-    },
-    {
-      type: 'google',
-      logo: '/assets/google-play-logo.png',
-      text: 'Google Play',
-    },
-    {
-      type: 'pandora',
-      background: '#3668ff',
-      textColor: '#fff',
-      text: 'Pandora',
-    },
-    {
-      type: 'youtube',
-      logo: '/assets/youtube-logo-red.png',
-      text: 'Youtube',
-    },
-  ];
-
-  const ReleaseView = () => {
-    return (
-      <WhiteContainer id='abs'>
-        <LargerAlbum src={artist.latest.img} />
-        <SongTitle>{artist.latest.name}</SongTitle>
-        <Subtitle>Listen on</Subtitle>
-        {artist.latest.links &&
-          linkInfo.map((item) => {
-            const link = artist.latest.links[item.type];
-            return (
-              link && (
-                <ReactGA.OutboundLink
-                  to={link}
-                  eventLabel={link}
-                  target='_blank'
-                >
-                  <SpotifyButton
-                    background={item.background}
-                    textColor={item.textColor}
-                  >
-                    {item.logo && <SpotifyImg src={item.logo} alt='' />}
-                    {item.text}
-                  </SpotifyButton>
-                </ReactGA.OutboundLink>
-              )
-            );
-          })}
-      </WhiteContainer>
-    );
-  };
-
   return (
     <>
       <Background img={artist.img}>
         <Mask />
         <Content>
-          {hasSocialMedia && (
-            <SocialMediaLinks>
-              {artist.facebook && <FacebookIcon href={artist.facebook} />}
-              {artist.twitter && <TwitterIcon href={artist.twitter} />}
-              {artist.instagram && <InstagramIcon href={artist.instagram} />}
-              {artist.website && <WebsiteIcon href={artist.website} />}
-            </SocialMediaLinks>
-          )}
-          <ArtistName>
-            {(presave || release) && (
-              <ArrowBack
-                src='/assets/arrow-backward-white.png'
-                onClick={() => {
-                  setPresave(false);
-                  setRelease(false);
-                }}
-              />
-            )}
-            {artist.name}
-          </ArtistName>
-          <Transition
-            in={!(presave || release)}
-            timeout={duration}
-            appear
-            enter
-            unmountOnExit
-            mountOnEnter
-          >
-            {(state) => (
-              <>
-                <div
-                  style={{
-                    ...defaultStyle,
-                    ...fadeInoutLeftStyle[state],
-                    position: 'absolute',
-                  }}
-                >
-                  <SelectView />
-                </div>
-                <Placeholder />
+          <ArtistName>{presave && <ArrowBack
+            src='/assets/arrow-backward-white.png'
+            onClick={() => setPresave(false)}
+          />}{artist.name}</ArtistName>
+          {presave ? <PresaveView artist={artist} hasSocialMedia={hasSocialMedia} /> :
+            <>
+              {/* <About>about</About> */}
+              <Spacing />
+              {artist.latest && <>
+                <SongCard song={artist.latest} />
+                <Header>Listen</Header>
+                <PlatformIcons links={artist.latest.links} color='#fff' clickable />
               </>
-            )}
-          </Transition>
-          {artist.upcoming && (
-            <Transition
-              in={presave}
-              timeout={duration}
-              appear
-              enter
-              unmountOnExit
-              mountOnEnter
-            >
-              {(state) => (
-                <div
-                  style={{
-                    ...defaultStyle,
-                    ...inRightOutRightStyle[state],
-                  }}
-                >
-                  <PresaveView />
-                </div>
-              )}
-            </Transition>
-          )}
-          {artist.latest && (
-            <Transition
-              in={release}
-              timeout={duration}
-              appear
-              enter
-              unmountOnExit
-              mountOnEnter
-            >
-              {(state) => (
-                <div
-                  style={{
-                    ...defaultStyle,
-                    ...inRightOutRightStyle[state],
-                  }}
-                >
-                  <ReleaseView />
-                </div>
-              )}
-            </Transition>
-          )}
+              }
+              {artist.upcoming && <>
+                <Header>Presave</Header>
+                <Spacing />
+                <SongCard song={artist.upcoming} presave action={() => setPresave(true)} />
+              </>}
+              {hasSocialMedia && <>
+                <Spacing />
+                <Header>Share</Header>
+                <SocialLinks>
+                  {artist.facebook && <FacebookIcon href={artist.facebook} />}
+                  {artist.twitter && <TwitterIcon href={artist.twitter} />}
+                  {artist.instagram && <InstagramIcon href={artist.instagram} />}
+                  {artist.website && <WebsiteIcon href={artist.website} />}
+                </SocialLinks>
+              </>}
+              <Spacing />
+              <Spacing />
+            </>
+          }
         </Content>
         <PoweredBy to='/'>
           powered by <strong>Genie</strong>
         </PoweredBy>
+        <Spacing />
       </Background>
     </>
   );

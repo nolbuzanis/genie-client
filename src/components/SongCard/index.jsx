@@ -14,6 +14,8 @@ const SongContainer = styled.div`
   text-align: center;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   background-color: #ffffff;
+  overflow: hidden;
+  ${props => props.presave && 'border-radius: 10px;'}
 `;
 const SongName = styled.p`
   color: #444444;
@@ -26,6 +28,18 @@ const SongDate = styled.p`
   font-weight: normal;
   color: #444444;
   padding: 5px 0 10px;
+`;
+const CTA = styled.button`
+  background-color: #f2f2fa;
+  padding: 0;
+  display: block;
+  height: 35px;
+  line-height: 35px;
+  box-shadow: none;
+  width: 100%;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
 `;
 
 const parseDate = (timestamp) => {
@@ -42,14 +56,13 @@ const parseDate = (timestamp) => {
   return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
 };
 
-const SongCard = ({ song }) => {
+const SongCard = ({ song, presave, action }) => {
 
-  console.log('from card: ', song);
-
-  return <SongContainer>
+  return <SongContainer presave={presave}>
     <SongPic img={song.img} />
     <SongName>{song.name}</SongName>
     <SongDate>{parseDate(song.releaseDate)}</SongDate>
+    {presave && <CTA onClick={action}>Presave today</CTA>}
   </SongContainer>
 };
 
