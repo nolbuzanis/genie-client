@@ -13,7 +13,7 @@ pipelines:
           - node
         script:
           - npm install
-          - npm test
+          # - npm test
 
     - step:
         name: Build
