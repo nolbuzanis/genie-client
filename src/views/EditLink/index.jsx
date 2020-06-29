@@ -23,7 +23,7 @@ const Background = styled.div`
   position: relative;
   width: 100%;
   min-height: 100%;
-  background: linear-gradient(90deg, #373b44 0%, #4286f4 100%);
+  background: linear-gradient(90deg, rgb(70,70,70) 0%, rgb(50,50,50) 100%);
   ${(props) =>
     props.img && `background: url(${props.img}) center center no-repeat;`}
   background-size: cover;
@@ -162,6 +162,7 @@ const SongContent = styled.div`
   cursor: pointer;
   align-items: center;
   text-align: left;
+  margin-bottom: 10px;
 `;
 // const ReleaseList = styled.ul`
 //   padding:
@@ -251,7 +252,7 @@ const ReleasesDropdown = ({ user, setAuth, onClose }) => {
   return (
     <DropdownContainer ref={menuRef}>
       <DropdownHeader>
-        Select Latest
+        Select featured
         {!songs && (
           <ClipLoader css={override} size={20} color='#444444' loading={true} />
         )}
@@ -277,8 +278,8 @@ const ReleasesDropdown = ({ user, setAuth, onClose }) => {
             );
           })
         ) : (
-          <p>No releases found. Create your first one below! </p>
-        ))}
+            <p>No releases found. Create your first one below! </p>
+          ))}
       <Spacing />
       <Button type='button' onClick={() => history.push('/releases/new')}>
         Add Release
@@ -390,7 +391,7 @@ const EditLink = () => {
               >
                 {uploading ? 'Uploading' : 'Change Background'}
               </Button>
-              <Heading>Latest</Heading>
+              <Heading>Featured</Heading>
               <SongCard>
                 {user.latest && (
                   <>
@@ -414,7 +415,7 @@ const EditLink = () => {
                   </Button>
                 </SmallButtonWrapper>
               </SongCard>
-              <Heading>Upcoming</Heading>
+              <Heading>Presave</Heading>
               <SongCard>
                 {user.upcoming ? (
                   <>
@@ -434,12 +435,12 @@ const EditLink = () => {
                     </SmallButtonWrapper>
                   </>
                 ) : (
-                  <SmallButtonWrapper>
-                    <Button type='button' small onClick={handleAddPresave}>
-                      Add
+                    <SmallButtonWrapper>
+                      <Button type='button' small onClick={handleAddPresave}>
+                        Add
                     </Button>
-                  </SmallButtonWrapper>
-                )}
+                    </SmallButtonWrapper>
+                  )}
               </SongCard>
               <Heading>Social Media</Heading>
               <InputSection

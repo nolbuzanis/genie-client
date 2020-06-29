@@ -173,7 +173,8 @@ const Background = styled.div`
   position: relative;
   width: 100%;
   min-height: 100%;
-  background: linear-gradient(90deg, #373b44 0%, #4286f4 100%);
+  //background: linear-gradient(90deg, #373b44 0%, #4286f4 100%);
+  background: linear-gradient(90deg, rgb(70,70,70) 0%, rgb(50,50,50) 100%);
   ${(props) =>
     props.img && `background: url(${props.img}) center center no-repeat;`}
   background-size: cover;
@@ -457,15 +458,15 @@ const PublicLink = () => {
           </SongCard>
         </>
       ) : (
-        !artist.upcoming && (
-          <>
-            <Heading>Latest</Heading>
-            <NoReleasesText>
-              This artist has not added any releases. Check back again later!
+          !artist.upcoming && (
+            <>
+              <Heading>Latest</Heading>
+              <NoReleasesText>
+                This artist has not added any releases. Check back again later!
             </NoReleasesText>
-          </>
-        )
-      )}
+            </>
+          )
+        )}
       {artist.upcoming && (
         <>
           <Heading>Upcoming</Heading>
@@ -584,43 +585,87 @@ const PublicLink = () => {
         <LargerAlbum src={artist.upcoming.img} />
         <SongTitle>{artist.upcoming.name}</SongTitle>
         {follower &&
-        follower.presaves &&
-        follower.presaves.includes(artist.upcoming.id) ? (
-          follower.following && follower.following.includes(artist.id) ? (
-            <>
-              <Subtitle>Thanks for subscribing!</Subtitle>
-              <PresaveText>
-                Check out {artist.name}’s other social links for more exciting
-                updates!
+          follower.presaves &&
+          follower.presaves.includes(artist.upcoming.id) ? (
+            follower.following && follower.following.includes(artist.id) ? (
+              <>
+                <Subtitle>Thanks for subscribing!</Subtitle>
+                <PresaveText>
+                  Check out {artist.name}’s other social links for more exciting
+                  updates!
               </PresaveText>
-            </>
+              </>
+            ) : (
+                <>
+                  <Subtitle>Thanks for presaving!</Subtitle>
+                  <PresaveText>
+                    Consider yourself a big fan? Presave all {artist.name}’s future
+                    releases and stay up to date!
+              </PresaveText>
+                  <Button
+                    onClick={handleSubscribe}
+                    isLoading={isSubscribing}
+                    disabled={isSubscribing}
+                  >
+                    {isSubscribing ? 'Subscribing' : 'Subscribe'}
+                  </Button>
+                  <Disclaimer>
+                    * By subscribing you agree to pre-save all {artist.name}'s
+                    future releases. You can opt out anytime.
+              </Disclaimer>
+                  <Disclaimer>
+                    By subscribing you agree to Genie’s{' '}
+                    <BoldText
+                      target='_blank'
+                      href='/privacy-policy'
+                      previewMode={previewMode}
+                    >
+                      Privacy Policy
+                </BoldText>{' '}
+                    and{' '}
+                    <BoldText
+                      target='_blank'
+                      href='/terms-of-service'
+                      previewMode={previewMode}
+                    >
+                      Terms of Service
+                </BoldText>
+                    .
+              </Disclaimer>
+                </>
+              )
           ) : (
             <>
-              <Subtitle>Thanks for presaving!</Subtitle>
-              <PresaveText>
-                Consider yourself a big fan? Presave all {artist.name}’s future
-                releases and stay up to date!
-              </PresaveText>
-              <Button
-                onClick={handleSubscribe}
-                isLoading={isSubscribing}
-                disabled={isSubscribing}
-              >
-                {isSubscribing ? 'Subscribing' : 'Subscribe'}
-              </Button>
+              <Subtitle>Presave with</Subtitle>
+              <DeezerButton onClick={handleSpotifyLogin}>
+                <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
+                Spotify
+            </DeezerButton>
+              <SpotifyButton onClick={handleDeezerLogin}>
+                <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
+                Deezer
+            </SpotifyButton>
+              <ToggleContainer>
+                <Toggle
+                  defaultChecked={checked}
+                  icons={false}
+                  onChange={() => setChecked(!checked)}
+                />
+                <ToggleText>Opt in to {artist.name}'s email updates</ToggleText>
+              </ToggleContainer>
+              {/* <Disclaimer>
+          * By following you agree to pre-save {artist.name}'s future releases.
+          You can opt out anytime.
+        </Disclaimer> */}
               <Disclaimer>
-                * By subscribing you agree to pre-save all {artist.name}'s
-                future releases. You can opt out anytime.
-              </Disclaimer>
-              <Disclaimer>
-                By subscribing you agree to Genie’s{' '}
+                By pre-saving you agree to Genie’s{' '}
                 <BoldText
                   target='_blank'
                   href='/privacy-policy'
                   previewMode={previewMode}
                 >
                   Privacy Policy
-                </BoldText>{' '}
+              </BoldText>{' '}
                 and{' '}
                 <BoldText
                   target='_blank'
@@ -628,55 +673,11 @@ const PublicLink = () => {
                   previewMode={previewMode}
                 >
                   Terms of Service
-                </BoldText>
-                .
-              </Disclaimer>
-            </>
-          )
-        ) : (
-          <>
-            <Subtitle>Presave with</Subtitle>
-            <DeezerButton onClick={handleSpotifyLogin}>
-              <SpotifyImg src='/assets/spotify-logo-white-sm.png' alt='' />
-              Spotify
-            </DeezerButton>
-            <SpotifyButton onClick={handleDeezerLogin}>
-              <DeezerImg src='/assets/deezer-logo-black-sm.png' alt='' />
-              Deezer
-            </SpotifyButton>
-            <ToggleContainer>
-              <Toggle
-                defaultChecked={checked}
-                icons={false}
-                onChange={() => setChecked(!checked)}
-              />
-              <ToggleText>Opt in to {artist.name}'s email updates</ToggleText>
-            </ToggleContainer>
-            {/* <Disclaimer>
-          * By following you agree to pre-save {artist.name}'s future releases.
-          You can opt out anytime.
-        </Disclaimer> */}
-            <Disclaimer>
-              By pre-saving you agree to Genie’s{' '}
-              <BoldText
-                target='_blank'
-                href='/privacy-policy'
-                previewMode={previewMode}
-              >
-                Privacy Policy
-              </BoldText>{' '}
-              and{' '}
-              <BoldText
-                target='_blank'
-                href='/terms-of-service'
-                previewMode={previewMode}
-              >
-                Terms of Service
               </BoldText>
-              .
+                .
             </Disclaimer>
-          </>
-        )}
+            </>
+          )}
       </WhiteContainer>
     );
   };

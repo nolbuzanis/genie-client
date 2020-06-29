@@ -3,15 +3,24 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
-import { initGA, initFBPixel } from './analytics';
+import { initGA, initFBPixel, initMongoDBApp } from './analytics';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { hotjar } from 'react-hotjar';
+import Cookies from 'js-cookie';
+//import { hotjar } from 'react-hotjar';
 
-hotjar.initialize('1824836', 'v1');
+//hotjar.initialize('1824836', 'v1');
 
 //Google analytics
 initGA();
+
+export let user_id =
+  Cookies.get('_ga') ? Cookies.get('_ga').split('.')[2] + '.' + Cookies.get('_ga').split('.')[2] : '';
+export let session_id =
+  Cookies.get('_ga') ? Cookies.get('_gid').split('.')[2] + '.' + Cookies.get('_gid').split('.')[2] : '';
+
+// MongoDB
+initMongoDBApp();
 
 // Stripe
 const stripePromise = loadStripe('pk_test_WUVFL6e8MvKUMbCGtN8npTaA00srMSEDJH');

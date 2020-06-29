@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import './App.css';
 import { ToastProvider } from 'react-toast-notifications';
-import { TrackPixelPageView } from './analytics';
-
+import { TrackPixelPageView, reportMongoDBEvent } from './analytics';
+import { getGeo } from './api';
 //views and components
 import Login from './views/LogIn';
 import authContext from './Context/authContext';
@@ -53,17 +53,40 @@ const legalMenuItems = [
 ];
 
 const App = () => {
-  const [auth, setAuth] = React.useState({
+  const [auth, setAuth] = useState({
     user: undefined,
     follower: undefined,
   });
   const history = useHistory();
 
-  history.listen((location) => {
-    TrackPixelPageView();
-    ReactGA.set({ page: location.pathname }); // Update the user's current page
-    ReactGA.pageview(location.pathname); // Record a pageview for the given page
-  });
+  useEffect(() => {
+    const init = async () => {
+      const geo = await getGeo();
+      localStorage.setItem('geo', JSON.stringify(geo));
+
+      //first page view
+      reportMongoDBEvent('Pageview', {
+        page: history.location.pathname,
+        referrer: document.referrer,
+      });
+    };
+    init();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(
+    history.listen((location) => {
+      reportMongoDBEvent({
+        name: 'Pageview',
+        page: location.pathname,
+        referrer: document.referrer,
+      });
+      TrackPixelPageView();
+      ReactGA.set({ page: location.pathname }); // Update the user's current page
+      ReactGA.pageview(location.pathname); // Record a pageview for the given page
+    }),
+    [history]
+  );
 
   return (
     <ToastProvider autoDismiss autoDismissTimeout={5000}>

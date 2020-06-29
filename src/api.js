@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// export let SERVER_URL =
-//   process.env.NODE_ENV === 'development'
-//     ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
-//     : 'https://purplegenie.ca/api';
-export let SERVER_URL = 'https://purplegenie.ca/api';
+export let SERVER_URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
+    : 'https://purplegenie.ca/api';
+//export let SERVER_URL = 'https://purplegenie.ca/api';
 
 const axiosConfig = {
   withCredentials: true,
@@ -571,4 +571,52 @@ export const getReleases = async () => {
     console.log(error);
     return { error };
   }
+};
+
+export const getGeo = async () => {
+  try {
+    const { data } = await axios.get('https://ipapi.co/json/');
+    return { city: data.city, country: data.country_code };
+  } catch (error) {
+    console.log('error getting geo', error);
+    return undefined;
+  }
+};
+
+export const fetchItunesSong = async (searchTerm) => {
+  try {
+    let country;
+    try {
+      const geo = JSON.parse(localStorage.getItem('geo'));
+      country = geo.country;
+    } catch (err) {
+      country = 'US';
+    }
+
+    const { data } = await axios.get('https://itunes.apple.com/search', {
+      params: {
+        term: searchTerm,
+        entity: 'song,album,podcast',
+        country,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log('error fetching song: ', error);
+    return { error };
+  }
+};
+
+export const findSongLinks = async (songData) => {
+  try {
+    const sentData = JSON.stringify({ ...songData });
+    const { data } = await axios.post(`${SERVER_URL}/songs/find`, sentData, axiosConfig);
+
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+
 };
