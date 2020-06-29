@@ -393,7 +393,7 @@ const NewRelease = () => {
   const [releaseDate, setReleaseDate] = useState(new Date());
   const history = useHistory();
   const { user, setAuth } = useAuth();
-
+  const { addToast } = useToasts();
 
   const handleFormSubmit = async (formValues, { setSubmitting }) => {
     setSubmitting(true);
