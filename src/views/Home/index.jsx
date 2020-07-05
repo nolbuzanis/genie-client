@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAuth } from '../../Context/authContext';
+//import { useAuth } from '../../Context/authContext';
 //import { Link } from 'react-router-dom';
 import FollowersGraph from '../../components/FollowersGraph';
 import { getAnalyticsOverview } from '../../api';
