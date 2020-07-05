@@ -15,9 +15,9 @@ import Cookies from 'js-cookie';
 initGA();
 
 export let user_id =
-  Cookies.get('_ga') ? Cookies.get('_ga').split('.')[2] + '.' + Cookies.get('_ga').split('.')[2] : '';
+  Cookies.get('_ga') ? Cookies.get('_ga').split('.')[2] + '.' + Cookies.get('_ga').split('.')[3] : '';
 export let session_id =
-  Cookies.get('_ga') ? Cookies.get('_gid').split('.')[2] + '.' + Cookies.get('_gid').split('.')[2] : '';
+  Cookies.get('_gid') ? Cookies.get('_gid').split('.')[2] + '.' + Cookies.get('_gid').split('.')[3] : '';
 
 // MongoDB
 initMongoDBApp();

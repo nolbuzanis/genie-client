@@ -36,7 +36,7 @@ const FollowersGraph = ({ data }) => {
     }}
     curve='cardinal'
     data={data}
-    margin={{ top: 50, right: 25, bottom: 30, left: 40 }}
+    margin={{ top: 100, right: 30, bottom: 40, left: 60 }}
     xScale={{ type: 'point' }}
     //yScale={{ type: 'linear', min: '0', max: 'auto', stacked: false, reverse: false }}
     axisTop={null}
@@ -50,15 +50,14 @@ const FollowersGraph = ({ data }) => {
       //legendOffset: 36,
       //legendPosition: 'middle'
     }}
+    //curve={select('curve', curveOptions, 'linear')}
     defs={[
       linearGradientDef('gradientA', [
         { offset: 0, color: 'inherit' },
-        { offset: 0, color: 'inherit', opacity: 0 },
-      ]),
+        { offset: 100, color: 'inherit', opacity: 0 },
+      ])
     ]}
-    fill={[
-      { match: '*', id: 'gradientA' }
-    ]}
+    fill={[{ match: '*', id: 'gradientA' }]}
     axisLeft={{
       orient: 'left',
       tickSize: 5,
@@ -77,22 +76,23 @@ const FollowersGraph = ({ data }) => {
     pointBorderWidth={0}
     pointBorderColor='rgba(69,104,220,0.7)'
     pointLabel="y"
-    pointLabelYOffset={- 12}
-    enableArea={false}
-    enableGridX={true}
-    areaOpacity={1}
+    //pointLabelYOffset={-12}
+    enableArea={true}
+    enableGridX={false}
+    enableGridY={false}
+    //areaOpacity={0.1}
     useMesh={true}
     legends={
       [
         {
-          anchor: 'top-right',
-          direction: 'column',
+          anchor: 'top',
+          direction: 'row',
           justify: false,
           translateX: 0,
           translateY: -40,
           itemsSpacing: 0,
           itemDirection: 'left-to-right',
-          itemWidth: 80,
+          itemWidth: 200,
           itemHeight: 15,
           itemOpacity: 0.75,
           symbolSize: 9,
@@ -112,7 +112,7 @@ const FollowersGraph = ({ data }) => {
     enableCrosshair={false}
     xPadding={0.5}
     xOuterPadding={0.5}
-    interpolation="smooth"
+    interpolation="monotoneX"
   />
 };
 

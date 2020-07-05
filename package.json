@@ -5,8 +5,9 @@
   "homepage": "https://www.purplegenie.ca",
   "dependencies": {
     "@emotion/core": "^10.0.27",
+    "@nivo/bar": "^0.62.0",
     "@nivo/core": "^0.61.0",
-    "@nivo/line": "^0.61.1",
+    "@nivo/line": "^0.62.0",
     "@nivo/stream": "^0.61.1",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.5.0",

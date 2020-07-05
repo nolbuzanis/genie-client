@@ -45,7 +45,7 @@ export const reportMongoDBEvent = async (name, data, slim = false) => {
     if (process.env.REACT_APP_ENV === 'production') {
       eventCollection = mongodb.db('production').collection('events');
     } else {
-      eventCollection = mongodb.db('staging').collection('events-staging');
+      eventCollection = mongodb.db('staging').collection('events');
     }
 
     let geo;
@@ -54,6 +54,7 @@ export const reportMongoDBEvent = async (name, data, slim = false) => {
     } catch (err) {
       console.log('error fetching geo:', err);
     }
+    //console.log(`Reporting ${name} event for ${user_id}`);
 
     if (slim) {
       await eventCollection.insertOne({

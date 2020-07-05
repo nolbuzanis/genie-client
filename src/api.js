@@ -620,3 +620,15 @@ export const findSongLinks = async (songData) => {
   }
 
 };
+
+export const getAnalyticsOverview = async () => {
+  try {
+
+    const { data } = await axios.post(`${SERVER_URL}/artist/analytics`, {}, axiosConfig);
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    return { error };
+  }
+};

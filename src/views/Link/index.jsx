@@ -511,7 +511,10 @@ const PublicLink = () => {
               {artist.latest && <>
                 <SongCard song={artist.latest} />
                 <Header>Listen</Header>
-                <PlatformIcons links={artist.latest.links} color='#fff' clickable />
+                <PlatformIcons song={artist.latest} color='#fff' clickable />
+                {/* <audio controls='controls'>
+                  <source src='https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/28/20/d8/2820d8ee-5c1c-a043-4e0c-a6599992b77c/mzaf_5702610131159527568.plus.aac.p.m4a' type='audio/mp4' />
+                </audio> */}
               </>
               }
               {artist.upcoming && <>

@@ -1,313 +1,348 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../../Context/authContext';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import FollowersGraph from '../../components/FollowersGraph';
-import { fetchFollowerCountData } from '../../api';
+import { getAnalyticsOverview } from '../../api';
 import moment from 'moment';
-import Popup from '../../components/Popup';
-import { freeUser } from '../../config';
-import { isPremium } from '../../auth/index';
-//import ChoroplethMap from '../../components/ChoroplethMap';
-//import ReactTooltip from 'react-tooltip';
+//import { freeUser } from '../../config';
+//import { isPremium } from '../../auth/index';
+import PageHeader from '../../components/PageHeader';
+import ChoroplethMap from '../../components/ChoroplethMap';
+import { scaleLinear } from 'd3-scale';
+import { mapCountryIOS2 } from '../../utils/helpers';
+import BarGraph from '../../components/BarGraph';
 
 const Background = styled.div`
-  position: absolute;
-  width: 100%;
-  background-image: linear-gradient(to bottom, #4568dc, #8872ff);
-  //background-attachment: fixed;
-  height: 240px;
+  background-color: #f5f6fa;
+  min-height: 100%;
+  padding: 0 30px;
+  @media only screen and (max-width: 500px) {
+    padding: 0;
+  }
 `;
+const Svg = styled.svg`
+    margin-right: 10px;
+  `;
+
+const VisitorSvg = () => (
+  <Svg xmlns="http://www.w3.org/2000/svg" id="prefix__Icon" width={45} height={45} viewBox="0 0 45 45">
+    <defs>
+      <linearGradient id="prefix__linear-gradient" x2={0} y2={1} gradientUnits="objectBoundingBox">
+        <stop offset={0} stopColor="#4981fd" />
+        <stop offset={1} stopColor="#7e96ff" />
+      </linearGradient>
+    </defs>
+    <path id="prefix__Icon_BG" fill="rgba(73,129,253,0.34)" d="M22.5 0A22.5 22.5 0 1 1 0 22.5 22.5 22.5 0 0 1 22.5 0z" />
+    <g id="prefix__users_together" fill="url(#prefix__linear-gradient)" data-name="users together" transform="translate(-3 1)">
+      <path id="prefix__New_customer_Icon" d="M8 16v-2h5.626a2.834 2.834 0 0 0-2.716-2H8v-2h2.91a4.878 4.878 0 0 1 4.85 5v1zM4 5V4a4 4 0 1 1 8 0v1a4 4 0 0 1-8 0zm2-1v1a2 2 0 0 0 4 0V4a2 2 0 1 0-4 0z" data-name="New customer Icon" opacity="0.69" transform="translate(20.463 11.5)" />
+      <path id="prefix__New_customer_Icon-2" d="M8 16v-2h5.626a2.831 2.831 0 0 0-2.716-2H8v-2h2.91a4.878 4.878 0 0 1 4.85 5v1zm-8 0v-1a4.951 4.951 0 0 1 5-5h3v2H5a2.91 2.91 0 0 0-2.8 2H8v2zM4 5V4a4 4 0 0 1 8 0v1a4 4 0 0 1-8 0zm2-1v1a2 2 0 0 0 4 0V4a2 2 0 0 0-4 0z" data-name="New customer Icon" transform="translate(14.463 14.5)" />
+    </g>
+  </Svg>
+);
+
+const BounceSvg = () => (
+  <Svg xmlns="http://www.w3.org/2000/svg" width={45} height={45} viewBox="0 0 45 45">
+    <g id="prefix__Icon" transform="translate(-235 -994)">
+      <path id="prefix__Icon_BG" fill="rgba(86,217,254,0.32)" d="M22.5 0A22.5 22.5 0 1 1 0 22.5 22.5 22.5 0 0 1 22.5 0z" transform="translate(235 994)" />
+      <path id="prefix__ic_call_missed_24px" fill="#11c8fc" d="M19.59 7L12 14.59 6.41 9H11V7H3v8h2v-4.59l7 7 9-9z" transform="translate(247 1007)" />
+    </g>
+  </Svg>
+);
+
+const OutboundSvg = () => (
+  <Svg xmlns="http://www.w3.org/2000/svg" id="prefix__Icon" width={45} height={45} viewBox="0 0 45 45">
+    <path id="prefix__Icon_BG" fill="rgba(255,8,8,0.3)" d="M22.5 0A22.5 22.5 0 1 1 0 22.5 22.5 22.5 0 0 1 22.5 0z" />
+    <path id="prefix__ic_trending_down_24px" fill="#fff" d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z" transform="translate(12 12)" />
+  </Svg>
+);
+
+const StatCard = styled.div`
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px 10px;
+    box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.04);
+  `;
+const Stat = styled.p`
+  color: #4d4f5c;
+  font-size: 25px;
+  font-weight: bold;
+  `;
+const StatSub = styled.p`
+    color: #6a7284;
+    font-size: 15px;
+  `;
+const StatGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    column-gap: 50px;
+    row-gap: 20px;
+    margin: 0 auto;
+    padding: 0;
+    @media only screen and (max-width: 500px) {
+    padding: 0 30px;
+    }
+  `;
 const Content = styled.div`
-  position: relative;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 40px 20px 60px;
-`;
-const Title = styled.h1`
-  color: white;
-  font-size: 24px;
-  font-weight: 600;
-  text-align: center;
-`;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+  `;
 const Graph = styled.div`
   position: relative;
-  width: 100%;
+  width: ${({ half }) => half ? '47%' : '100%'};
   background: white;
-  height: 210px;
-  border-radius: 5px;
-  box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
-  margin-top: 40px;
-`;
-const StatBox = styled.div`
-  width: 48%;
-  height: 80px;
-  border-radius: 5px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-color: white;
-  background-image: ${({ colorOne, colorTwo }) =>
-    `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px;
-`;
-const StatsContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding-top: 25px;
-`;
-const StatIcon = styled.img`
-  width: 28px;
-  height: 28px;
-  margin-right: 15px;
-`;
-const Stat = styled.p`
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-`;
-const StatContent = styled.div`
-  font-size: 14px;
-  font-weight: 500;
-  color: white;
-`;
-
-const EditContainer = styled.div`
-  width: 100%;
-  border-radius: 5px;
-  box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
-  background-color: #ffffff;
-  margin-top: 24px;
-`;
-const Divider = styled.div`
-  border-bottom: solid 1px rgba(112, 112, 112, 0.24);
-`;
-const EditBox = styled.div`
-  height: 65px;
-  width: 100%;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-const CircularNumber = styled.div`
-  width: 40px;
-  display: inline-block;
-  height: 40px;
-  line-height: 40px;
-  color: white;
-  border-radius: 50px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  border: solid 1px #ffffff;
-  text-align: center;
-  font-size: ${props => (props.children > 99 ? '12px' : '18px')};
-  font-weight: 600;
-  background-color: #4568dc;
-  background-image: ${({ colorOne, colorTwo }) =>
-    `linear-gradient(to bottom, ${colorOne}, ${colorTwo})`};
-`;
-const EditBoxText = styled.p`
-  display: inline;
-  font-weight: 600;
-  padding: 0 2vw;
-  font-size: calc(13px + 0.5vw);
-`;
-const EditButton = styled(Link)`
-  width: 60px;
-  line-height: 30px;
-  text-align: center;
-  height: 30px;
-  border-radius: 15px;
-  border: solid 1px #818181;
-  font-size: 16px;
-  font-weight: 600;
-  color: #717171;
-  background: white;
-  cursor: pointer;
-`;
-const PublicArtistPage = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-  height: 70px;
-  cursor: pointer;
-  border-radius: 5px;
-  box-shadow: 3px 5px 10px 0 rgba(0, 0, 0, 0.16);
-  background-image: linear-gradient(
-    to bottom,
-    rgba(69, 104, 220, 0.7),
-    #8872ff
-  );
-  width: 100%;
-  font-size: 16px;
-  font-weight: 600;
-`;
-const GlobeIcon = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+  height: ${({ height }) => height || '340px'};
+  box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.04);
+  margin-top: 20px;
+  overflow: hidden;
+  @media only screen and (max-width: 500px) {
+    width: 100%;
+    }
 `;
 const GraphTitle = styled.h3`
-  position: absolute;
-  top: 12px;
+  position: ${({ normal }) => normal ? 'static' : 'absolute'};
+  ${({ normal }) => normal && 'padding: 30px;'};
+  top: 20px;
   left: 20px;
-  font-size: 15px;
-  font-weight: bold;
-  color: #4568dc;
+  font-size: 17px;
+  color: #4d4f5c;
+  font-weight: 500;
+`;
+const GraphContainer = styled.div`
+    position: relative;
+    padding: 10px;
+    height: 340px;
+    overflow: hidden;
+    @media only screen and (max-width: 500px) {
+    height: 260px;
+  }
+  @media only screen and (max-width: 400px) {
+    height: 230px;
+  }
+  `;
+const Flex = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-bottom: 30px;
+  `;
+const minColor = '#CFD8DC';
+const maxColor = '#37474F';
+const GeoCircle = styled.div`
+    width: 20px;
+    height: 20px;
+    border: solid 3px ${({ color }) => color || minColor};
+    border-radius: 50%;
+    margin-right: 10px;
+  `;
+const GeoItem = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 0 20px 10px 40px;
+  `;
+const GeoText = styled.p`
+    color: #43425d;
+    font-size: 14px;
+    margin-right: 15px;
+  `;
+const GeoStat = styled.p`
+    color: #43425d;
+    font-size: 12px;
+    opacity: 0.5;
+  `;
+const GeoTop = styled.div`
+    padding: 20px 10px;
+`;
+const DoubleGraph = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
-const getLastWeek = (startDate = moment().format('YYYY-MM-DD')) => {
-  const week = [startDate];
-  const longMonths = [1, 3, 5, 7, 8, 10, 12];
-
-  let day = parseInt(startDate.split('-')[2]) - 1;
-  let month = parseInt(startDate.split('-')[1]);
-  let year = parseInt(startDate.split('-')[0]);
-
-  for (let i = 0; i < 6; i++) {
-    if (day < 1) {
-      // change month as well
-      month += -1;
-      if (month < 1) {
-        //change year!!
-        year += -1;
-        month = 12;
-      }
-      day = longMonths.includes(month) ? 31 : 30;
-    }
-    week.push(
-      `${year}-${month < 10 ? '0' + month : month}-${
-        day < 10 ? '0' + day : day
-      }`
-    );
-    day += -1;
+const getLastWeek = (startDate = moment().subtract(6, 'd')) => {
+  const week = [];
+  for (let i = 0; i < 7; i++) {
+    week.push(new moment(startDate));
+    startDate.add(1, 'd');
   }
-  return week.reverse();
+  return week;
 };
 
+const sumArray = (arr) => {
+  return arr.reduce((a, b) => a + b, 0);
+}
+
 const Home = () => {
-  const { user } = useAuth();
-  const [followerData, setFollowerData] = React.useState([[], []]);
-  //const [tooltipContent, setTooltipContent] = React.useState('PLaceHODLER');
-  const isUserPremium = isPremium(user);
+  //const { user } = useAuth();
+  const [error, setError] = useState();
+  const [graphData, setGraphData] = useState({});
+  //const isUserPremium = isPremium(user);
+  const [totals, setTotals] = useState({ visitors: 0, bounced: 0, outbound: 0 });
+  const [geoData, setGeoData] = useState({});
+  const [topGeo, setTopGeo] = useState({});
+  const [deviceData, setDeviceData] = useState([]);
+  const [referrerData, setReferrerData] = useState([]);
+  console.log(error);
 
   React.useEffect(() => {
-    const fetchFollowerData = async () => {
-      const data = await fetchFollowerCountData();
-      const { followersByDay } = data;
+    const topTenGeo = (data) => {
+      const geoCopy = { ...data };
+      let keys = Object.keys(geoCopy);
+      if (keys.length === 0) return;
+
+      let sorted = [];
+      return new Promise((res, rej) => {
+        do {
+          const highest = keys.reduce((a, b) => geoCopy[a] > geoCopy[b] ? a : b);
+          sorted.push(highest);
+          delete geoCopy[highest];
+          keys = Object.keys(geoCopy);
+        } while (keys.length !== 0);
+
+        res(sorted);
+      });
+    }
+
+    const fetchData = async () => {
+      const data = await getAnalyticsOverview();
+      if (data.error) {
+        return setError(data.error);
+      }
+
+      const { visitors, bounced, totalVisitor, totalOutbound, bouncedCount, countries, devices, referrers } = data;
+      setTotals({ visitors: totalVisitor, bounced: bouncedCount, outbound: totalOutbound });
+      const top = await topTenGeo({ ...countries });
+      const total = sumArray(Object.values(countries));
+      setGeoData(countries);
+      setTopGeo({ top, total });
+      setDeviceData([{
+        "index": "mobile",
+        "Visitors": devices.mobile,
+        "VisitorsColor": "hsl(241, 70%, 50%)"
+      },
+      {
+        "index": "desktop",
+        "Visitors": devices.browser,
+        "VisitorsColor": "hsl(241, 70%, 50%)"
+      }]);
+
+      const referrals = [];
+      //referrer data parsing
+      Object.keys(referrers).forEach((key) => {
+        referrals.push({
+          "index": key === '' ? 'Direct' : key,
+          "Visitors": referrers[key]
+        });
+      });
+      setReferrerData(referrals);
 
       const daysToPlot = getLastWeek();
-      const lastWeeksData = getLastWeek(
-        moment()
-          .subtract(7, 'd')
-          .format('YYYY-MM-DD')
-      );
-      let finalData2 = [];
-      const finalData = daysToPlot.map((date, i) => {
-        finalData2.push({
-          x: parseInt(date.split('-')[2]),
-          y: followersByDay ? followersByDay[lastWeeksData[i]] || 0 : 0
+      const parsedVisitors = [], parsedBounced = [];
+
+      daysToPlot.forEach((date) => {
+        parsedVisitors.push({
+          x: date.format('DD MMM'),
+          y: visitors[date.format('DD-MM-YYYY')] || 0
         });
-        return {
-          x: parseInt(date.split('-')[2]),
-          y: followersByDay ? followersByDay[date] || 0 : 0
-        };
+        parsedBounced.push({
+          x: date.format('DD MMM'),
+          y: bounced[date.format('DD-MM-YYYY')] || 0
+        });
       });
 
-      return setFollowerData([finalData, finalData2]);
-    };
+      return setGraphData({ visitors: parsedVisitors, bounced: parsedBounced });
 
-    fetchFollowerData();
+
+    };
+    fetchData();
+
   }, []);
 
   const followersData = [
     {
-      id: 'Last 7 days',
-      color: 'rgba(69,104,220,0.8)',
-      data: followerData[0]
+      id: 'Visitors (All Visitors)',
+      color: '#4981fd',
+      data: graphData.visitors || []
     },
     {
-      id: 'Week before',
-      color: 'rgba(69,104,220,0.4)',
-      data: followerData[1]
+      id: 'Visitors (Bounced Session)',
+      color: '#56d9fe',
+      data: graphData.bounced || []
     }
   ];
 
-  let accountsConnected = 0;
-  if (user.uri) accountsConnected += 1;
-  if (user.deezerId) accountsConnected += 1;
+  const values = Object.values(geoData);
+  const minValue = 0;
+  const maxValue = Math.max(...values);
+
+  const customScale = scaleLinear()
+    .domain([minValue, maxValue])
+    .range([minColor, maxColor]);
+
   return (
-    <>
-      <Background />
-      <Popup />
+    <Background>
       <Content>
-        <Title>Genie Dashboard</Title>
+        <PageHeader color='#444444'>Your Dashboard</PageHeader>
+        <p>All Time</p>
+        <StatGrid>
+          <StatCard>
+            <VisitorSvg />
+            <div>
+              <Stat>{totals.visitors}</Stat>
+              <StatSub>All Visitors</StatSub>
+            </div>
+          </StatCard>
+          <StatCard>
+            <BounceSvg />
+            <div>
+              <Stat>{totals.bounced}</Stat>
+              <StatSub>Bounced Session</StatSub>
+            </div>
+          </StatCard>
+          <StatCard>
+            <OutboundSvg />
+            <div>
+              <Stat>{totals.outbound}</Stat>
+              <StatSub>Outbound Clicks</StatSub>
+            </div>
+          </StatCard>
+        </StatGrid>
         <Graph>
-          {/* <ChoroplethMap setTooltipContent={setTooltipContent} /> */}
-          <GraphTitle>Followers per day</GraphTitle>
+          <GraphTitle>Visitors</GraphTitle>
           <FollowersGraph data={followersData} />
-          {/* <ReactTooltip>{tooltipContent}</ReactTooltip> */}
         </Graph>
-        <StatsContainer>
-          <StatBox colorOne='#ff9b9b' colorTwo='#f7db65'>
-            <StatIcon src='/assets/people-stat-icon.png' />
-            <StatContent>
-              <Stat>{user.followers}</Stat>
-              Followers
-            </StatContent>
-          </StatBox>
-          <StatBox colorOne='#9bcdff' colorTwo='#65f7e6'>
-            <StatIcon src='/assets/save-icon-white.png' />
-            <StatContent>
-              <Stat>{user.saves}</Stat>
-              Total Saves
-            </StatContent>
-          </StatBox>
-        </StatsContainer>
-        <EditContainer>
-          <EditBox>
-            <div>
-              <CircularNumber colorOne='#4568dc' colorTwo='#8872ff'>
-                {user.releases}
-              </CircularNumber>
-              <EditBoxText>Releases</EditBoxText>
-            </div>
-            <EditButton to='/releases'>View</EditButton>
-          </EditBox>
-          <Divider />
-          <EditBox>
-            <div>
-              <CircularNumber colorOne='#dc4585' colorTwo='#f472ff'>
-                {isUserPremium
-                  ? '∞'
-                  : freeUser.maxSaves - user.saves < 0
-                  ? 0
-                  : freeUser.maxSaves - user.saves}
-              </CircularNumber>
-              <EditBoxText>Saves Remaining</EditBoxText>
-            </div>
-            <EditButton to='/billing'>View</EditButton>
-          </EditBox>
-          <Divider />
-          <EditBox>
-            <div>
-              <CircularNumber colorOne='#483833' colorTwo='#666666'>
-                {accountsConnected}/2
-              </CircularNumber>
-              <EditBoxText>Accounts Connected</EditBoxText>
-            </div>
-            <EditButton to='/accounts'>View</EditButton>
-          </EditBox>
-        </EditContainer>
-        <PublicArtistPage to={'/artist/' + user.id + '?view=preview'}>
-          <GlobeIcon src='/assets/globe-icon-white.png' />
-          My artist page
-        </PublicArtistPage>
+        <DoubleGraph>
+          <Graph half>
+            <GraphTitle>Devices</GraphTitle>
+            <BarGraph data={deviceData} keys={['Visitors']} />
+          </Graph>
+          <Graph half>
+            <GraphTitle>Referrers</GraphTitle>
+            <BarGraph data={referrerData} keys={['Visitors']} />
+          </Graph>
+        </DoubleGraph>
+        <Graph height='auto'>
+          <GraphTitle normal>Demographic</GraphTitle>
+          <Flex>
+            <GraphContainer>
+              <ChoroplethMap data={geoData} customScale={customScale} />
+            </GraphContainer>
+            <GeoTop>
+              {topGeo.top && topGeo.total && topGeo.top.map(country => (
+                <GeoItem key={country}>
+                  <GeoCircle color={customScale(geoData[country])} />
+                  <GeoText>{mapCountryIOS2[country] || country}</GeoText>
+                  <GeoStat>{`${geoData[country]}(${Math.round((geoData[country] / topGeo.total * 100) * 10) / 10}%)`}</GeoStat>
+                </GeoItem>
+              ))}
+            </GeoTop>
+          </Flex>
+        </Graph>
       </Content>
-    </>
+    </Background>
   );
 };
 

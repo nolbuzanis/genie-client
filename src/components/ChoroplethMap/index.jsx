@@ -1,40 +1,43 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import {
   ComposableMap,
-  ZoomableGroup,
+  // ZoomableGroup,
   Geographies,
   Geography
 } from 'react-simple-maps';
-import { scaleLinear } from 'd3-scale';
-//import ReactTooltip from 'react-tooltip';
+//import { scaleLinear } from 'd3-scale';
+import ReactTooltip from 'react-tooltip';
 
-const data = {
-  CA: 2
-};
+// const minColor = '#CFD8DC';
+// const maxColor = '#37474F';
 
-const minValue = 0; // based on the data array above
-const maxValue = 2; // based on the data array above
+const ChoroplethMap = ({ data = {}, customScale }) => {
+  const [tooltipContent, setTooltipContent] = useState('');
 
-const minColor = '#CFD8DC';
-const maxColor = '#37474F';
+  // const values = Object.values(data);
+  // const minValue = 0;
+  // const maxValue = Math.max(...values);
 
-const customScale = scaleLinear()
-  .domain([minValue, maxValue])
-  .range([minColor, maxColor]);
+  // const customScale = scaleLinear()
+  //   .domain([minValue, maxValue])
+  //   .range([minColor, maxColor]);
 
-const ChoroplethMap = ({ setTooltipContent }) => {
   return (
-    <ComposableMap
-      width={980}
-      height={551}
-      style={{
-        width: '100%',
-        height: 'auto'
-      }}
-      data-tip=''
-      //projectionConfig={{ scale: 200 }}
-    >
-      <ZoomableGroup>
+    <>
+      <ReactTooltip>{tooltipContent}</ReactTooltip>
+      <ComposableMap
+        //height={500}
+        //width={700}
+        style={{
+          marginTop: '-40px',
+          marginLeft: '-40px',
+          //width: '100%',
+          height: '140%',
+          //marginRight: 'auto'
+        }}
+        data-tip=''
+      //projectionConfig={{ scale: 150 }}
+      >
         <Geographies geography='/world-50m-simplified.json'>
           {(geos, proj) =>
             geos.geographies.map((geo, i) => {
@@ -82,8 +85,9 @@ const ChoroplethMap = ({ setTooltipContent }) => {
             })
           }
         </Geographies>
-      </ZoomableGroup>
-    </ComposableMap>
+        {/* </ZoomableGroup> */}
+      </ComposableMap>
+    </>
   );
 };
 

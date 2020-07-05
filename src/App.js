@@ -76,8 +76,7 @@ const App = () => {
 
   useEffect(
     history.listen((location) => {
-      reportMongoDBEvent({
-        name: 'Pageview',
+      reportMongoDBEvent('Pageview', {
         page: location.pathname,
         referrer: document.referrer,
       });

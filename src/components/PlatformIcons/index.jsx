@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { reportMongoDBEvent } from '../../analytics';
+import { useLocation } from 'react-router-dom';
 
 const PlatformList = styled.div`
   display: flex;
@@ -263,14 +265,28 @@ const list = {
   napster: { icon: <NapsterSvg />, label: 'Napster' }
 }
 
-const PlatformIcons = ({ links, color, clickable }) => {
+const PlatformIcons = ({ song, color, clickable }) => {
 
+  const { links, songId } = song;
   const parsedLinks = Object.keys(links).sort();
+  const location = useLocation();
+
+  const handleClick = (url) => {
+    if (!clickable) return;
+
+    reportMongoDBEvent('Outbound', {
+      page: location.pathname,
+      referrer: document.referrer,
+      destination: url,
+      songId
+    });
+
+  };
 
   return (<PlatformList>
     {parsedLinks.map(key => (
       list[key] &&
-      <IconContainer key={key} as={clickable && 'a'} href={clickable && links[key]} target='_blank'>
+      <IconContainer key={key} as={clickable && 'a'} href={clickable && links[key]} target='_blank' onClick={() => handleClick(links[key])}>
         {list[key].icon}
         <IconName color={color}>{list[key].label}</IconName>
       </IconContainer>

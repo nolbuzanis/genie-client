@@ -318,7 +318,7 @@ const StepZero = ({ setStep, step, user, setAuth }) => {
     <Spacing />
     <SongCard song={song} />
     <PlatformHeader>{Object.keys(song.links).length} Links found!</PlatformHeader>
-    <PlatformIcons links={song.links} />
+    <PlatformIcons song={song} />
     <Button
       type='button'
       disabled={isLoading}
@@ -360,7 +360,6 @@ const StepZero = ({ setStep, step, user, setAuth }) => {
                 <SongContent>
                   <AlbumCover src={item.artworkUrl100} />
                   <div>
-                    {console.log(item)}
                     <SongName>{item.trackName}</SongName>
                     <ArtistName>{item.artistName}</ArtistName>
                     <ReleaseDate>{parseDate(item.releaseDate)}</ReleaseDate>
