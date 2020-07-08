@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-//import { useHistory, Link } from 'react-router-dom';
 import { useAuth } from '../../Context/authContext';
 import Button from '../../components/Button';
 import Header from '../../components/PageHeader';
@@ -293,7 +292,7 @@ const EditLink = () => {
   const [uploading, setUploading] = useState(false);
   const { addToast } = useToasts();
   const [popup, setPopup] = useState(false);
-  const history = useHistory();
+  //const history = useHistory();
   const [dropdown, setDropdown] = useState(false);
 
   const handlePhotoSubmit = async (e) => {
@@ -340,10 +339,10 @@ const EditLink = () => {
     return setAuth({ user: { ...user, ...values } });
   };
 
-  const handleAddPresave = () => {
-    if (!user.uri && !user.deezerId) return setPopup('link_accounts');
-    history.push('/presave/new');
-  };
+  // const handleAddPresave = () => {
+  //   if (!user.uri && !user.deezerId) return setPopup('link_accounts');
+  //   history.push('/presave/new');
+  // };
 
   return (
     <Background img={user.img}>
@@ -351,7 +350,7 @@ const EditLink = () => {
       <Mask />
       <Content>
         <Header alternate>Edit Your Link</Header>
-        <ViewLink to={`/artist/${user.id}`} target='_blank'>
+        <ViewLink to={`/artist/${user.id}?view=preview`}>
           View live <ViewArrow src='/assets/arrow-forward-white.png' />
         </ViewLink>
         <Formik
@@ -391,7 +390,7 @@ const EditLink = () => {
               >
                 {uploading ? 'Uploading' : 'Change Background'}
               </Button>
-              <Heading>Featured</Heading>
+              <Heading>Select a Release to feature</Heading>
               <SongCard>
                 {user.latest && (
                   <>
@@ -415,9 +414,10 @@ const EditLink = () => {
                   </Button>
                 </SmallButtonWrapper>
               </SongCard>
-              <Heading>Presave</Heading>
+              <Heading>Presave campaign</Heading>
               <SongCard>
-                {user.upcoming ? (
+                <p>Coming soon!</p>
+                {/* {user.upcoming ? (
                   <>
                     <AlbumCover src={user.upcoming.img} />
                     <SongName>{user.upcoming.name}</SongName>
@@ -440,7 +440,7 @@ const EditLink = () => {
                         Add
                     </Button>
                     </SmallButtonWrapper>
-                  )}
+                  )} */}
               </SongCard>
               <Heading>Social Media</Heading>
               <InputSection

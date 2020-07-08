@@ -220,11 +220,11 @@ const menu = [
   //   route: '/followers',
   //   icon: menuIcons.FollowerIcon
   // },
-  {
-    name: 'Guides',
-    route: '/guides',
-    icon: menuIcons.GuidesIcon,
-  },
+  // {
+  //   name: 'Guides',
+  //   route: '/guides',
+  //   icon: menuIcons.GuidesIcon,
+  // },
   // {
   //   name: 'Roadmap',
   //   route: '/roadmap',
@@ -256,7 +256,7 @@ const menu = [
     icon: menuIcons.SettingsIcon,
     children: [
       {
-        name: 'Accounts',
+        name: 'Integrations',
         route: '/accounts',
       },
       {

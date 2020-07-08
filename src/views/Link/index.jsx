@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useParams, Redirect, Link } from 'react-router-dom';
+import { useParams, Redirect, Link, useHistory } from 'react-router-dom';
 import {
   getArtistById,
   presaveTrack,
@@ -17,6 +17,55 @@ import { useToasts } from 'react-toast-notifications';
 //import ReactGA from 'react-ga';
 import SongCard from '../../components/SongCard';
 import PlatformIcons from '../../components/PlatformIcons';
+
+const PreviewBanner = styled.div`
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  align-items: center;
+  z-index: 101;
+  width: 100%;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 90px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #464646;
+  color: white;
+`;
+const PreviewHeader = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+`;
+const PreviewText = styled.p`
+  font-size: 14px;
+  font-weight: 500;
+  padding-top: 5px;
+  color: white;
+`;
+const PreviewButton = styled.button`
+  display: block;
+  cursor: pointer;
+  width: 80px;
+  background: ${(props) =>
+    props.disabled
+      ? '#DDDDDD'
+      : props.alternate
+        ? 'white'
+        : 'linear-gradient(90deg, #8872ff, #4568DC)'};
+  height: 30px;
+  border: ${(props) => (props.alternate ? '1px solid #4568DC' : 'none')};
+  color: ${(props) => (props.alternate ? '#4568DC' : 'white')};
+  line-height: 30px;
+  text-align: center;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: ${(props) =>
+    !props.alternate && '0 3px 6px 0 rgba(0, 0, 0, 0.16)'};
+  margin: 5px 0;
+`;
 
 const loadingStyles = css`
   position: relative;
@@ -463,6 +512,7 @@ const PublicLink = () => {
   const [artist, setArtist] = useState(undefined);
   const { user } = useAuth();
   const [presave, setPresave] = useState(false);
+  const history = useHistory();
 
   const urlParams = new URLSearchParams(window.location.search);
   const view = urlParams.get('view');
@@ -499,6 +549,23 @@ const PublicLink = () => {
     <>
       <Background img={artist.img}>
         <Mask />
+        {previewMode && (
+          <PreviewBanner>
+            <div>
+              <PreviewHeader>Preview Mode</PreviewHeader>
+              <PreviewText>Buttons and links have been disabled.</PreviewText>
+            </div>
+            <div>
+              <PreviewButton onClick={() => history.goBack()}>Back</PreviewButton>
+              <PreviewButton
+                alternate
+                onClick={() => window.location.replace(history.location.pathname)}
+              >
+                Disable
+            </PreviewButton>
+            </div>
+          </PreviewBanner>
+        )}
         <Content>
           <ArtistName>{presave && <ArrowBack
             src='/assets/arrow-backward-white.png'
@@ -511,7 +578,7 @@ const PublicLink = () => {
               {artist.latest && <>
                 <SongCard song={artist.latest} />
                 <Header>Listen</Header>
-                <PlatformIcons song={artist.latest} color='#fff' clickable />
+                <PlatformIcons song={artist.latest} color='#fff' clickable={!previewMode} />
                 {/* <audio controls='controls'>
                   <source src='https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/28/20/d8/2820d8ee-5c1c-a043-4e0c-a6599992b77c/mzaf_5702610131159527568.plus.aac.p.m4a' type='audio/mp4' />
                 </audio> */}

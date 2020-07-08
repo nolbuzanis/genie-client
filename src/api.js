@@ -621,10 +621,11 @@ export const findSongLinks = async (songData) => {
 
 };
 
-export const getAnalyticsOverview = async () => {
+export const getAnalyticsOverview = async (start, end) => {
   try {
 
-    const { data } = await axios.post(`${SERVER_URL}/artist/analytics`, {}, axiosConfig);
+    const sentData = JSON.stringify({ start, end });
+    const { data } = await axios.post(`${SERVER_URL}/artist/analytics`, sentData, axiosConfig);
     return data;
 
   } catch (error) {

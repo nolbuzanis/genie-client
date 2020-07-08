@@ -37,11 +37,11 @@ const Button = styled.button`
   &:hover,
   &:active {
     box-shadow: ${(props) => {
-      if (props.disabled) return 'none';
-      return props.alternate
-        ? 'inset 0 0 0 99999px rgba(128, 128, 128, 0.2)'
-        : 'inset 0 0 0 99999px rgba(128, 128, 128, 0.2), 0 3px 6px 0 rgba(0, 0, 0, 0.16)';
-    }}
+    if (props.disabled) return 'none';
+    return props.alternate
+      ? 'inset 0 0 0 99999px rgba(128, 128, 128, 0.2)'
+      : 'inset 0 0 0 99999px rgba(128, 128, 128, 0.2), 0 3px 6px 0 rgba(0, 0, 0, 0.16)';
+  }}
     }
       
   }
@@ -54,14 +54,14 @@ const override = css`
 
 export default (props) => (
   <Button {...props}>
-    {props.children}
-    {props.isLoading && (
+    {props.isLoading ? (
       <ClipLoader
         css={override}
         size={20}
         color={props.alternate ? '#656ded' : 'white'}
         loading={true}
       />
-    )}
+    ) :
+      props.children}
   </Button>
 );

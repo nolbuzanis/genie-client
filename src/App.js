@@ -43,7 +43,7 @@ import CreateRelease from './views/NewRelease';
 // import Followers from './views/Followers';
 
 const settingsMenuItems = [
-  { title: 'Link Accounts', route: '/accounts' },
+  { title: 'Integrations', route: '/accounts' },
   { title: 'Plans & Billing', route: '/billing' },
   //{ title: "Change Password", route: '/settings' }
 ];

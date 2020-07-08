@@ -102,35 +102,35 @@ const Content = styled.div`
   width: 60%;
   overflow-x: hidden;
 `;
-const ReleaseIconContainer = styled.div`
-  cursor: ${(props) => props.edit && 'pointer'};
-  position: absolute;
-  right: 0;
-  width: 60px;
-  text-align: center;
-`;
-const ReleaseIcon = styled.img`
-  display: block;
-  width: 30px;
-  height: 30px;
-  margin: 0 auto;
-`;
-const Span = styled.span`
-  font-weight: 500;
-  font-size: 11px;
-  letter-spacing: -0.31px;
-`;
+// const ReleaseIconContainer = styled.div`
+//   cursor: ${(props) => props.edit && 'pointer'};
+//   position: absolute;
+//   right: 0;
+//   width: 60px;
+//   text-align: center;
+// `;
+// const ReleaseIcon = styled.img`
+//   display: block;
+//   width: 30px;
+//   height: 30px;
+//   margin: 0 auto;
+// `;
+// const Span = styled.span`
+//   font-weight: 500;
+//   font-size: 11px;
+//   letter-spacing: -0.31px;
+// `;
 // const EditIcon = styled.img`
 //   width: 25px;
 //   height: 25px;
 //   margin-left: 10px;
 //   cursor: pointer;
 // `
-const Delete = styled.p`
-  color: #910505;
-  font-size: 12px;
-  font-weight: 500;
-`;
+// const Delete = styled.p`
+//   color: #910505;
+//   font-size: 12px;
+//   font-weight: 500;
+// `;
 const AddImg = styled.img`
   width: 22px;
   height: 22px;
@@ -171,67 +171,66 @@ const parseDate = (timestamp) => {
     .split(' ');
   return parsed[0] + '. ' + parsed[1] + ' ' + parsed[2];
 };
-const timeUntilRelease = (releaseDate) => {
-  const now = new Date();
+// const timeUntilRelease = (releaseDate) => {
+//   const now = new Date();
 
-  const timeRemaining = Math.round(
-    (releaseDate.getTime() - now.getTime()) / 1000
-  );
-  const hours = Math.floor(timeRemaining / 3600);
-  const minutes = Math.floor(timeRemaining / 60) - hours * 60;
-  const seconds = timeRemaining - (hours * 60 + minutes) * 60;
+//   const timeRemaining = Math.round(
+//     (releaseDate.getTime() - now.getTime()) / 1000
+//   );
+//   const hours = Math.floor(timeRemaining / 3600);
+//   const minutes = Math.floor(timeRemaining / 60) - hours * 60;
+//   const seconds = timeRemaining - (hours * 60 + minutes) * 60;
 
-  const parsedHours = hours < 10 ? '0' + hours.toString() : hours.toString();
-  const parsedMinutes =
-    minutes < 10 ? '0' + minutes.toString() : minutes.toString();
-  const parsedSeconds =
-    seconds < 10 ? '0' + seconds.toString() : seconds.toString();
+//   const parsedHours = hours < 10 ? '0' + hours.toString() : hours.toString();
+//   const parsedMinutes =
+//     minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+//   const parsedSeconds =
+//     seconds < 10 ? '0' + seconds.toString() : seconds.toString();
 
-  return parsedHours + ' : ' + parsedMinutes + ' : ' + parsedSeconds;
-};
+//   return parsedHours + ' : ' + parsedMinutes + ' : ' + parsedSeconds;
+// };
 
 const Release = ({ song, setURIModal, edit }) => {
-  const now = new Date();
+  //const now = new Date();
 
-  const releaseDate = new Date(song.releaseDate);
-  const [time, setTime] = useState('-- : -- : --');
-  const [confirm, setConfirm] = useState(false);
+  //const releaseDate = new Date(song.releaseDate);
+  //const [time, setTime] = useState('-- : -- : --');
+  //const [confirm, setConfirm] = useState(false);
 
-  React.useEffect(() => {
-    if (song.status === 'scheduled' && song.ids) {
-      const interval = setInterval(() => {
-        return setTime(timeUntilRelease(releaseDate));
-      }, 1000);
+  // React.useEffect(() => {
+  //   if (song.status === 'scheduled' && song.ids) {
+  //     const interval = setInterval(() => {
+  //       return setTime(timeUntilRelease(releaseDate));
+  //     }, 1000);
 
-      return () => clearInterval(interval);
-    }
-  }, [releaseDate, song.ids, song.status]);
-  const released =
-    now > releaseDate &&
-    (song.status === 'released' || song.type === 'release');
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [releaseDate, song.ids, song.status]);
+  // const released =
+  //   now > releaseDate &&
+  //   (song.status === 'released' || song.type === 'release');
 
-  if (!edit && confirm) {
-    setConfirm(false);
-  }
+  // if (!edit && confirm) {
+  //   setConfirm(false);
+  // }
 
-  const handleDeleteClick = () => {
-    if (confirm) {
-      // Delete song
-    }
-    return setConfirm(true);
-  };
+  // const handleDeleteClick = () => {
+  //   if (confirm) {
+  //     // Delete song
+  //   }
+  //   return setConfirm(true);
+  // };
 
   return (
     <ReleaseCard>
       <Pic src={song.img || '/rec.png'} />
       <Content>
-        <SongName released={released}>{song.name}</SongName>
+        <SongName released={true}>{song.name}</SongName>
         <ReleasedOn>
-          {(released ? 'Released ' : 'Releasing ') +
-            parseDate(song.releaseDate)}
+          {parseDate(song.releaseDate)}
         </ReleasedOn>
       </Content>
-      <ReleaseIconContainer edit={edit} onClick={handleDeleteClick}>
+      {/* <ReleaseIconContainer edit={edit} onClick={handleDeleteClick}>
         {
           edit ? (
             <>
@@ -245,25 +244,25 @@ const Release = ({ song, setURIModal, edit }) => {
               <Delete>{confirm ? 'are you sure?' : 'delete'}</Delete>
             </>
           ) : (
-            <>
-              <ReleaseIcon
-                released={released}
-                src={
-                  released ? '/assets/save-icon-blue.png' : '/clock-icon.png'
-                }
-              />
-              <Span released={released}>
-                {released
-                  ? song.saves || 0 + ' save' + (song.saves !== 1 ? 's' : '')
-                  : time}
-              </Span>
-            </>
-          )
+              <>
+                <ReleaseIcon
+                  released={released}
+                  src={
+                    released ? '/assets/save-icon-blue.png' : '/clock-icon.png'
+                  }
+                />
+                <Span released={released}>
+                  {released
+                    ? song.saves || 0 + ' save' + (song.saves !== 1 ? 's' : '')
+                    : time}
+                </Span>
+              </>
+            )
           // : (
           //   <AddURI onClick={() => setURIModal(song)}>Add URI</AddURI>
           // )}
         }
-      </ReleaseIconContainer>
+      </ReleaseIconContainer> */}
     </ReleaseCard>
   );
 };
@@ -373,14 +372,14 @@ const Releases = () => {
         </CreateSongButton> */}
       </Header>
       <BlastList>
-        {!user.upcoming && (
+        {/* {!user.upcoming && (
           <ReleaseCard as={Link} to='/presave/new' onClick={checkIfAllowed}>
             <AddContainer>
               <AddImg src='/add-icon.png' />
             </AddContainer>
             <AddText>Create Presave</AddText>
           </ReleaseCard>
-        )}
+        )} */}
         <ReleaseCard as={Link} to='/releases/new' onClick={checkIfAllowed}>
           <AddContainer>
             <AddImg src='/add-icon.png' />

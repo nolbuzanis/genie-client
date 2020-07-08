@@ -1,12 +1,21 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar'
+import styled from 'styled-components';
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
+
+const NoData = styled.p`
+  color: #43425d;
+  padding-top: 100px;
+  text-align: center;
+`;
+
 const BarGraph = ({ data = [], keys = [], max }) => {
 
+  if ((data.length === 0) || (data[0] && Object.keys(data[0]).length === 0)) return <NoData>No data to display</NoData>;
   return <ResponsiveBar
     data={data}
     keys={keys}

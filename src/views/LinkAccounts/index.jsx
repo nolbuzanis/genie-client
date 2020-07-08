@@ -283,48 +283,48 @@ const LinkAccounts = () => {
             </Button>
           </>
         ) : (
-          <>
-            <ModalText>Please enter your Spotify Artist URI code.</ModalText>
-            <HelpContainer to='/find-artist-uri'>
-              <HelpIcon src='/assets/help-icon-blue.png' />
-              <HelpText>how do I find this?</HelpText>
-            </HelpContainer>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSpotifySubmit}
-            >
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
-                  <Input
-                    name='uri'
-                    value={props.values['uri']}
-                    type='text'
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.errors['uri'] && props.touched['uri']}
-                    placeholder='Spotify Artist URI'
-                  />
-                  {props.errors['uri'] && props.touched['uri'] && (
-                    <ErrorMsg>{props.errors['uri']}</ErrorMsg>
-                  )}
-                  <Spacing />
-                  <Button
-                    type='submit'
-                    disabled={props.isSubmitting}
-                    isLoading={props.isSubmitting}
-                  >
-                    Continue
+            <>
+              <ModalText>Please enter your Spotify Artist URI code.</ModalText>
+              <HelpContainer to='/find-artist-uri'>
+                <HelpIcon src='/assets/help-icon-blue.png' />
+                <HelpText>how do I find this?</HelpText>
+              </HelpContainer>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSpotifySubmit}
+              >
+                {(props) => (
+                  <form onSubmit={props.handleSubmit}>
+                    <Input
+                      name='uri'
+                      value={props.values['uri']}
+                      type='text'
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      error={props.errors['uri'] && props.touched['uri']}
+                      placeholder='Spotify Artist URI'
+                    />
+                    {props.errors['uri'] && props.touched['uri'] && (
+                      <ErrorMsg>{props.errors['uri']}</ErrorMsg>
+                    )}
+                    <Spacing />
+                    <Button
+                      type='submit'
+                      disabled={props.isSubmitting}
+                      isLoading={props.isSubmitting}
+                    >
+                      Continue
                   </Button>
-                  <Spacing />
-                  <Button type='button' alternate onClick={() => onClose()}>
-                    Cancel
+                    <Spacing />
+                    <Button type='button' alternate onClick={() => onClose()}>
+                      Cancel
                   </Button>
-                </form>
-              )}
-            </Formik>
-          </>
-        )}
+                  </form>
+                )}
+              </Formik>
+            </>
+          )}
       </ModalContainer>
     </Modal>
   );
@@ -354,48 +354,48 @@ const LinkAccounts = () => {
             </Button>
           </>
         ) : (
-          <>
-            <ModalText>Please enter your Deezer Artist Link.</ModalText>
-            <HelpContainer to='/find-deezer-link'>
-              <HelpIcon src='/assets/help-icon-blue.png' />
-              <HelpText>how do I find this?</HelpText>
-            </HelpContainer>
-            <Formik
-              initialValues={initialDeezerValues}
-              validationSchema={deezerValidationSchema}
-              onSubmit={handleDeezerSubmit}
-            >
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
-                  <Input
-                    name='deezer'
-                    value={props.values['deezer']}
-                    type='text'
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.errors['deezer'] && props.touched['deezer']}
-                    placeholder='Deezer Artist Link'
-                  />
-                  {props.errors['deezer'] && props.touched['deezer'] && (
-                    <ErrorMsg>{props.errors['deezer']}</ErrorMsg>
-                  )}
-                  <Spacing />
-                  <Button
-                    type='submit'
-                    disabled={props.isSubmitting}
-                    isLoading={props.isSubmitting}
-                  >
-                    Continue
+            <>
+              <ModalText>Please enter your Deezer Artist Link.</ModalText>
+              <HelpContainer to='/find-deezer-link'>
+                <HelpIcon src='/assets/help-icon-blue.png' />
+                <HelpText>how do I find this?</HelpText>
+              </HelpContainer>
+              <Formik
+                initialValues={initialDeezerValues}
+                validationSchema={deezerValidationSchema}
+                onSubmit={handleDeezerSubmit}
+              >
+                {(props) => (
+                  <form onSubmit={props.handleSubmit}>
+                    <Input
+                      name='deezer'
+                      value={props.values['deezer']}
+                      type='text'
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      error={props.errors['deezer'] && props.touched['deezer']}
+                      placeholder='Deezer Artist Link'
+                    />
+                    {props.errors['deezer'] && props.touched['deezer'] && (
+                      <ErrorMsg>{props.errors['deezer']}</ErrorMsg>
+                    )}
+                    <Spacing />
+                    <Button
+                      type='submit'
+                      disabled={props.isSubmitting}
+                      isLoading={props.isSubmitting}
+                    >
+                      Continue
                   </Button>
-                  <Spacing />
-                  <Button type='button' alternate onClick={() => onClose()}>
-                    Cancel
+                    <Spacing />
+                    <Button type='button' alternate onClick={() => onClose()}>
+                      Cancel
                   </Button>
-                </form>
-              )}
-            </Formik>
-          </>
-        )}
+                  </form>
+                )}
+              </Formik>
+            </>
+          )}
       </ModalContainer>
     </Modal>
   );
@@ -407,7 +407,7 @@ const LinkAccounts = () => {
         onClose={() => setSpotifyModal(false)}
       />
       <DeezerModal isOpen={deezerModal} onClose={() => setDeezerModal(false)} />
-      <PageHeader>Accounts</PageHeader>
+      <PageHeader>Integrations</PageHeader>
       <Container>
         <AccountContainer>
           <CenteredDiv>
@@ -425,10 +425,10 @@ const LinkAccounts = () => {
           </ButtonWrapper>
         </AccountContainer>
         <AccountNote>
-          · followers save your song to their Spotify library (on release)
+          · Fans will save your song to their Spotify library (on presave release)
         </AccountNote>
         <AccountNote>
-          · play icon on your profile page links to your Spotify page
+          · Fans will follow you as an artist on Spotify (on any presave release)
         </AccountNote>
         <AccountContainer>
           <CenteredDiv>
@@ -446,13 +446,10 @@ const LinkAccounts = () => {
           </ButtonWrapper>
         </AccountContainer>
         <AccountNote>
-          · followers save your song to their Deezer library (on release)
+          · Fans will save your song to their Deezer library (on presave release)
         </AccountNote>
         <AccountNote>
-          · follower adds you to their favourite artists (on follow)
-        </AccountNote>
-        <AccountNote>
-          · play icon on your profile links to your Deezer page
+          · Fans will add you to their favourite artists on Deezer (on any presave release)
         </AccountNote>
       </Container>
     </>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-//import { useAuth } from '../../Context/authContext';
+import { useAuth } from '../../Context/authContext';
 //import { Link } from 'react-router-dom';
 import FollowersGraph from '../../components/FollowersGraph';
 import { getAnalyticsOverview } from '../../api';
@@ -12,6 +12,15 @@ import ChoroplethMap from '../../components/ChoroplethMap';
 import { scaleLinear } from 'd3-scale';
 import { mapCountryIOS2 } from '../../utils/helpers';
 import BarGraph from '../../components/BarGraph';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+//import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import Modal from '../../components/Modal';
+import Button from '../../components/Button';
+import { useToasts } from 'react-toast-notifications';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { css } from '@emotion/core';
 
 const Background = styled.div`
   background-color: #f5f6fa;
@@ -78,6 +87,7 @@ const StatGrid = styled.div`
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     column-gap: 50px;
     row-gap: 20px;
+    text-align: left;
     margin: 0 auto;
     padding: 0;
     @media only screen and (max-width: 500px) {
@@ -86,6 +96,7 @@ const StatGrid = styled.div`
   `;
 const Content = styled.div`
     max-width: 900px;
+    text-align: center;
     margin: 0 auto;
     padding-bottom: 80px;
   `;
@@ -161,10 +172,40 @@ const DoubleGraph = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
 `;
+const Spacing = styled.div`
+  height: 20px;
+`;
 
-const getLastWeek = (startDate = moment().subtract(6, 'd')) => {
+const DateSelection = styled.button`
+  border-radius: 31px;
+  border: solid 2px #dee2ec;
+  color: #444444;
+  font-size: 14px;
+  box-shadow: none;
+  padding: 5px 10px;
+  margin: 10px auto 20px;
+`;
+
+const DateSvg = styled.svg`
+  margin-right: 10px;
+`;
+
+// const datePresets = [
+//   { label: 'Today', start: new Date(), end: new Date() },
+//   { label: 'Past Week', start: new Date(new Date().setDate(new Date().getDate() - 7)), end: new Date() },
+//   { label: 'Past Month', start: moment().subtract(1, 'months').toDate(), end: new Date() }
+// ];
+
+const DateIcon = () => (
+  <DateSvg xmlns="http://www.w3.org/2000/svg" width={12} height="13.333" viewBox="0 0 12 13.333">
+    <path id="prefix__ic_event_note_24px" fill="#444" d="M12.333 7H5.667v1.333h6.667zm1.333-4.667H13V1h-1.333v1.333H6.333V1H5v1.333h-.667a1.327 1.327 0 0 0-1.326 1.334L3 13a1.333 1.333 0 0 0 1.333 1.333h9.333A1.337 1.337 0 0 0 15 13V3.667a1.337 1.337 0 0 0-1.333-1.334zm0 10.667H4.333V5.667h9.333zm-3.333-3.333H5.667V11h4.667z" transform="translate(-3 -1)" />
+  </DateSvg>
+);
+
+const getDateRanges = (startDate = moment().subtract(6, 'd'), endDate = moment()) => {
   const week = [];
-  for (let i = 0; i < 7; i++) {
+  const diff = endDate.diff(startDate, 'd');
+  for (let i = 0; i < diff + 1; i++) {
     week.push(new moment(startDate));
     startDate.add(1, 'd');
   }
@@ -175,9 +216,26 @@ const sumArray = (arr) => {
   return arr.reduce((a, b) => a + b, 0);
 }
 
+const topTenGeo = (data) => {
+  const geoCopy = { ...data };
+  let keys = Object.keys(geoCopy);
+  if (keys.length === 0) return;
+
+  let sorted = [];
+  return new Promise((res, rej) => {
+    do {
+      const highest = keys.reduce((a, b) => geoCopy[a] > geoCopy[b] ? a : b);
+      sorted.push(highest);
+      delete geoCopy[highest];
+      keys = Object.keys(geoCopy);
+    } while (keys.length !== 0);
+
+    res(sorted);
+  });
+}
+
 const Home = () => {
-  //const { user } = useAuth();
-  const [error, setError] = useState();
+  const { user } = useAuth();
   const [graphData, setGraphData] = useState({});
   //const isUserPremium = isPremium(user);
   const [totals, setTotals] = useState({ visitors: 0, bounced: 0, outbound: 0 });
@@ -185,39 +243,34 @@ const Home = () => {
   const [topGeo, setTopGeo] = useState({});
   const [deviceData, setDeviceData] = useState([]);
   const [referrerData, setReferrerData] = useState([]);
-  console.log(error);
+  const [dates, setDates] = useState([
+    {
+      startDate: moment().subtract(6, 'd').toDate(),
+      endDate: new Date(),
+      key: 'selection',
+    }]);
+  const [dateModal, setDateModal] = useState(false);
+  const [isLoading, setLoading] = useState(true);
+  const { addToast } = useToasts();
 
-  React.useEffect(() => {
-    const topTenGeo = (data) => {
-      const geoCopy = { ...data };
-      let keys = Object.keys(geoCopy);
-      if (keys.length === 0) return;
-
-      let sorted = [];
-      return new Promise((res, rej) => {
-        do {
-          const highest = keys.reduce((a, b) => geoCopy[a] > geoCopy[b] ? a : b);
-          sorted.push(highest);
-          delete geoCopy[highest];
-          keys = Object.keys(geoCopy);
-        } while (keys.length !== 0);
-
-        res(sorted);
-      });
+  const fetchData = async () => {
+    setLoading(true);
+    const data = await getAnalyticsOverview(dates[0].startDate, dates[0].endDate);
+    setLoading(false);
+    if (data.error) {
+      return addToast(data.error, { appearance: 'error' });
+      //return setError(data.error);
     }
 
-    const fetchData = async () => {
-      const data = await getAnalyticsOverview();
-      if (data.error) {
-        return setError(data.error);
-      }
-
-      const { visitors, bounced, totalVisitor, totalOutbound, bouncedCount, countries, devices, referrers } = data;
-      setTotals({ visitors: totalVisitor, bounced: bouncedCount, outbound: totalOutbound });
-      const top = await topTenGeo({ ...countries });
-      const total = sumArray(Object.values(countries));
-      setGeoData(countries);
-      setTopGeo({ top, total });
+    const { visitors, bounced, totalVisitor, totalOutbound, bouncedCount, countries, devices, referrers } = data;
+    setTotals({ visitors: totalVisitor, bounced: bouncedCount, outbound: totalOutbound });
+    const top = await topTenGeo({ ...countries });
+    const total = sumArray(Object.values(countries));
+    setGeoData(countries);
+    setTopGeo({ top, total });
+    if (devices && Object.keys(devices).length === 0) {
+      setDeviceData([{}]);
+    } else {
       setDeviceData([{
         "index": "mobile",
         "Visitors": devices.mobile,
@@ -228,40 +281,43 @@ const Home = () => {
         "Visitors": devices.browser,
         "VisitorsColor": "hsl(241, 70%, 50%)"
       }]);
+    }
 
-      const referrals = [];
-      //referrer data parsing
-      Object.keys(referrers).forEach((key) => {
-        referrals.push({
-          "index": key === '' ? 'Direct' : key,
-          "Visitors": referrers[key]
-        });
+
+    const referrals = [];
+    //referrer data parsing
+    Object.keys(referrers).forEach((key) => {
+      referrals.push({
+        "index": key === '' ? 'Direct' : key,
+        "Visitors": referrers[key]
       });
-      setReferrerData(referrals);
+    });
+    setReferrerData(referrals);
 
-      const daysToPlot = getLastWeek();
-      const parsedVisitors = [], parsedBounced = [];
+    const daysToPlot = getDateRanges(moment(dates[0].startDate), moment(dates[0].endDate));
+    const parsedVisitors = [], parsedBounced = [];
 
-      daysToPlot.forEach((date) => {
-        parsedVisitors.push({
-          x: date.format('DD MMM'),
-          y: visitors[date.format('DD-MM-YYYY')] || 0
-        });
-        parsedBounced.push({
-          x: date.format('DD MMM'),
-          y: bounced[date.format('DD-MM-YYYY')] || 0
-        });
+    daysToPlot.forEach((date) => {
+      parsedVisitors.push({
+        x: date.format('DD MMM'),
+        y: visitors[date.format('DD-MM-YYYY')] || 0
       });
+      parsedBounced.push({
+        x: date.format('DD MMM'),
+        y: bounced[date.format('DD-MM-YYYY')] || 0
+      });
+    });
 
-      return setGraphData({ visitors: parsedVisitors, bounced: parsedBounced });
+    return setGraphData({ visitors: parsedVisitors, bounced: parsedBounced });
 
+  };
 
-    };
+  React.useEffect(() => {
     fetchData();
-
+    // eslint-disable-next-line
   }, []);
 
-  const followersData = [
+  const visitorsData = [
     {
       id: 'Visitors (All Visitors)',
       color: '#4981fd',
@@ -282,65 +338,114 @@ const Home = () => {
     .domain([minValue, maxValue])
     .range([minColor, maxColor]);
 
+  const handleDateChange = () => {
+    //query analytics for new date
+    fetchData();
+    setDateModal(false)
+  };
+
+  const override = css`
+  display: block;
+  margin: 0 auto;
+  margin-top: 100px;
+`;
+  const NoData = styled.p`
+  color: #43425d;
+  padding-top: 100px;
+  text-align: center;
+  margin: 0 auto;
+`;
+
+  const createdAtDiff = moment(user.createdAt).diff(moment().subtract(1, 'months'), 'd');
+
   return (
     <Background>
       <Content>
         <PageHeader color='#444444'>Your Dashboard</PageHeader>
-        <p>All Time</p>
-        <StatGrid>
-          <StatCard>
-            <VisitorSvg />
-            <div>
-              <Stat>{totals.visitors}</Stat>
-              <StatSub>All Visitors</StatSub>
-            </div>
-          </StatCard>
-          <StatCard>
-            <BounceSvg />
-            <div>
-              <Stat>{totals.bounced}</Stat>
-              <StatSub>Bounced Session</StatSub>
-            </div>
-          </StatCard>
-          <StatCard>
-            <OutboundSvg />
-            <div>
-              <Stat>{totals.outbound}</Stat>
-              <StatSub>Outbound Clicks</StatSub>
-            </div>
-          </StatCard>
-        </StatGrid>
-        <Graph>
-          <GraphTitle>Visitors</GraphTitle>
-          <FollowersGraph data={followersData} />
-        </Graph>
-        <DoubleGraph>
-          <Graph half>
-            <GraphTitle>Devices</GraphTitle>
-            <BarGraph data={deviceData} keys={['Visitors']} />
-          </Graph>
-          <Graph half>
-            <GraphTitle>Referrers</GraphTitle>
-            <BarGraph data={referrerData} keys={['Visitors']} />
-          </Graph>
-        </DoubleGraph>
-        <Graph height='auto'>
-          <GraphTitle normal>Demographic</GraphTitle>
-          <Flex>
-            <GraphContainer>
-              <ChoroplethMap data={geoData} customScale={customScale} />
-            </GraphContainer>
-            <GeoTop>
-              {topGeo.top && topGeo.total && topGeo.top.map(country => (
-                <GeoItem key={country}>
-                  <GeoCircle color={customScale(geoData[country])} />
-                  <GeoText>{mapCountryIOS2[country] || country}</GeoText>
-                  <GeoStat>{`${geoData[country]}(${Math.round((geoData[country] / topGeo.total * 100) * 10) / 10}%)`}</GeoStat>
-                </GeoItem>
-              ))}
-            </GeoTop>
-          </Flex>
-        </Graph>
+        <DateSelection onClick={() => setDateModal(true)}>
+          <DateIcon />
+          {moment(dates[0].startDate).format('MMMM D, YYYY') + ' - ' + moment(dates[0].endDate).format('MMMM D, YYYY')}
+        </DateSelection>
+        <Modal title='Select date range' isOpen={dateModal} onClose={() => setDateModal(false)}>
+          <Spacing />
+          <DateRange
+            ranges={dates}
+            showSelectionPreview
+            onChange={({ selection }) => setDates([selection])}
+            rangeColors={['rgb(101, 109, 237)']}
+            maxDate={new Date()}
+            minDate={createdAtDiff > 0 ? new Date(user.createdAt) : moment().subtract(1, 'months').toDate()}
+          />
+          <Spacing />
+          <Button onClick={handleDateChange}>Apply</Button>
+        </Modal>
+        {isLoading ?
+          <ClipLoader
+            css={override}
+            size={40}
+            color='#656ded'
+            loading={true}
+          />
+          :
+          <>
+            <StatGrid>
+              <StatCard>
+                <VisitorSvg />
+                <div>
+                  <Stat>{totals.visitors}</Stat>
+                  <StatSub>All Visitors</StatSub>
+                </div>
+              </StatCard>
+              <StatCard>
+                <BounceSvg />
+                <div>
+                  <Stat>{totals.bounced}</Stat>
+                  <StatSub>Bounced Session</StatSub>
+                </div>
+              </StatCard>
+              <StatCard>
+                <OutboundSvg />
+                <div>
+                  <Stat>{totals.outbound}</Stat>
+                  <StatSub>Outbound Clicks</StatSub>
+                </div>
+              </StatCard>
+            </StatGrid>
+            <Graph>
+              <GraphTitle>Visitors</GraphTitle>
+              <FollowersGraph data={visitorsData} />
+            </Graph>
+            <DoubleGraph>
+              <Graph half>
+                <GraphTitle>Devices</GraphTitle>
+                <BarGraph data={deviceData} keys={['Visitors']} />
+              </Graph>
+              <Graph half>
+                <GraphTitle>Referrers</GraphTitle>
+                <BarGraph data={referrerData} keys={['Visitors']} />
+              </Graph>
+            </DoubleGraph>
+            <Graph height='auto'>
+              <GraphTitle normal>Demographic</GraphTitle>
+              <Flex>
+                <GraphContainer>
+                  <ChoroplethMap data={geoData} customScale={customScale} />
+                </GraphContainer>
+                <GeoTop>
+                  {topGeo.top && topGeo.total ? topGeo.top.map(country => (
+                    <GeoItem key={country}>
+                      <GeoCircle color={customScale(geoData[country])} />
+                      <GeoText>{mapCountryIOS2[country] || country}</GeoText>
+                      <GeoStat>{`${geoData[country]}(${Math.round((geoData[country] / topGeo.total * 100) * 10) / 10}%)`}</GeoStat>
+                    </GeoItem>
+                  )) :
+                    <NoData>No data to display</NoData>
+                  }
+                </GeoTop>
+              </Flex>
+            </Graph>
+          </>
+        }
       </Content>
     </Background>
   );

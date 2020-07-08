@@ -92,7 +92,7 @@ const FollowersGraph = ({ data }) => {
           translateY: -40,
           itemsSpacing: 0,
           itemDirection: 'left-to-right',
-          itemWidth: 200,
+          itemWidth: 170,
           itemHeight: 15,
           itemOpacity: 0.75,
           symbolSize: 9,

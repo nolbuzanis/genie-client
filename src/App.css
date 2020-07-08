@@ -71,3 +71,24 @@ textarea {
 .ReactModal__Body--open {
   overflow-y: hidden;
 }
+
+/* @import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-lists/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-calendars/styles/material.css"; */
+
+/* Styling for calendar on dashboard */
+/* .e-active .e-btn.e-flat.e-primary, .e-apply, .e-list-item.e-active, .e-input-group-icon.e-icons.e-active {
+  color: #656ded !important;
+}
+.e-selected span {
+  background: #656ded !important;
+}
+.e-today span, span.e-today {
+  color: #656ded !important;
+}
+.e-today span.e-day{
+  border: 1px solid #656ded !important;
+} */
