@@ -158,7 +158,7 @@ const Pricing = () => {
       <SmallSpacing />
       <OuterButton>
         <BoldPlan>Genie Premium <GenieIcon src='/assets/genie-logo-round.png' /></BoldPlan>
-        <Cost>{plan === 1 ? '$83.99 CAD / year' : '$9.99 CAD / month'}</Cost>
+        <Cost>{plan === 1 ? '$49.99 USD / year' : '$4.99 USD / month'}</Cost>
       </OuterButton>
       <SmallSpacing />
       <Heading>Add Payment Details</Heading>
@@ -181,13 +181,13 @@ const Pricing = () => {
         active={plan === 1}
         onClick={() => setPlan(1)}
         valueTag
-        title='$83.99 Annual ($7.00/mo)'
+        title='$44.99 USD Annual ($3.75/mo)'
         subtitle='Billed yearly. Cancel anytime.'
       />
       <Selector
         active={plan === 2}
         onClick={() => setPlan(2)}
-        title='$9.99 Monthly'
+        title='$4.99 USD Monthly'
         subtitle='Reoccurring payment. Cancel anytime.'
       />
       <Disclaimer>

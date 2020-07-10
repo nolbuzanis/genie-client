@@ -40,6 +40,7 @@ const HeroTitle = styled.h1`
 const HeroText = styled.p`
   font-size: calc(12px + 0.7vw);
   color: white;
+  font-weight: 300;
   padding-top: 25px;
   max-width: 520px;
 `;
@@ -521,7 +522,7 @@ const Landing = () => {
           </Plan>
           <Plan>
             <PlanTitle>Premium</PlanTitle>
-            <PlanSubtitle>$9.99 CAD / month</PlanSubtitle>
+            <PlanSubtitle>$4.99 USD / month</PlanSubtitle>
             <PlanFeatures>
               {premiumPlanFeatures.map((item, i) => {
                 return (
