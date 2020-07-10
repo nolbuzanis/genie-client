@@ -2,7 +2,7 @@
 export const privacyPolicy = {
   "lastUpdated": "April 26, 2020",
   "content": [
-    `Your privacy is important to us. It is Genie's policy to respect your privacy regarding any information we may collect from you across our website, http://purplegenie.ca, and other sites we own and operate.`,
+    `Your privacy is important to us. It is Genie's policy to respect your privacy regarding any information we may collect from you across our website, http://genieurl.com, and other sites we own and operate.`,
     `We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we’re collecting it and how it will be used.`,
     `We only retain collected information for as long as necessary to provide you with your requested service. What data we store, we’ll protect within commercially acceptable means to prevent loss and theft, as well as unauthorized access, disclosure, copying, use or modification. We don’t share any personally identifying information publicly or with third-parties, except when required to by law.`,
     `We will protect personal information by using reasonable security safeguards against loss or theft, as well as unauthorized access, disclosure, copying, use or modification.`,
@@ -24,7 +24,7 @@ export const termsOfService = {
   "content": [
     {
       title: 'Terms',
-      text: `By accessing the website at http://purplegenie.ca, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.`
+      text: `By accessing the website at http://genieurl.com, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws. If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.`
     },
     {
       title: 'Use License',

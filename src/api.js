@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export let SERVER_URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
-    : 'https://purplegenie.ca/api';
-//export let SERVER_URL = 'https://purplegenie.ca/api';
+// export let SERVER_URL =
+//   process.env.NODE_ENV === 'development'
+//     ? 'http://localhost:5000/indepdent-8833f/us-central1/api'
+//     : 'https://genieurl.com/api';
+export let SERVER_URL = 'https://genieurl.com/api';
 
 const axiosConfig = {
   withCredentials: true,
