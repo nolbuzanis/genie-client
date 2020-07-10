@@ -95,32 +95,32 @@ const Header = ({ history }) => {
             Go to dashboard
           </DashboardLink>
         ) : (
-          <>
-            {path === '/signup' || path === '/forgot-password' || (
-              <SignupLink
-                to='/signup'
-                landing={landing ? 1 : 0}
-                onClick={() => {
-                  Event('ENGAGEMENTS', 'Sign up', 'HEADER');
-                  TrackPixelEvent('Sign up (Header)', { v: 1 });
-                }}
-              >
-                Sign Up
+            <>
+              {path === '/signup' || path === '/forgot-password' || (
+                <SignupLink
+                  to='/signup'
+                  landing={landing ? 1 : 0}
+                  onClick={() => {
+                    Event('ENGAGEMENTS', 'Sign up', 'HEADER');
+                    TrackPixelEvent('Sign up (Header)', { v: 1 });
+                  }}
+                >
+                  Sign Up
               </SignupLink>
-            )}
-            {path === '/login' || (
-              <StyledLink
-                to='/login'
-                landing={landing ? 1 : 0}
-                onClick={() => {
-                  Event('ENGAGEMENTS', 'Log In', 'HEADER');
-                  TrackPixelEvent('Log In (Header)', { v: 1 });
-                }}
-              >
-                Log In
+              )}
+              {path === '/login' || (
+                <StyledLink
+                  to='/login'
+                  landing={landing ? 1 : 0}
+                  onClick={() => {
+                    Event('ENGAGEMENTS', 'Log In', 'HEADER');
+                    TrackPixelEvent('Log In (Header)', { v: 1 });
+                  }}
+                >
+                  Log In
               </StyledLink>
-            )}
-            <StyledLink
+              )}
+              {/* <StyledLink
               to='/guides'
               landing={1}
               onClick={() => {
@@ -129,9 +129,9 @@ const Header = ({ history }) => {
               }}
             >
               Guides
-            </StyledLink>
-          </>
-        )}
+            </StyledLink> */}
+            </>
+          )}
       </Nav>
     </HeaderContainer>
   );

@@ -153,27 +153,48 @@ const FeatureText = styled.p`
 `;
 const features = [
   {
-    title: 'Unlimited platforms.',
+    title: 'Compounded growth',
     text:
-      'Completely customizable url for your fans to visit. Showcase your latest song and add as many music platforms are you like!',
-    icon: 'link',
-    width: 39,
-  },
-  {
-    title: 'Powerful analytics.',
-    text:
-      'Obtain insights on fans visiting your page. Breakdown by referrers, devices, country, and what music platform your fans listen on.',
+      'Saves on each release compound over time so you don’t have to start from scratch.',
     icon: 'growth',
     width: 37,
     height: 38
   },
   {
+    title: 'Affordable',
+    text:
+      'Low funds? No problem! Genie is the most affordable pre-save platform on the market. Try it out for free for as long as you like!',
+    icon: 'card',
+    width: 41,
+    height: 30
+  },
+  {
     title: 'No ads ever',
     text:
-      'You should never have to compete with 3rd party ads when it comes to your branding.',
+      'You should never have to compete with 3rd party ads when it comes to your branding.  We will never place ads on your public page.',
     icon: 'ad',
     width: 41,
     height: 35
+  },
+  {
+    title: 'Direct access to your most loyal fans',
+    text:
+      'Use emailing lists of followers that opt-in to send thank you messages, exclusive content, or giveaways.',
+    icon: 'mail',
+    width: 39,
+    height: 33
+  },
+  {
+    title: 'Be heard',
+    text:
+      'We only work on new features and changes that are most important to you. Have a direct say in future features by voting on our roadmap.',
+    icon: 'collaboration'
+  },
+  {
+    title: '24/7 Support',
+    text:
+      'Need help with something? Contact us anytime in app for support or at purplegenieapp@gmail.com',
+    icon: 'support'
   }
 ];
 
@@ -231,16 +252,28 @@ const StepContainer = styled(FeatureContainer)`
 `;
 const stepList = [
   {
-    title: '1. Set up your link',
+    title: '1. Set up your profile',
     text:
-      'Create an account. Link to unlimited music platforms for your latest release. Customize background, social media, + more.',
+      'Easily import your profile from spotify. Customize things such as your photo, bio, social links, and more!',
     icon: 'profile'
   },
   {
-    title: '2. Share your link',
+    title: '2. Build a following',
     text:
-      'Share your link on social media. View numerous analytics and gain valuable insights on your fans!',
+      'Share your public artist page on social media so your fans can follow you on Genie. More fans on release day means more saves.',
     icon: 'followers'
+  },
+  {
+    title: '3. Schedule a release',
+    text:
+      'Once you’ve scheduled a release on Spotify, create the release in Genie and choose the day you want it to be saved to your follower’s song libraries.',
+    icon: 'hourglass'
+  },
+  {
+    title: '4. Grow on Spotify',
+    text:
+      'The more saves you have on Spotify, the higher chance  of being recognized by the Spotify Algorithm and getting on curated playlists. ',
+    icon: 'rocket'
   }
 ];
 
@@ -281,7 +314,7 @@ const PlanFeatures = styled.ul`
   padding: 20px 15px;
   margin: 0;
   text-align: left;
-  min-height: 250px;
+  min-height: 360px;
 `;
 const PlanIcon = styled.img`
   width: 14.8px;
@@ -292,17 +325,21 @@ const PlanIcon = styled.img`
 `;
 
 const freePlanFeatures = [
-  'Unlimited music platforms on your link',
-  'Customize social media, background, release, and more!',
-  'Powerful analytics (breakdown by country, referrers, device, + more)',
+  '1000 presaves with Spotify',
+  'Customize your public artist page',
+  'Link social media accounts',
+  'Daily followers breakdown',
   'In-app help & support'
 ];
 const premiumPlanFeatures = [
-  'Everything in the free tier, plus:',
+  'Unlimited pre-saves with Spotify and Apple Music',
+  'Customize your public artist page',
+  'Link Social media accounts',
+  'Daily followers breakdown',
+  'Followers emailing marketing list',
   'Contribute to new features roadmap',
   'In-app help & support',
-  'Create Presave campaign (coming soon)',
-  'Help support our team :)'
+  'Dark mode (coming soon)'
 ];
 
 const PlanItem = styled.div`
@@ -426,9 +463,11 @@ const Landing = () => {
       <Header />
       <Hero>
         <Attention>
-          <HeroTitle>One link for all your fans.</HeroTitle>
+          <HeroTitle>Make a big splash using pre-saves</HeroTitle>
           <HeroText>
-            Create a Genie link to showcase your latest release and drive fans to your music on their listening platform. Obtain powerful analytics & insights.
+            Genie is the optimal way for musicians to become featured on curated
+            playlists and discovered on Spotify, Deezer, & other music
+            platforms.
           </HeroText>
           <ButtonWrapper>
             <LandingButton
@@ -559,7 +598,7 @@ const Landing = () => {
         <CTAContainer>
           <HeroTitle>Ready to grow?</HeroTitle>
           <CTAText>
-            {/* Try it for free. We’ll even throw in 1000 pre-saves on us. */}
+            Try it for free. We’ll even throw in 1000 pre-saves on us.
           </CTAText>
           <LandingButton
             as={Link}

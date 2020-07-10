@@ -10,8 +10,8 @@ const HeroImage = styled.div`
   height: 560px;
   width: 100%;
   background: url(${window.innerWidth >= 1024
-      ? '/assets/landing-image-2.jpg'
-      : '/assets/landing-image-2-sm.jpg'})
+    ? '/assets/landing-image-2.jpg'
+    : '/assets/landing-image-2-sm.jpg'})
     center center no-repeat;
   background-size: cover;
 `;
@@ -204,24 +204,23 @@ const howItWorksContent = [
 
 export const FAQs = [
   {
+    question: 'Can I add more than one link under an account?',
+    answer: 'Yes! We added this feature for managers who represent more than one brand. Click on your profile on the top left menu, and Create Artist in the dropdown menu.'
+  },
+  {
     question: 'How much does it cost?',
     answer:
       'Genie is absolutely free to set up an account and get started. For more information, check out our plans.'
   },
   {
-    question: 'What is a presave?',
-    answer:
-      'Pre-save to Spotify is functionality that allows your fans to connect on Spotify and have an upcoming song automatically added to their Spotify library on release day.'
-  },
-  {
     question: 'How will this help me?',
     answer:
-      'Presaving allows music artists to acquire listeners on releases much faster than they normally would. As well, followers can be rewarded with exclusive content, discounts on tickets or merch, and stay up to date with every new song you release!'
+      'Genie is especially helpful for social media such as Instagram where you can only share one url on your bio. You simple have to share one link and your fans can find your music, regardless of the music platform they listen on. As well, we provide powerful analytics and insights on your fans free of charge!'
   },
   {
     question: 'How long does it take to setup?',
     answer:
-      'Roughly 5 minutes! After you signup, we ask you to import your artist profile on Spotify which automatically populates fields such as your name & photo, and these can also be customized later.'
+      'Roughly 2 minutes! After you signup, you can customize your link. Adding a release is really easy, as Genie will automatically find your song on music platforms such as Spotify, Apple music, Deezer, etc.'
   },
   {
     question: 'I have another question',
